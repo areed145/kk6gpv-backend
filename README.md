@@ -1,6 +1,17 @@
 # kk6gpv-flask
 goal will be to re-create kk6gpv.net as a flask site
 
+## stack
+- python
+- mongodb
+- flask
+- boostrap
+- plotly
+- leaflet (folium?)
+- datashader
+- mqtt
+
+## structure
 - weather
     - station
     - aviation
