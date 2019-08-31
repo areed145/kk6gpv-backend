@@ -33,3 +33,8 @@ goal will be to re-create kk6gpv.net as a flask site
 - oil & gas
      - doggr application
 
+## todo
+- connect to mongodb
+- incorporate fetchers
+- UI
+- rebuild flickr gallery functionality
