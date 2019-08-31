@@ -1,4 +1,4 @@
-$('#first_cat').on('change',function(){
+$('#first_cat').on('change', function () {
 
     $.ajax({
         url: "/bar",
@@ -8,10 +8,10 @@ $('#first_cat').on('change',function(){
             'selected': document.getElementById('first_cat').value
 
         },
-        dataType:"json",
+        dataType: "json",
         success: function (data) {
-            Plotly.newPlot('bargraph', data );
-            Plotly.newPlot('bargraph2', data );
+            Plotly.newPlot('bargraph', data);
+            Plotly.newPlot('bargraph2', data);
         }
     });
 })
