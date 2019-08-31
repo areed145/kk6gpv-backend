@@ -3,8 +3,6 @@ from flask import Flask, render_template, request
 import numpy as np
 import pandas as pd
 
-import pymongo as 
-
 import plotly
 import plotly.graph_objs as go
 import json
