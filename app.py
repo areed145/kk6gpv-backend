@@ -6,25 +6,6 @@ import pandas as pd
 import numpy as np
 import json
 
-app = Flask(__name__)
-
-
-@app.route('/')
-def index():
-    feature = 'Bar'
-    bar = create_plot(feature)
-    return render_template('index.html', plot=bar)
-
-
-@app.route('/welcome')
-def welcome():
-    return render_template('welcome.html')
-
-
-@app.route('/test')
-def test():
-    return render_template('test.html')
-
 
 def create_plot(feature):
     if feature == 'Bar':
@@ -53,6 +34,26 @@ def create_plot(feature):
     return graphJSON
 
 
+app = Flask(__name__)
+
+
+@app.route('/')
+def index():
+    feature = 'Bar'
+    bar = create_plot(feature)
+    return render_template('index.html', plot=bar)
+
+
+@app.route('/welcome')
+def welcome():
+    return render_template('welcome.html')
+
+
+@app.route('/test')
+def test():
+    return render_template('test.html')
+
+
 @app.route('/bar', methods=['GET', 'POST'])
 def change_features():
     feature = request.args['selected']
@@ -61,4 +62,4 @@ def change_features():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
