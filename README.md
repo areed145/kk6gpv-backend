@@ -34,7 +34,10 @@ goal will be to re-create kk6gpv.net as a flask site
      - doggr application
 
 ## todo
-- connect to mongodb
 - incorporate fetchers
 - UI
 - rebuild flickr gallery functionality
+
+## done
+- connect to mongodb
+- live updating plots
