@@ -1,5 +1,8 @@
 from flask import Flask, render_template, request
 
+# from helpers import data_helpers, image_helpers
+from figures import figs
+
 import numpy as np
 import pandas as pd
 
@@ -7,41 +10,15 @@ import plotly
 import plotly.graph_objs as go
 import json
 
-
-def create_plot(feature):
-    if feature == 'Bar':
-        N = 40
-        x = np.linspace(0, 1, N)
-        y = np.random.randn(N)
-        df = pd.DataFrame({'x': x, 'y': y})  # creating a sample dataframe
-        data = [
-            go.Bar(
-                x=df['x'],  # assign x as the dataframe column 'x'
-                y=df['y']
-            )
-        ]
-    else:
-        N = 1000
-        random_x = np.random.randn(N)
-        random_y = np.random.randn(N)
-
-        # Create a trace
-        data = [go.Scatter(
-            x=random_x,
-            y=random_y,
-            mode='markers'
-        )]
-    graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON
-
+from pymongo import MongoClient
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
-    feature = 'Bar'
-    bar = create_plot(feature)
+    feature = 'bar'
+    bar = figs.create_plot(feature)
     return render_template('index.html', plot=bar)
 
 
@@ -57,12 +34,19 @@ def wx():
 
 @app.route('/iot')
 def iot():
-    return render_template('iot.html')
+    sensor_iot = 'sensor.load_1m'
+    time_iot = 't_100'
+    graph_iot = figs.create_graph_iot(sensor_iot, time_iot)
+    return render_template('iot.html', plot=graph_iot)
 
 
 @app.route('/aprs')
 def aprs():
-    return render_template('aprs.html')
+    type_aprs = 'prefix'
+    prop_aprs = 'altitude'
+    time_aprs = 't_100'
+    map_aprs = figs.create_map_aprs(type_aprs, prop_aprs, time_aprs)
+    return render_template('aprs.html', plot=map_aprs)
 
 
 @app.route('/aircraft')
@@ -118,7 +102,24 @@ def test():
 @app.route('/bar', methods=['GET', 'POST'])
 def change_features():
     feature = request.args['selected']
-    graphJSON = create_plot(feature)
+    graphJSON = figs.create_plot(feature)
+    return graphJSON
+
+
+@app.route('/map_aprs', methods=['GET', 'POST'])
+def map_aprs_change():
+    type_aprs = request.args['type_aprs']
+    prop_aprs = request.args['prop_aprs']
+    time_aprs = request.args['time_aprs']
+    graphJSON = figs.create_map_aprs(type_aprs, prop_aprs, time_aprs)
+    return graphJSON
+
+
+@app.route('/graph_iot', methods=['GET', 'POST'])
+def graph_iot_change():
+    sensor_iot = request.args['sensor_iot']
+    time_iot = request.args['time_iot']
+    graphJSON = figs.create_graph_iot(sensor_iot, time_iot)
     return graphJSON
 
 

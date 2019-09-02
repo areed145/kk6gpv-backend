@@ -3,11 +3,11 @@
 {% block body %}
 <div class="container">
     <div class="row">
-        <div class="col-xs-3">
+        <div class="col-md-3">
             <label> Choose the plot type....</label>
             <select class="form-control" id='first_cat'>
-                <option value="Bar">Bar</option>
-                <option value="Scatter">Scatter</option>
+                <option value="bar">Bar</option>
+                <option value="scatter">Scatter</option>
             </select>
         </div>
     </div>
@@ -32,4 +32,5 @@
         </div>
     </div>
 </div>
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
 {% endblock %}

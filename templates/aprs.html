@@ -2,8 +2,53 @@
 
 {% block body %}
 <div class="container">
-  <h1>APRS</h1>
-  <br>
-  <p>Click <a href="/">here</a> to go home.</p>
+    <h1>APRS</h1>
+    <br>
+    <p>Click <a href="/">here</a> to go home.</p>
 </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <label>Type</label>
+            <select class="form-control" id='type_aprs'>
+                <option value="prefix">Prefix</option>
+                <option value="entry">Entry</option>
+                <option value="radius">Radius</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>Property</label>
+            <select class="form-control" id='prop_aprs'>
+                <option value="altitude">Altitude</option>
+                <option value="speed">Speed</option>
+                <option value="course">Course</option>
+                <option value="none">None</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>Time</label>
+            <select class="form-control" id='time_aprs'>
+                <option value="t_100">100</option>
+                <option value="t_500">500</option>
+                <option value="t_1000">1000</option>
+                <option value="t_5000">5000</option>
+                <option value="t_10000">10000</option>
+                <option value="t_50000">50000</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart" id="map_aprs">
+                <script>
+                    var graphs = {{ plot | safe}};
+                    Plotly.plot('map_aprs', graphs, {});
+                </script>
+            </div>
+        </div>
+    </div>
+    <div id="log-event"></div>
+    <div id="log-layout"></div>
+</div>
+<script src="{{ url_for('static', filename='js/aprs.js') }}"></script>
 {% endblock %}
