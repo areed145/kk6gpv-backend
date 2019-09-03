@@ -8,7 +8,9 @@ import json
 client = MongoClient(
     'mongodb+srv://web:web@cluster0-li5mj.gcp.mongodb.net')
 
-cs = [
+mapbox_access_token = 'pk.eyJ1IjoiYXJlZWQxNDUiLCJhIjoiY2phdzNsN2ZoMGh0bjMybzF3cTkycWYyciJ9.4aS7z-guI2VDlP3duMg2FA'
+
+cs_normal = [
     [0.0, '#424ded'],
     [0.1, '#4283ed'],
     [0.2, '#42d0ed'],
@@ -20,6 +22,34 @@ cs = [
     [0.8, '#f48541'],
     [0.9, '#f44741'],
     [1.0, '#f44298']
+]
+
+cs_rdgn = [
+    [0.0, '#f44741'],
+    [0.2, '#f48541'],
+    [0.4, '#f4af41'],
+    [0.6, '#edde42'],
+    [0.8, '#d6ed42'],
+    [1.0, '#78ed42']
+]
+
+cs_circle = [
+    [0.000, '#f45f42'],
+    [0.067, '#f7856f'],
+    [0.133, '#e2aba1'],
+    [0.200, '#d8bdb8'],
+    [0.267, '#BCBCBC'],
+    [0.333, '#bac8e0'],
+    [0.400, '#aeccfc'],
+    [0.467, '#77aaf9'],
+    [0.533, '#4186f4'],
+    [0.600, '#77aaf9'],
+    [0.667, '#aeccfc'],
+    [0.733, '#bac8e0'],
+    [0.800, '#BCBCBC'],
+    [0.867, '#d8bdb8'],
+    [0.933, '#e2aba1'],
+    [1.000, '#f7856f'],
 ]
 
 
@@ -101,8 +131,6 @@ def create_map_aprs(script, prop, time):
               'course': [0, 359, 1, 'degrees'], }
 
     time = int(time[2:])
-    client = MongoClient(
-        'mongodb+srv://web:web@cluster0-li5mj.gcp.mongodb.net')
     db = client.aprs
     if script == 'prefix':
         df = pd.DataFrame(list(db.raw.find({'script': script, 'from': 'KK6GPV', 'latitude': {
@@ -112,7 +140,6 @@ def create_map_aprs(script, prop, time):
                           '$exists': True, '$ne': None}}).sort([('timestamp_', -1)]).limit(time)))
     df = df[['timestamp_', 'latitude', 'longitude',
              'script', 'altitude', 'speed', 'course', 'raw']]
-    mapbox_access_token = 'pk.eyJ1IjoiYXJlZWQxNDUiLCJhIjoiY2phdzNsN2ZoMGh0bjMybzF3cTkycWYyciJ9.4aS7z-guI2VDlP3duMg2FA'
     if prop == 'none':
         data = [go.Scattermapbox(lat=df['latitude'],
                                  lon=df['longitude'],
@@ -122,9 +149,11 @@ def create_map_aprs(script, prop, time):
                                  )
                 ]
     else:
+        cs = cs_normal
         if prop == 'course':
             cmin = 0
             cmax = 359
+            cs = cs_circle
         else:
             cmin = df[prop].quantile(0.01)
             cmax = df[prop].quantile(0.99)
