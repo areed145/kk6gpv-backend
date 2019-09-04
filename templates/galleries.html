@@ -6,4 +6,17 @@
   <br>
   <p>Click <a href="/">here</a> to go home.</p>
 </div>
+<div class="container">
+  <!-- For loop logic of jinja template -->
+  {%for row in rows%}
+  <div class="row">
+    {%for gallery in row%}
+    <div class="col-md-3">
+      <p align=center><img src="{{gallery['primary']}}" alt="{{gallery['title']}}" width="100%"></p>
+      <p align=center>{{gallery['title']}} - {{gallery['photos']}}</p>
+    </div>
+    {%endfor%}
+  </div>
+  {%endfor%}
+</div>
 {% endblock %}
