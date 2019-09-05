@@ -18,15 +18,15 @@ def get_gals():
         count_photos = p.count_photos
         count_views = p.count_views
         primary = 'https://live.staticflickr.com/' + \
-            p.secret+'/'+p.primary+'_'+p.secret+'_q_d.jpg'
+            p.server+'/'+p.primary+'_'+p.secret+'_q_d.jpg'
         flickr_link = 'https://www.flickr.com/photos/adamreeder/albums/'+p.id
         kk6gpv_link = '/galleries/'+p.id
         photos = {}
         phs = p.getPhotos()
         for ph in phs:
             photos[ph.id] = {
-                'thumb': 'https://live.staticflickr.com/'+ph.secret+'/'+ph.id+'_'+ph.secret+'_q_d.jpg',
-                'large': 'https://live.staticflickr.com/'+ph.secret+'/'+ph.id+'_'+ph.secret+'_h.jpg'
+                'thumb': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_q_d.jpg',
+                'large': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_h.jpg'
             }
         gals[pid] = {
             'id': pid,
