@@ -14,11 +14,40 @@ from pymongo import MongoClient
 
 app = Flask(__name__)
 
-f.set_keys(api_key='77a2ae7ea816558f00e4dd32249be54e', api_secret='2267640a7461db21')
+f.set_keys(api_key='77a2ae7ea816558f00e4dd32249be54e',
+           api_secret='2267640a7461db21')
 f.set_auth_handler('helpers/auth')
 username = '- Adam Reeder -'
 u = f.Person.findByUserName(username)
 ps = u.getPhotosets()
+
+gals = {}
+for p in ps:
+    pid = p.id
+    title = p.title
+    count_photos = p.count_photos
+    count_views = p.count_views
+    primary = 'https://live.staticflickr.com/8203/'+p.primary+'_'+p.secret+'_q_d.jpg'
+    flickr_link = 'https://www.flickr.com/photos/adamreeder/albums/'+p.id
+    kk6gpv_link = '/galleries/'+p.id
+    photos = {}
+    phs = p.getPhotos()
+    for ph in phs:
+        photos[ph.id] = {
+            'thumb': 'https://live.staticflickr.com/8203/'+ph.id+'_'+ph.secret+'_q_d.jpg',
+            'large': 'https://live.staticflickr.com/8203/'+ph.id+'_'+ph.secret+'_q_h.jpg'
+        }
+    gals[pid] = {
+        'id': pid,
+        'title': title,
+        'count_photos': count_photos,
+        'count_views': count_views,
+        'primary': primary,
+        'flickr_link': flickr_link,
+        'kk6gpv_link': kk6gpv_link,
+        'photos': photos
+        }
+
 
 @app.route('/')
 def index():
@@ -77,24 +106,49 @@ def n5777v():
 @app.route('/galleries')
 def galleries():
     rows = []
-    gals = []
+    frames = []
     idx = 0
-    for p in ps:
-        if idx < 4:
-            title = p.title
-            pid = p.id
-            photos = p.count_photos
-            views = p.count_views
-            primary = 'https://live.staticflickr.com/8203/'+p.primary+'_'+p.secret+'_q_d.jpg'
-            link = 'https://www.flickr.com/photos/adamreeder/albums/'+p.id
-            gals.append({'title':title, 'id':pid, 'photos':photos, 'views':views, 'primary':primary, 'link':link})
+    for gal in gals:
+        if idx < 6:
+            frames.append(
+                {'caption': gals[gal]['title'] + ' - ' + str(gals[gal]['count_photos']),
+                'thumb': gals[gal]['primary'],
+                'kk6gpv_link': gals[gal]['kk6gpv_link']},
+                )
             idx += 1
         else:
-            rows.append(gals)
-            gals = []
+            rows.append(frames)
+            frames = []
             idx = 0
+    return render_template('galleries.html', rows=rows, title='Galleries')
 
-    return render_template('galleries.html', rows=rows)
+
+@app.route('/galleries/<id>')
+def gallery(id):
+    rows = []
+    frames = []
+    idx = 0
+    for ph in gals[id]['photos']:
+        if idx < 6:
+            frames.append(
+                {'thumb': gals[id]['photos'][ph]['thumb'],
+                'kk6gpv_link': '/galleries/'+id+'/'+ph},
+                )
+            idx += 1
+        else:
+            rows.append(frames)
+            frames = []
+            idx = 0
+    return render_template('galleries.html', rows=rows, title=gals[id]['title'])
+
+
+@app.route('/galleries/<id>/<ph>')
+def image(id, ph):
+    image = {
+        'thumb': gals[id]['photos'][ph]['thumb'],
+        'thumb': gals[id]['photos'][ph]['large'],
+        }
+    return render_template('image.html', image=image, title='photo')
 
 
 @app.route('/travel')

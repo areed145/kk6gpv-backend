@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class="container">
-  <h1>Galleries</h1>
+  <h1>{{title}}</h1>
   <br>
   <p>Click <a href="/">here</a> to go home.</p>
 </div>
@@ -11,9 +11,11 @@
   {%for row in rows%}
   <div class="row">
     {%for gallery in row%}
-    <div class="col-md-3">
-      <p align=center><img src="{{gallery['primary']}}" alt="{{gallery['title']}}" width="100%"></p>
-      <p align=center>{{gallery['title']}} - {{gallery['photos']}}</p>
+    <div class="col-md-2">
+      <a href="{{gallery['kk6gpv_link']}}">
+        <p align=center><img src="{{gallery['thumb']}}" alt="{{gallery['caption']}}" width="100%"></p>
+      </a>
+      <p align=center>{{gallery['caption']}}</p>
     </div>
     {%endfor%}
   </div>

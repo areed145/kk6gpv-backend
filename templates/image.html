@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="container">
+  <h1>{{title}}</h1>
+  <br>
+  <p>Click <a href="/">here</a> to go home.</p>
+</div>
+<div class="container">
+  <!-- For loop logic of jinja template -->
+  <div class="row">
+    <div class="col-md-12">
+      <a href="{{image['large']}}">
+        <p align=center><img src="{{image['large']}}" alt="{{image['large']}}" width="100%"></p>
+      </a>
+      <p align=center>{{image['thumb']}}</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
