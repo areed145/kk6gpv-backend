@@ -26,7 +26,7 @@ def get_gals():
         for ph in phs:
             photos[ph.id] = {
                 'thumb': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_q_d.jpg',
-                'large': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_h.jpg'
+                'large': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_b.jpg'
             }
         gals[pid] = {
             'id': pid,
