@@ -1,10 +1,17 @@
+import time
+import atexit
+from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request
-
+#from flask_apscheduler import APScheduler
 from helpers import figs, flickr
 
 app = Flask(__name__)
 
-gals = flickr.get_gals()
+flickr.get_gals()
+
+sched = BackgroundScheduler(daemon=True)
+sched.add_job(flickr.get_gals, 'interval', minutes=2)
+sched.start()
 
 
 @app.route('/')
@@ -63,21 +70,22 @@ def n5777v():
 
 @app.route('/galleries')
 def galleries():
-    rows = flickr.get_gal_rows(gals, 6)
+    rows = flickr.get_gal_rows(6)
     return render_template('galleries.html', rows=rows, title='Galleries')
 
 
 @app.route('/galleries/<id>')
 def gallery(id):
-    rows = flickr.get_photo_rows(gals, 6)
+    rows, gals = flickr.get_photo_rows(id, 6)
     return render_template('galleries.html', rows=rows, title=gals[id]['title'])
 
 
 @app.route('/galleries/<id>/<ph>')
 def image(id, ph):
+    gals = flickr.load_gals()
     image = {
         'thumb': gals[id]['photos'][ph]['thumb'],
-        'thumb': gals[id]['photos'][ph]['large'],
+        'large': gals[id]['photos'][ph]['large'],
     }
     return render_template('image.html', image=image, title='photo')
 

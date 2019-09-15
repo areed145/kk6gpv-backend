@@ -1,14 +1,16 @@
 #from __future__ import print_function
 
 import flickr_api as f
+import pickle
+
+f.set_keys(api_key='77a2ae7ea816558f00e4dd32249be54e',
+           api_secret='2267640a7461db21')
+f.set_auth_handler('helpers/auth')
+username = '- Adam Reeder -'
+u = f.Person.findByUserName(username)
 
 
 def get_gals():
-    f.set_keys(api_key='77a2ae7ea816558f00e4dd32249be54e',
-               api_secret='2267640a7461db21')
-    f.set_auth_handler('helpers/auth')
-    username = '- Adam Reeder -'
-    u = f.Person.findByUserName(username)
     ps = u.getPhotosets()
 
     gals = {}
@@ -38,9 +40,20 @@ def get_gals():
             'kk6gpv_link': kk6gpv_link,
             'photos': photos
         }
+    g = open('static/gals', 'wb')
+    pickle.dump(gals, g)
+    print('galleries updated')
+
+
+def load_gals():
+    g = open('static/gals', 'rb')
+    gals = pickle.load(g)
     return gals
 
-def get_gal_rows(gals, width):
+
+def get_gal_rows(width):
+    g = open('static/gals', 'rb')
+    gals = pickle.load(g)
     rows = []
     frames = []
     idx = 0
@@ -58,7 +71,10 @@ def get_gal_rows(gals, width):
             idx = 0
     return rows
 
-def get_photo_rows(gals, width):
+
+def get_photo_rows(id, width):
+    g = open('static/gals', 'rb')
+    gals = pickle.load(g)
     rows = []
     frames = []
     idx = 0
@@ -73,4 +89,4 @@ def get_photo_rows(gals, width):
             rows.append(frames)
             frames = []
             idx = 0
-    return rows
+    return rows, gals
