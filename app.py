@@ -63,40 +63,13 @@ def n5777v():
 
 @app.route('/galleries')
 def galleries():
-    rows = []
-    frames = []
-    idx = 0
-    for gal in gals:
-        if idx < 6:
-            frames.append(
-                {'caption': gals[gal]['title'] + ' - ' + str(gals[gal]['count_photos']),
-                 'thumb': gals[gal]['primary'],
-                 'kk6gpv_link': gals[gal]['kk6gpv_link']},
-            )
-            idx += 1
-        else:
-            rows.append(frames)
-            frames = []
-            idx = 0
+    rows = flickr.get_gal_rows(gals, 6)
     return render_template('galleries.html', rows=rows, title='Galleries')
 
 
 @app.route('/galleries/<id>')
 def gallery(id):
-    rows = []
-    frames = []
-    idx = 0
-    for ph in gals[id]['photos']:
-        if idx < 6:
-            frames.append(
-                {'thumb': gals[id]['photos'][ph]['thumb'],
-                 'kk6gpv_link': '/galleries/'+id+'/'+ph},
-            )
-            idx += 1
-        else:
-            rows.append(frames)
-            frames = []
-            idx = 0
+    rows = flickr.get_photo_rows(gals, 6)
     return render_template('galleries.html', rows=rows, title=gals[id]['title'])
 
 

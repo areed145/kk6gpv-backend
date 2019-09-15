@@ -39,3 +39,38 @@ def get_gals():
             'photos': photos
         }
     return gals
+
+def get_gal_rows(gals, width):
+    rows = []
+    frames = []
+    idx = 0
+    for gal in gals:
+        if idx < width:
+            frames.append(
+                {'caption': gals[gal]['title'] + ' - ' + str(gals[gal]['count_photos']),
+                 'thumb': gals[gal]['primary'],
+                 'kk6gpv_link': gals[gal]['kk6gpv_link']},
+            )
+            idx += 1
+        else:
+            rows.append(frames)
+            frames = []
+            idx = 0
+    return rows
+
+def get_photo_rows(gals, width):
+    rows = []
+    frames = []
+    idx = 0
+    for ph in gals[id]['photos']:
+        if idx < width:
+            frames.append(
+                {'thumb': gals[id]['photos'][ph]['thumb'],
+                 'kk6gpv_link': '/galleries/'+id+'/'+ph},
+            )
+            idx += 1
+        else:
+            rows.append(frames)
+            frames = []
+            idx = 0
+    return rows
