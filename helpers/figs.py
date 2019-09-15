@@ -142,11 +142,14 @@ def create_map_awc(prop):
 
     df = pd.DataFrame(list(db.awc.find()))
 
+    legend = False
+
     if prop == 'flight_category':
         df_vfr = df[df['flight_category'] == 'VFR']
         df_mvfr = df[df['flight_category'] == 'MVFR']
         df_ifr = df[df['flight_category'] == 'IFR']
         df_lifr = df[df['flight_category'] == 'LIFR']
+        legend = True
 
         data = [go.Scattermapbox(lat=df_vfr['latitude'],
                                  lon=df_vfr['longitude'],
@@ -192,6 +195,7 @@ def create_map_awc(prop):
         df_bkn = df[df['sky_cover_0'] == 'BKN']
         df_ovc = df[df['sky_cover_0'] == 'OVC']
         df_ovx = df[df['sky_cover_0'] == 'OVX']
+        legend = True
 
         data = [go.Scattermapbox(lat=df_clr['latitude'],
                                  lon=df_clr['longitude'],
@@ -281,7 +285,7 @@ def create_map_awc(prop):
                 ]
     layout = go.Layout(autosize=True,
                        # height=1000,
-                       showlegend=False,
+                       showlegend=legend,
                        hovermode='closest',
                        uirevision=True,
                        margin=dict(r=0, t=0, b=0, l=0, pad=0),
