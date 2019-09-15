@@ -4,6 +4,7 @@ from pymongo import MongoClient
 import plotly
 import plotly.graph_objs as go
 import json
+from datetime import datetime
 
 client = MongoClient(
     'mongodb+srv://web:web@cluster0-li5mj.gcp.mongodb.net')
@@ -31,6 +32,15 @@ cs_rdgn = [
     [0.6, '#edde42'],
     [0.8, '#d6ed42'],
     [1.0, '#78ed42']
+]
+
+cs_gnrd = [
+    [0.0, '#78ed42'],
+    [0.2, '#d6ed42'],
+    [0.4, '#edde42'],
+    [0.6, '#f4af41'],
+    [0.8, '#f48541'],
+    [1.0, '#f44741'],
 ]
 
 cs_circle = [
@@ -136,7 +146,10 @@ def create_map_awc(prop):
               'cloud_base_ft_agl_0': [0, 10000, 1, 0, 'ft'],
               'sky_cover_0': [0, 100, 1, 0, 'degrees'],
               'precip_in': [0, 10, 1, 0, 'degrees'],
-              'elevation_m': [0, 10000, 3.2808, 0, 'ft'], }
+              'elevation_m': [0, 10000, 3.2808, 0, 'ft'],
+              'age': [0, 10000, 1, 0, 'minutes'],
+              'three_hr_pressure_tendency_mb': [0, 10000, 1, 0, '?'],
+              }
 
     db = client.wx
 
@@ -253,33 +266,43 @@ def create_map_awc(prop):
                                  )
                 ]
     else:
-        cs = cs_normal
-        cmin = df[prop].quantile(0.01)
-        cmax = df[prop].quantile(0.99)
         if prop == 'wind_dir_degrees':
+            cs = cs_circle
             cmin = 0
             cmax = 359
-            cs = cs_circle
-        if prop == 'visibility_statute_mi':
+        elif prop == 'visibility_statute_mi':
+            cs = cs_rdgn
             cmin = 0
             cmax = 10
-            cs = cs_rdgn
-        if prop == 'cloud_base_ft_agl_0':
+        elif prop == 'cloud_base_ft_agl_0':
             cs = cs_rdgn
             cmin = 0
             cmax = 2000
+        elif prop == 'age':
+            df['age'] = (datetime.utcnow() - df['observation_time']
+                         ).astype('timedelta64[m]')
+            cs = cs_gnrd
+            cmin = 0
+            cmax = 60
+        else:
+            cs = cs_normal
+            cmin = df[prop].quantile(0.01)
+            cmax = df[prop].quantile(0.99)
 
         data = [go.Scattermapbox(lat=df['latitude'],
                                  lon=df['longitude'],
                                  text=df['raw_text'],
                                  mode='markers',
                                  marker=dict(size=10,
-                                             color=params[prop][2] * df[prop] + params[prop][3],
+                                             color=params[prop][2] *
+                                             df[prop] + params[prop][3],
                                              colorbar=dict(
                                                  title=params[prop][4]),
                                              colorscale=cs,
-                                             cmin=params[prop][2] * cmin + params[prop][3],
-                                             cmax=params[prop][2] * cmax + params[prop][3],
+                                             cmin=params[prop][2] *
+                                             cmin + params[prop][3],
+                                             cmax=params[prop][2] *
+                                             cmax + params[prop][3],
                                              )
                                  )
                 ]
@@ -340,12 +363,15 @@ def create_map_aprs(script, prop, time):
                                  text=df['raw'],
                                  mode='markers',
                                  marker=dict(size=10,
-                                             color=params[prop][2] * df[prop] + params[prop][3],
+                                             color=params[prop][2] *
+                                             df[prop] + params[prop][3],
                                              colorbar=dict(
                                                  title=params[prop][4]),
                                              colorscale=cs,
-                                             cmin=params[prop][2] * cmin + params[prop][3],
-                                             cmax=params[prop][2] * cmax + params[prop][3],
+                                             cmin=params[prop][2] *
+                                             cmin + params[prop][3],
+                                             cmax=params[prop][2] *
+                                             cmax + params[prop][3],
                                              )
                                  )
                 ]

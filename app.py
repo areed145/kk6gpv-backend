@@ -3,14 +3,14 @@ import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request
 #from flask_apscheduler import APScheduler
-from helpers import figs, flickr
+from helpers import figs, flickr, awc_fetch
 
 app = Flask(__name__)
 
-#flickr.get_gals()
-
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(flickr.get_gals, 'interval', minutes=30)
+sched.add_job(flickr.get_gals, 'interval', hours=1)
+sched.add_job(awc_fetch.get_awc_short, 'interval', minutes=1, args=[0.02], max_instances=3)
+sched.add_job(awc_fetch.get_awc_long, 'interval', hours=1, args=[2])
 sched.start()
 
 
@@ -129,6 +129,7 @@ def map_awc_change():
     prop_awc = request.args['prop_awc']
     graphJSON = figs.create_map_awc(prop_awc)
     return graphJSON
+
 
 @app.route('/map_aprs', methods=['GET', 'POST'])
 def map_aprs_change():
