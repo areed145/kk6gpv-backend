@@ -11,8 +11,9 @@ if ($('#iot').length > 0) {
             },
             dataType: "json",
             success: function (data) {
-                Plotly.plot('graph_iot', data);
-                Plotly.deleteTraces('graph_iot', 0);
+                Plotly.react('graph_iot', data);
+                // Plotly.plot('graph_iot', data);
+                // Plotly.deleteTraces('graph_iot', 0);
             }
         });
     })
@@ -28,8 +29,9 @@ if ($('#iot').length > 0) {
             },
             dataType: "json",
             success: function (data) {
-                Plotly.plot('graph_iot', data);
-                Plotly.deleteTraces('graph_iot', 0);
+                Plotly.react('graph_iot', data);
+                // Plotly.plot('graph_iot', data);
+                // Plotly.deleteTraces('graph_iot', 0);
             }
         });
     })
@@ -46,8 +48,9 @@ if ($('#iot').length > 0) {
             dataType: "json",
         })
             .done(function (data) {
-                Plotly.plot('graph_iot', data);
-                Plotly.deleteTraces('graph_iot', 0);
+                Plotly.react('graph_iot', data);
+                // Plotly.plot('graph_iot', data);
+                // Plotly.deleteTraces('graph_iot', 0);
             })
     }, 1000 * 5);
 
@@ -67,9 +70,9 @@ if ($('#aprs').length > 0) {
             },
             dataType: "json",
             success: function (data) {
-                Plotly.plot('map_aprs', data);
-                Plotly.deleteTraces('map_aprs', 0);
-    
+                Plotly.react('map_aprs', data);
+                // Plotly.plot('map_aprs', data);
+                // Plotly.deleteTraces('map_aprs', 0);
             }
         });
     })
@@ -86,9 +89,9 @@ if ($('#aprs').length > 0) {
             },
             dataType: "json",
             success: function (data) {
-                Plotly.plot('map_aprs', data);
-                Plotly.deleteTraces('map_aprs', 0);
-    
+                Plotly.react('map_aprs', data);
+                // Plotly.plot('map_aprs', data);
+                // Plotly.deleteTraces('map_aprs', 0);    
             }
         });
     })
@@ -106,9 +109,9 @@ if ($('#aprs').length > 0) {
             },
             dataType: "json",
             success: function (data) {
-                Plotly.plot('map_aprs', data);
-                Plotly.deleteTraces('map_aprs', 0);
-    
+                Plotly.react('map_aprs', data);
+                // Plotly.plot('map_aprs', data);
+                // Plotly.deleteTraces('map_aprs', 0);    
             }
         });
     })
@@ -127,8 +130,9 @@ if ($('#aprs').length > 0) {
             dataType: "json",
         })
             .done(function (data) {
-                Plotly.plot('map_aprs', data);
-                Plotly.deleteTraces('map_aprs', 0);
+                Plotly.react('map_aprs', data);
+                // Plotly.plot('map_aprs', data);
+                // Plotly.deleteTraces('map_aprs', 0);    
             })
     }, 1000 * 60);
 
@@ -143,12 +147,13 @@ if ($('#awc').length > 0) {
             contentType: 'application/json;charset=UTF-8',
             data: {
                 'prop_awc': document.getElementById('prop_awc').value,
-                'update': true,
+                // 'update': true,
             },
             dataType: "json",
             success: function (data) {
-                Plotly.plot('map_awc', data);
-                Plotly.deleteTraces('map_awc', 0);
+                Plotly.react('map_awc', data);
+                // Plotly.plot('map_awc', data);
+                // Plotly.deleteTraces('map_awc', 0);
     
             }
         });
@@ -161,13 +166,14 @@ if ($('#awc').length > 0) {
             contentType: 'application/json;charset=UTF-8',
             data: {
                 'prop_awc': document.getElementById('prop_awc').value,
-                'update': true,
+                // 'update': true,
             },
             dataType: "json",
         })
             .done(function (data) {
-                Plotly.plot('map_awc', data);
-                Plotly.deleteTraces('map_awc', 0);
+                Plotly.react('map_awc', data);
+                // Plotly.plot('map_awc', data);
+                // Plotly.deleteTraces('map_awc', 0);
             })
     }, 1000 * 60);
 

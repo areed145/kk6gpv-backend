@@ -125,18 +125,18 @@ def create_graph_iot(sensor, time):
 
 
 def create_map_awc(prop):
-    params = {'flight_category': [0, 0, 0, ''],
-              'temp_c': [0, 100, 1, 'C'],
-              'dewpoint_c': [0, 100, 1, 'C'],
-              'altim_in_hg': [0, 100, 1, 'inHg'],
-              'wind_dir_degrees': [0, 359, 1, 'degrees'],
-              'wind_speed_kt': [0, 100, 1, 'kts'],
-              'wind_gust_kt': [0, 100, 1, 'kts'],
-              'visibility_statute_mi': [0, 100, 1, 'mi'],
-              'cloud_base_ft_agl_0': [0, 10000, 1, 'ft'],
-              'sky_cover_0': [0, 100, 1, 'degrees'],
-              'precip_in': [0, 10, 1, 'degrees'],
-              'elevation_m': [0, 10000, 3.2808, 'ft'], }
+    params = {'flight_category': [0, 0, 0, 0, ''],
+              'temp_c': [0, 100, 1.8, 32, 'F'],
+              'dewpoint_c': [0, 100, 1.8, 32, 'F'],
+              'altim_in_hg': [0, 100, 1, 0, 'inHg'],
+              'wind_dir_degrees': [0, 359, 1, 0, 'degrees'],
+              'wind_speed_kt': [0, 100, 1, 0, 'kts'],
+              'wind_gust_kt': [0, 100, 1, 0, 'kts'],
+              'visibility_statute_mi': [0, 100, 1, 0, 'mi'],
+              'cloud_base_ft_agl_0': [0, 10000, 1, 0, 'ft'],
+              'sky_cover_0': [0, 100, 1, 0, 'degrees'],
+              'precip_in': [0, 10, 1, 0, 'degrees'],
+              'elevation_m': [0, 10000, 3.2808, 0, 'ft'], }
 
     db = client.wx
 
@@ -250,24 +250,32 @@ def create_map_awc(prop):
                 ]
     else:
         cs = cs_normal
-        if prop == '':
+        cmin = df[prop].quantile(0.01)
+        cmax = df[prop].quantile(0.99)
+        if prop == 'wind_dir_degrees':
             cmin = 0
             cmax = 359
             cs = cs_circle
-        else:
-            cmin = df[prop].quantile(0.01)
-            cmax = df[prop].quantile(0.99)
+        if prop == 'visibility_statute_mi':
+            cmin = 0
+            cmax = 10
+            cs = cs_rdgn
+        if prop == 'cloud_base_ft_agl_0':
+            cs = cs_rdgn
+            cmin = 0
+            cmax = 2000
+
         data = [go.Scattermapbox(lat=df['latitude'],
                                  lon=df['longitude'],
                                  text=df['raw_text'],
                                  mode='markers',
                                  marker=dict(size=10,
-                                             color=params[prop][2] * df[prop],
+                                             color=params[prop][2] * df[prop] + params[prop][3],
                                              colorbar=dict(
-                                                 title=params[prop][3]),
+                                                 title=params[prop][4]),
                                              colorscale=cs,
-                                             cmin=cmin,
-                                             cmax=cmax,
+                                             cmin=params[prop][2] * cmin + params[prop][3],
+                                             cmax=params[prop][2] * cmax + params[prop][3],
                                              )
                                  )
                 ]
@@ -291,10 +299,10 @@ def create_map_awc(prop):
 
 
 def create_map_aprs(script, prop, time):
-    params = {'none': [0, 0, 0, ''],
-              'altitude': [0, 1000, 3.2808, 'ft'],
-              'speed': [0, 100, 0.621371, 'mph'],
-              'course': [0, 359, 1, 'degrees'], }
+    params = {'none': [0, 0, 0, 0, ''],
+              'altitude': [0, 1000, 3.2808, 0, 'ft'],
+              'speed': [0, 100, 0.621371, 0, 'mph'],
+              'course': [0, 359, 1, 0, 'degrees'], }
 
     time = int(time[2:])
     db = client.aprs
@@ -328,12 +336,12 @@ def create_map_aprs(script, prop, time):
                                  text=df['raw'],
                                  mode='markers',
                                  marker=dict(size=10,
-                                             color=params[prop][2] * df[prop],
+                                             color=params[prop][2] * df[prop] + params[prop][3],
                                              colorbar=dict(
-                                                 title=params[prop][3]),
+                                                 title=params[prop][4]),
                                              colorscale=cs,
-                                             cmin=cmin,
-                                             cmax=cmax,
+                                             cmin=params[prop][2] * cmin + params[prop][3],
+                                             cmax=params[prop][2] * cmax + params[prop][3],
                                              )
                                  )
                 ]

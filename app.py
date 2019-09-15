@@ -10,7 +10,7 @@ app = Flask(__name__)
 #flickr.get_gals()
 
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(flickr.get_gals, 'interval', minutes=2)
+sched.add_job(flickr.get_gals, 'interval', minutes=30)
 sched.start()
 
 
@@ -23,7 +23,7 @@ def index():
 
 @app.route('/awc')
 def awc():
-    prop_awc = 'temp_c'
+    prop_awc = 'flight_category'
     map_awc = figs.create_map_awc(prop_awc)
     return render_template('awc.html', plot=map_awc)
 

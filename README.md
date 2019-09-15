@@ -36,8 +36,19 @@ goal will be to re-create kk6gpv.net as a flask site
 ## todo
 - incorporate fetchers
 - UI
-- rebuild flickr gallery functionality
+- rebuild flickr photo gallery functionality
+- add station weather plots
+- move gallery listing to db
+- incorporate Plotly.react in other plots
+- port DOGGR data
+- figure out how to add raster layers to maps (leaflet? instaead of plotly for mapbox)
+- builder like blog for writing about proejcts
+- details pages for APRS info
+- styling
+- convert time queries to date range
 
 ## done
 - connect to mongodb
 - live updating plots
+- rebuild flickr gallery functionality
+- add weather maps
