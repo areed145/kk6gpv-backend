@@ -2,8 +2,41 @@
 
 {% block body %}
 <div class="container">
-  <h1>Aviation Weather</h1>
-  <br>
-  <p>Click <a href="/">here</a> to go home.</p>
+    <h1>Aviation Weather</h1>
+    <br>
+    <p>Click <a href="/">here</a> to go home.</p>
+</div>
+<div class="container" id="awc">
+    <div class="row">
+        <div class="col-md-4">
+            <label>Property</label>
+            <select class="form-control" id='prop_awc'>
+                <option value="flight_category">Flight Category</option>
+                <option value="temp_c">Temperature</option>
+                <option value="dewpoint_c">Dewpoint</option>
+                <option value="altim_in_hg">Altimeter</option>
+                <option value="wind_dir_degrees">Wind Direction</option>
+                <option value="wind_speed_kt">Wind Speed</option>
+                <option value="wind_gust_kt">Wind Gust</option>
+                <option value="visibility_statute_mi">Visibility</option>
+                <option value="cloud_base_ft_agl_0">Cloud Base AGL</option>
+                <option value="sky_cover_0">Sky Cover</option>
+                <option value="precip_in">Precip</option>
+                <option value="elevation_m">Elevation</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart" id="map_awc">
+                <script>
+                    var graphs = {{ plot | safe}};
+                    Plotly.plot('map_awc', graphs, {});
+                </script>
+            </div>
+        </div>
+    </div>
+    <div id="log-event"></div>
+    <div id="log-layout"></div>
 </div>
 {% endblock %}

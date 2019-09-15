@@ -134,5 +134,44 @@ if ($('#aprs').length > 0) {
 
 }
 
+if ($('#awc').length > 0) {
+    
+    $('#prop_awc').on('change', function () {
+        $.ajax({
+            url: "/map_awc",
+            type: "GET",
+            contentType: 'application/json;charset=UTF-8',
+            data: {
+                'prop_awc': document.getElementById('prop_awc').value,
+                'update': true,
+            },
+            dataType: "json",
+            success: function (data) {
+                Plotly.plot('map_awc', data);
+                Plotly.deleteTraces('map_awc', 0);
+    
+            }
+        });
+    })
+    
+    setInterval(function () {
+        $.ajax({
+            url: "/map_awc",
+            type: "GET",
+            contentType: 'application/json;charset=UTF-8',
+            data: {
+                'prop_awc': document.getElementById('prop_awc').value,
+                'update': true,
+            },
+            dataType: "json",
+        })
+            .done(function (data) {
+                Plotly.plot('map_awc', data);
+                Plotly.deleteTraces('map_awc', 0);
+            })
+    }, 1000 * 60);
+
+}
+
 
 

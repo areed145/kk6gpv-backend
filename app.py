@@ -7,7 +7,7 @@ from helpers import figs, flickr
 
 app = Flask(__name__)
 
-flickr.get_gals()
+#flickr.get_gals()
 
 sched = BackgroundScheduler(daemon=True)
 sched.add_job(flickr.get_gals, 'interval', minutes=2)
@@ -23,7 +23,9 @@ def index():
 
 @app.route('/awc')
 def awc():
-    return render_template('awc.html')
+    prop_awc = 'temp_c'
+    map_awc = figs.create_map_awc(prop_awc)
+    return render_template('awc.html', plot=map_awc)
 
 
 @app.route('/wx')
@@ -121,6 +123,12 @@ def change_features():
     graphJSON = figs.create_plot(feature)
     return graphJSON
 
+
+@app.route('/map_awc', methods=['GET', 'POST'])
+def map_awc_change():
+    prop_awc = request.args['prop_awc']
+    graphJSON = figs.create_map_awc(prop_awc)
+    return graphJSON
 
 @app.route('/map_aprs', methods=['GET', 'POST'])
 def map_aprs_change():
