@@ -77,27 +77,14 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
         print('fetch failed')
     awc.close()
 
-
-def get_awc_long(timeback):
+def get_awc(timeback, inc):
     pl = Pool(48)
-    inc = 16
     for lat_min in range(-90, 90, inc):
         for lon_min in range(-180, 180, inc):
             pl.apply_async(get_obs, args=(lat_min, lon_min, inc, timeback, 3))
     pl.close()
     pl.join()
-    print('got long')
-
-
-def get_awc_short(timeback):
-    pl = Pool(48)
-    inc = 45
-    for lat_min in range(-90, 90, inc):
-        for lon_min in range(-180, 180, inc):
-            pl.apply_async(get_obs, args=(lat_min, lon_min, inc, timeback, 3))
-    pl.close()
-    pl.join()
-    print('got short')
+    print('got '+str(timeback)+' hours back at '+str(inc)+' deg incs')
 
 
 def truncate_table():
