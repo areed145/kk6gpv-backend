@@ -1,3 +1,8 @@
 {
-    "python.pythonPath": ".venv/bin/python3"
+    "python.pythonPath": "/Users/areed145/anaconda3/envs/kk6gpv/bin/python",
+    "appService.zipIgnorePattern": [
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/45b59352-da58-4e3a-beab-1a4518951e4e/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/kk6gpv-flask",
+    "appService.deploySubpath": ""
 }

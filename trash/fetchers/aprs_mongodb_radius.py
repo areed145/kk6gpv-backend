@@ -29,6 +29,7 @@ def unpack_dict(d):
         raw.insert_one(message)
         print(message)
     except:
+        raw.insert_one(message)
         print('unpack failed')
 
 if __name__ == '__main__':

@@ -2,15 +2,16 @@ import time
 import atexit
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request
-#from flask_apscheduler import APScheduler
-from helpers import figs, flickr, awc_fetch
+from helpers import figs, flickr, fetcher_awc, fetcher_aprs
 
 app = Flask(__name__)
 
 sched = BackgroundScheduler(daemon=True)
 sched.add_job(flickr.get_gals, 'interval', hours=1)
-sched.add_job(awc_fetch.get_awc_short, 'interval', minutes=1, args=[0.02], max_instances=3)
-sched.add_job(awc_fetch.get_awc_long, 'interval', hours=1, args=[2])
+sched.add_job(fetcher_awc.get_awc_short, 'interval',
+              minutes=1, args=[0.02], max_instances=3)
+sched.add_job(fetcher_awc.get_awc_long, 'interval', hours=1, args=[2])
+sched.add_job(fetcher_aprs.run)
 sched.start()
 
 
