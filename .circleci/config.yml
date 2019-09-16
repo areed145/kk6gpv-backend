@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/buildpack-deps:stretch
     environment:
-      IMAGE_NAME: areed145/kk6gpv:latest
+      IMAGE_NAME: areed145/kk6gpv
     working_directory: ~/app
     steps:
       - checkout
