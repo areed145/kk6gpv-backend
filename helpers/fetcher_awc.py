@@ -26,7 +26,7 @@ def convert(val):
     return val
 
 
-def get_obs(lat_min, lon_min, inc, timeback):
+def get_obs(awc, lat_min, lon_min, inc, timeback):
     url = 'https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&mostRecentForEachStation=true'
     url += '&minLon='+str(lon_min)
     url += '&maxLon='+str(min(180, lon_min+inc+1))
@@ -71,19 +71,15 @@ def get_obs(lat_min, lon_min, inc, timeback):
     except:
         print('fetch failed')
 
-
-def get_awc(timeback, inc, threads):
+def get_awc(timeback, inc, max_pool):
     client = MongoClient(
-        'mongodb+srv://kk6gpv:ObqL7MKu4IrEvgyE@cluster0-li5mj.gcp.mongodb.net/test?retryWrites=true', maxPoolSize=threads)
+        'mongodb+srv://kk6gpv:ObqL7MKu4IrEvgyE@cluster0-li5mj.gcp.mongodb.net/test?retryWrites=true', maxPoolSize=max_pool)
     db = client.wx
     awc = db.awc
-    pl = Pool(threads)
     for lat_min in range(-90, 90, inc):
         for lon_min in range(-180, 180, inc):
-            pl.apply_async(get_obs, args=(lat_min, lon_min, inc, timeback))
-    pl.close()
-    pl.join()
-    awc.close()
+            get_obs(awc, lat_min, lon_min, inc, timeback)
+    client.close()
     print('got '+str(timeback)+' hours back at '+str(inc)+' deg incs')
 
 
@@ -93,4 +89,5 @@ def truncate_table():
     db = client.wx
     awc = db.awc
     awc.delete_many({})
+    client.close()
     print('table truncated')
