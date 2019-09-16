@@ -26,18 +26,13 @@ def convert(val):
     return val
 
 
-def get_obs(lat_min, lon_min, inc, timeback, max_pool):
+def get_obs(lat_min, lon_min, inc, timeback):
     url = 'https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&mostRecentForEachStation=true'
     url += '&minLon='+str(lon_min)
     url += '&maxLon='+str(min(180, lon_min+inc+1))
     url += '&minLat='+str(lat_min)
     url += '&maxLat='+str(min(90, lat_min+inc+1))
     url += '&hoursBeforeNow='+str(timeback)
-
-    client = MongoClient(
-        'mongodb+srv://kk6gpv:ObqL7MKu4IrEvgyE@cluster0-li5mj.gcp.mongodb.net/test?retryWrites=true', maxPoolSize=max_pool)
-    db = client.wx
-    awc = db.awc
 
     try:
         xml = urllib.request.urlopen(url).read()
@@ -75,15 +70,20 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                 print('write failed')
     except:
         print('fetch failed')
-    awc.close()
 
-def get_awc(timeback, inc):
-    pl = Pool(48)
+
+def get_awc(timeback, inc, threads):
+    client = MongoClient(
+        'mongodb+srv://kk6gpv:ObqL7MKu4IrEvgyE@cluster0-li5mj.gcp.mongodb.net/test?retryWrites=true', maxPoolSize=threads)
+    db = client.wx
+    awc = db.awc
+    pl = Pool(threads)
     for lat_min in range(-90, 90, inc):
         for lon_min in range(-180, 180, inc):
-            pl.apply_async(get_obs, args=(lat_min, lon_min, inc, timeback, 3))
+            pl.apply_async(get_obs, args=(lat_min, lon_min, inc, timeback))
     pl.close()
     pl.join()
+    awc.close()
     print('got '+str(timeback)+' hours back at '+str(inc)+' deg incs')
 
 
