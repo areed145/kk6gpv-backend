@@ -1,19 +1,17 @@
-FROM ubuntu:18.04
+FROM python:3.7-slim-buster
 
 LABEL maintainer="areed145@gmail.com"
 
-RUN apt-get update -y && \
-    apt-get install -y python-pip python-dev
-
-# We copy just the requirements.txt first to leverage Docker cache
-COPY ./requirements.txt /app/requirements.txt
-
 WORKDIR /app
-
-RUN pip install -r requirements.txt
 
 COPY . /app
 
-ENTRYPOINT [ "python" ]
+# We copy just the requirements.txt first to leverage Docker cache
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
-CMD [ "app.py" ]
+EXPOSE 80
+
+ENV NAME World
+
+CMD ["python", "app.py"]
