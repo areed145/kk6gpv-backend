@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/Users/areed145/anaconda3/envs/kk6gpv/bin/python",
+    "python.pythonPath": "/Library/Developer/CommandLineTools/usr/bin/python3",
     "appService.zipIgnorePattern": [
         ".vscode{,/**}"
     ],
