@@ -58,6 +58,18 @@ if ($('#iot').length > 0) {
 
 if ($('#aprs').length > 0) {
 
+    function Proc(rows) {
+        var content = '';
+        for (var i = 0; i < rows.length; i++) {
+            content += '<tr>';
+            content += '<td>' + rows[i].timestamp_ + '</td>';
+            content += '<td>' + rows[i].latitude + '</td>';
+            content += '<td>' + rows[i].longitude + '</td>';
+            content += '</tr>';
+        }
+        $('#packets tbody').html(content);
+    }
+
     $('#type_aprs').on('change', function () {
         $.ajax({
             url: "/map_aprs",
@@ -74,6 +86,7 @@ if ($('#aprs').length > 0) {
                 Plotly.react('plot_speed', data.plot_speed);
                 Plotly.react('plot_alt', data.plot_alt);
                 Plotly.react('plot_course', data.plot_course);
+                Proc(data.rows);
                 // Plotly.plot('map_aprs', data);
                 // Plotly.deleteTraces('map_aprs', 0);
             }
@@ -111,7 +124,7 @@ if ($('#aprs').length > 0) {
                 'type_aprs': document.getElementById('type_aprs').value,
                 'prop_aprs': document.getElementById('prop_aprs').value,
                 'time_aprs': document.getElementById('time_aprs').value,
-                'update': true,
+                // 'update': true,
             },
             dataType: "json",
             success: function (data) {
@@ -119,6 +132,7 @@ if ($('#aprs').length > 0) {
                 Plotly.react('plot_speed', data.plot_speed);
                 Plotly.react('plot_alt', data.plot_alt);
                 Plotly.react('plot_course', data.plot_course);
+                Proc(data.rows);
                 // Plotly.plot('map_aprs', data);
                 // Plotly.deleteTraces('map_aprs', 0);    
             }
@@ -134,7 +148,7 @@ if ($('#aprs').length > 0) {
                 'type_aprs': document.getElementById('type_aprs').value,
                 'prop_aprs': document.getElementById('prop_aprs').value,
                 'time_aprs': document.getElementById('time_aprs').value,
-                'update': true,
+                // 'update': true,
             },
             dataType: "json",
         })
@@ -143,6 +157,7 @@ if ($('#aprs').length > 0) {
                 Plotly.react('plot_speed', data.plot_speed);
                 Plotly.react('plot_alt', data.plot_alt);
                 Plotly.react('plot_course', data.plot_course);
+                Proc(data.rows);
                 // Plotly.plot('map_aprs', data);
                 // Plotly.deleteTraces('map_aprs', 0);    
             })

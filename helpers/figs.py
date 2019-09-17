@@ -345,10 +345,10 @@ def create_map_aprs(script, prop, time):
     else:
         df = pd.DataFrame(list(db.raw.find({'script': script, 'latitude': {
                           '$exists': True, '$ne': None}}).sort([('timestamp_', -1)]).limit(time)))
-    df = df[['timestamp_', 'latitude', 'longitude',
-             'script', 'altitude', 'speed', 'course', 'raw']]
+    # df = df[['timestamp_', 'latitude', 'longitude',
+    #          'script', 'altitude', 'speed', 'course', 'raw']]
     if prop == 'none':
-        data = [go.Scattermapbox(lat=df['latitude'],
+        data_map = [go.Scattermapbox(lat=df['latitude'],
                                  lon=df['longitude'],
                                  text=df['raw'],
                                  mode='markers',
@@ -364,7 +364,7 @@ def create_map_aprs(script, prop, time):
         else:
             cmin = df[prop].quantile(0.01)
             cmax = df[prop].quantile(0.99)
-        data = [go.Scattermapbox(lat=df['latitude'],
+        data_map = [go.Scattermapbox(lat=df['latitude'],
                                  lon=df['longitude'],
                                  text=df['raw'],
                                  mode='markers',
@@ -381,7 +381,7 @@ def create_map_aprs(script, prop, time):
                                              )
                                  )
                 ]
-    layout = go.Layout(autosize=True,
+    layout_map = go.Layout(autosize=True,
                        # height=1000,
                        showlegend=False,
                        hovermode='closest',
@@ -467,7 +467,7 @@ def create_map_aprs(script, prop, time):
                               showlegend=False,
                               )
 
-    graphJSON = json.dumps(dict(data=data, layout=layout),
+    graphJSON_map = json.dumps(dict(data=data_map, layout=layout_map),
                            cls=plotly.utils.PlotlyJSONEncoder)
 
     graphJSON_speed = json.dumps(dict(data=data_speed, layout=layout_speed),
@@ -479,4 +479,15 @@ def create_map_aprs(script, prop, time):
     graphJSON_course = json.dumps(dict(data=data_course, layout=layout_course),
                                   cls=plotly.utils.PlotlyJSONEncoder)
 
-    return graphJSON, graphJSON_speed, graphJSON_alt, graphJSON_course
+    df['timestamp_'] = df['timestamp_'].apply(lambda x: x.strftime('%Y-%m-%d %H:%M:%S'))
+    df = df[['timestamp_','latitude','longitude','speed','altitude','course']]
+    rows = []
+    for _, row in df.iterrows():
+        r = {}
+        r['timestamp_'] = row['timestamp_']
+        r['latitude'] = np.round(row['latitude'],2)
+        r['longitude'] = np.round(row['longitude'],2)
+        rows.append(r)
+    print(rows)
+
+    return graphJSON_map, graphJSON_speed, graphJSON_alt, graphJSON_course, rows
