@@ -70,13 +70,16 @@ if ($('#aprs').length > 0) {
             },
             dataType: "json",
             success: function (data) {
-                Plotly.react('map_aprs', data);
+                Plotly.react('map_aprs', data.map_aprs);
+                Plotly.react('plot_speed', data.plot_speed);
+                Plotly.react('plot_alt', data.plot_alt);
+                Plotly.react('plot_course', data.plot_course);
                 // Plotly.plot('map_aprs', data);
                 // Plotly.deleteTraces('map_aprs', 0);
             }
         });
     })
-    
+
     $('#prop_aprs').on('change', function () {
         $.ajax({
             url: "/map_aprs",
@@ -89,13 +92,16 @@ if ($('#aprs').length > 0) {
             },
             dataType: "json",
             success: function (data) {
-                Plotly.react('map_aprs', data);
+                Plotly.react('map_aprs', data.map_aprs);
+                // Plotly.react('plot_speed', data.plot_speed);
+                // Plotly.react('plot_alt', data.plot_alt);
+                // Plotly.react('plot_course', data.plot_course);
                 // Plotly.plot('map_aprs', data);
                 // Plotly.deleteTraces('map_aprs', 0);    
             }
         });
     })
-    
+
     $('#time_aprs').on('change', function () {
         $.ajax({
             url: "/map_aprs",
@@ -109,13 +115,16 @@ if ($('#aprs').length > 0) {
             },
             dataType: "json",
             success: function (data) {
-                Plotly.react('map_aprs', data);
+                Plotly.react('map_aprs', data.map_aprs);
+                Plotly.react('plot_speed', data.plot_speed);
+                Plotly.react('plot_alt', data.plot_alt);
+                Plotly.react('plot_course', data.plot_course);
                 // Plotly.plot('map_aprs', data);
                 // Plotly.deleteTraces('map_aprs', 0);    
             }
         });
     })
-    
+
     setInterval(function () {
         $.ajax({
             url: "/map_aprs",
@@ -130,7 +139,10 @@ if ($('#aprs').length > 0) {
             dataType: "json",
         })
             .done(function (data) {
-                Plotly.react('map_aprs', data);
+                Plotly.react('map_aprs', data.map_aprs);
+                Plotly.react('plot_speed', data.plot_speed);
+                Plotly.react('plot_alt', data.plot_alt);
+                Plotly.react('plot_course', data.plot_course);
                 // Plotly.plot('map_aprs', data);
                 // Plotly.deleteTraces('map_aprs', 0);    
             })
@@ -139,7 +151,7 @@ if ($('#aprs').length > 0) {
 }
 
 if ($('#awc').length > 0) {
-    
+
     $('#prop_awc').on('change', function () {
         $.ajax({
             url: "/map_awc",
@@ -154,11 +166,11 @@ if ($('#awc').length > 0) {
                 Plotly.react('map_awc', data);
                 // Plotly.plot('map_awc', data);
                 // Plotly.deleteTraces('map_awc', 0);
-    
+
             }
         });
     })
-    
+
     setInterval(function () {
         $.ajax({
             url: "/map_awc",

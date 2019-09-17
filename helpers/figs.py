@@ -395,6 +395,88 @@ def create_map_aprs(script, prop, time):
                                    zoom=6
                                    )
                        )
+
+    data_speed = [
+        go.Scatter(x=df['timestamp_'],
+                   y=df['speed'],
+                   name='Speed (mph)',
+                   line=dict(color='rgb(255, 127, 63)',
+                             width=2, shape='linear'),
+                   # xaxis='x', yaxis='y',
+                   mode='lines'),
+    ]
+
+    layout_speed = go.Layout(autosize=True,
+                             height=200,
+                             yaxis=dict(domain=[0.02, 0.98],
+                                        title='Speed (mph)',
+                                        # range=[td_min,td_max],
+                                        fixedrange=True,
+                                        titlefont=dict(
+                                            color='rgb(255, 95, 63)')
+                                        ),
+                             xaxis=dict(type='date', fixedrange=False),
+                             margin=dict(r=50, t=30, b=30, l=60, pad=0),
+                             showlegend=False,
+                             )
+
+    data_alt = [
+        go.Scatter(x=df['timestamp_'],
+                   y=df['altitude'],
+                   name='Altitude (ft)',
+                   line=dict(color='rgb(255, 95, 63)',
+                             width=2, shape='linear'),
+                   # xaxis='x', yaxis='y',
+                   mode='lines'),
+    ]
+
+    layout_alt = go.Layout(autosize=True,
+                           height=200,
+                           yaxis=dict(domain=[0.02, 0.98],
+                                      title='Altitude (ft)',
+                                      # range=[td_min,td_max],
+                                      fixedrange=True,
+                                      titlefont=dict(color='rgb(255, 95, 63)')
+                                      ),
+                           xaxis=dict(type='date', fixedrange=False),
+                           margin=dict(r=50, t=30, b=30, l=60, pad=0),
+                           showlegend=False,
+                           )
+
+    data_course = [
+        go.Scatter(x=df['timestamp_'],
+                   y=df['course'],
+                   name='Course (degrees)',
+                   line=dict(color='rgb(255, 63, 63)',
+                             width=2, shape='linear'),
+                   # xaxis='x', yaxis='y',
+                   mode='lines'),
+    ]
+
+    layout_course = go.Layout(autosize=True,
+                              height=200,
+                              yaxis=dict(domain=[0.02, 0.98],
+                                         title='Course (degrees)',
+                                         # range=[td_min,td_max],
+                                         fixedrange=True,
+                                         titlefont=dict(
+                                             color='rgb(255, 95, 63)')
+                                         ),
+                              xaxis=dict(type='date', fixedrange=False),
+                              margin=dict(r=50, t=30, b=30, l=60, pad=0),
+                              showlegend=False,
+                              )
+
     graphJSON = json.dumps(dict(data=data, layout=layout),
                            cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON
+
+    graphJSON_speed = json.dumps(dict(data=data_speed, layout=layout_speed),
+                                 cls=plotly.utils.PlotlyJSONEncoder)
+
+    graphJSON_alt = json.dumps(dict(data=data_alt, layout=layout_alt),
+                               cls=plotly.utils.PlotlyJSONEncoder)
+
+    graphJSON_course = json.dumps(dict(data=data_course, layout=layout_course),
+                                  cls=plotly.utils.PlotlyJSONEncoder)
+
+    return graphJSON, graphJSON_speed, graphJSON_alt, graphJSON_course

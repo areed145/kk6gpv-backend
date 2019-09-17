@@ -41,8 +41,38 @@
         <div class="col-md-12">
             <div class="chart" id="map_aprs">
                 <script>
-                    var graphs = {{ plot | safe}};
+                    var graphs = {{ map_aprs | safe}};
                     Plotly.plot('map_aprs', graphs, {});
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart" id="plot_speed">
+                <script>
+                    var graphs = {{ plot_speed | safe}};
+                    Plotly.plot('plot_speed', graphs, {});
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart" id="plot_alt">
+                <script>
+                    var graphs = {{ plot_alt | safe}};
+                    Plotly.plot('plot_alt', graphs, {});
+                </script>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart" id="plot_course">
+                <script>
+                    var graphs = {{ plot_course | safe}};
+                    Plotly.plot('plot_course', graphs, {});
                 </script>
             </div>
         </div>
