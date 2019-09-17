@@ -79,21 +79,33 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="table-responsive-sm">
+            <div class="table-responsive-md">
                 <table class="table table-hover table-sm" id="packets">
                     <thead>
                         <tr>
                             <th scope="col">Timestamp</th>
+                            <th scope="col">From</th>
+                            <th scope="col">To</th>
                             <th scope="col">Latitude</th>
                             <th scope="col">Longitude</th>
+                            <th scope="col">Speed</th>
+                            <th scope="col">Altitude</th>
+                            <th scope="col">Course</th>
+                            <th scope="col">Raw</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for row in rows %}
                         <tr>
                             <td>{{ row['timestamp_'] }}</td>
+                            <td>{{ row['from'] }}</td>
+                            <td>{{ row['to'] }}</td>
                             <td>{{ row['latitude'] }}</td>
                             <td>{{ row['longitude'] }}</td>
+                            <!-- <td>{{ row['speed'] }}</td>
+                            <td>{{ row['altitude'] }}</td>
+                            <td>{{ row['course'] }}</td>
+                            <td>{{ row['raw'] }}</td> -->
                         </tr>
                         {% endfor %}
                     </tbody>

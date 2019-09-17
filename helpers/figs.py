@@ -349,12 +349,12 @@ def create_map_aprs(script, prop, time):
     #          'script', 'altitude', 'speed', 'course', 'raw']]
     if prop == 'none':
         data_map = [go.Scattermapbox(lat=df['latitude'],
-                                 lon=df['longitude'],
-                                 text=df['raw'],
-                                 mode='markers',
-                                 marker=dict(size=10)
-                                 )
-                ]
+                                     lon=df['longitude'],
+                                     text=df['raw'],
+                                     mode='markers',
+                                     marker=dict(size=10)
+                                     )
+                    ]
     else:
         cs = cs_normal
         if prop == 'course':
@@ -365,36 +365,36 @@ def create_map_aprs(script, prop, time):
             cmin = df[prop].quantile(0.01)
             cmax = df[prop].quantile(0.99)
         data_map = [go.Scattermapbox(lat=df['latitude'],
-                                 lon=df['longitude'],
-                                 text=df['raw'],
-                                 mode='markers',
-                                 marker=dict(size=10,
-                                             color=params[prop][2] *
-                                             df[prop] + params[prop][3],
-                                             colorbar=dict(
-                                                 title=params[prop][4]),
-                                             colorscale=cs,
-                                             cmin=params[prop][2] *
-                                             cmin + params[prop][3],
-                                             cmax=params[prop][2] *
-                                             cmax + params[prop][3],
-                                             )
-                                 )
-                ]
+                                     lon=df['longitude'],
+                                     text=df['raw'],
+                                     mode='markers',
+                                     marker=dict(size=10,
+                                                 color=params[prop][2] *
+                                                 df[prop] + params[prop][3],
+                                                 colorbar=dict(
+                                                     title=params[prop][4]),
+                                                 colorscale=cs,
+                                                 cmin=params[prop][2] *
+                                                 cmin + params[prop][3],
+                                                 cmax=params[prop][2] *
+                                                 cmax + params[prop][3],
+                                                 )
+                                     )
+                    ]
     layout_map = go.Layout(autosize=True,
-                       # height=1000,
-                       showlegend=False,
-                       hovermode='closest',
-                       uirevision=True,
-                       margin=dict(r=0, t=0, b=0, l=0, pad=0),
-                       mapbox=dict(bearing=0,
-                                   center=dict(lat=30, lon=-95),
-                                   accesstoken=mapbox_access_token,
-                                   style='satellite-streets',
-                                   pitch=0,
-                                   zoom=6
-                                   )
-                       )
+                           # height=1000,
+                           showlegend=False,
+                           hovermode='closest',
+                           uirevision=True,
+                           margin=dict(r=0, t=0, b=0, l=0, pad=0),
+                           mapbox=dict(bearing=0,
+                                       center=dict(lat=30, lon=-95),
+                                       accesstoken=mapbox_access_token,
+                                       style='satellite-streets',
+                                       pitch=0,
+                                       zoom=6
+                                       )
+                           )
 
     data_speed = [
         go.Scatter(x=df['timestamp_'],
@@ -468,7 +468,7 @@ def create_map_aprs(script, prop, time):
                               )
 
     graphJSON_map = json.dumps(dict(data=data_map, layout=layout_map),
-                           cls=plotly.utils.PlotlyJSONEncoder)
+                               cls=plotly.utils.PlotlyJSONEncoder)
 
     graphJSON_speed = json.dumps(dict(data=data_speed, layout=layout_speed),
                                  cls=plotly.utils.PlotlyJSONEncoder)
@@ -479,14 +479,16 @@ def create_map_aprs(script, prop, time):
     graphJSON_course = json.dumps(dict(data=data_course, layout=layout_course),
                                   cls=plotly.utils.PlotlyJSONEncoder)
 
-    df['timestamp_'] = df['timestamp_'].apply(lambda x: x.strftime('%Y-%m-%d %H:%M:%S'))
-    df = df[['timestamp_','latitude','longitude','speed','altitude','course']]
+    df['timestamp_'] = df['timestamp_'].apply(
+        lambda x: x.strftime('%Y-%m-%d %H:%M:%S'))
     rows = []
     for _, row in df.iterrows():
         r = {}
         r['timestamp_'] = row['timestamp_']
-        r['latitude'] = np.round(row['latitude'],2)
-        r['longitude'] = np.round(row['longitude'],2)
+        r['from'] = row['from']
+        r['to'] = row['to']
+        r['latitude'] = np.round(row['latitude'], 3)
+        r['longitude'] = np.round(row['longitude'], 3)
         rows.append(r)
     print(rows)
 

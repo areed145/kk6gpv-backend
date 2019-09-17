@@ -63,8 +63,14 @@ if ($('#aprs').length > 0) {
         for (var i = 0; i < rows.length; i++) {
             content += '<tr>';
             content += '<td>' + rows[i].timestamp_ + '</td>';
+            content += '<td>' + rows[i].from + '</td>';
+            content += '<td>' + rows[i].to + '</td>';
             content += '<td>' + rows[i].latitude + '</td>';
             content += '<td>' + rows[i].longitude + '</td>';
+            // content += '<td>' + rows[i].speed + '</td>';
+            // content += '<td>' + rows[i].altitude + '</td>';
+            // content += '<td>' + rows[i].course + '</td>';
+            // content += '<td>' + rows[i].raw + '</td>';
             content += '</tr>';
         }
         $('#packets tbody').html(content);

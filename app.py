@@ -9,17 +9,19 @@ from helpers import figs, flickr, fetcher_awc, fetcher_aprs
 app = Flask(__name__)
 
 sched = BackgroundScheduler(daemon=True)
-# sched.add_job(flickr.get_gals, 'interval', hours=1)
-# sched.add_job(fetcher_awc.get_awc, 'interval',
-#               minutes=1, args=[0.02, 45, 6], max_instances=3)
-# sched.add_job(fetcher_awc.get_awc, 'interval', minutes=30, args=[1, 10, 18])
-# sched.add_job(fetcher_aprs.run)
+sched.add_job(flickr.get_gals, 'interval', hours=1)
+sched.add_job(fetcher_awc.get_awc, 'interval',
+              minutes=1, args=[0.02, 45, 6], max_instances=3)
+sched.add_job(fetcher_awc.get_awc, 'interval', minutes=30, args=[1, 10, 18])
+sched.add_job(fetcher_aprs.run)
 # sched.add_job(fetcher_awc.get_awc, args=[6, 10, 18])
 sched.start()
+
 
 def myconverter(o):
     if isinstance(o, datetime.datetime):
         return o.__str__()
+
 
 @app.route('/')
 def index():
@@ -53,7 +55,8 @@ def aprs():
     type_aprs = 'prefix'
     prop_aprs = 'altitude'
     time_aprs = 't_100'
-    map_aprs, plot_speed, plot_alt, plot_course, rows = figs.create_map_aprs(type_aprs, prop_aprs, time_aprs)
+    map_aprs, plot_speed, plot_alt, plot_course, rows = figs.create_map_aprs(
+        type_aprs, prop_aprs, time_aprs)
     return render_template('aprs.html', map_aprs=map_aprs, plot_speed=plot_speed, plot_alt=plot_alt, plot_course=plot_course, rows=rows)
 
 
@@ -143,7 +146,8 @@ def map_aprs_change():
     type_aprs = request.args['type_aprs']
     prop_aprs = request.args['prop_aprs']
     time_aprs = request.args['time_aprs']
-    map_aprs, plot_speed, plot_alt, plot_course, rows = figs.create_map_aprs(type_aprs, prop_aprs, time_aprs)
+    map_aprs, plot_speed, plot_alt, plot_course, rows = figs.create_map_aprs(
+        type_aprs, prop_aprs, time_aprs)
     data = {}
     data["map_aprs"] = json.loads(map_aprs)
     data["plot_speed"] = json.loads(plot_speed)
