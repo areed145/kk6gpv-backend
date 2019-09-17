@@ -138,6 +138,7 @@ def create_map_awc(prop):
     params = {'flight_category': [0, 0, 0, 0, ''],
               'temp_c': [0, 100, 1.8, 32, 'F'],
               'dewpoint_c': [0, 100, 1.8, 32, 'F'],
+              'temp_dewpoint_spread': [0, 100, 1.8, 0, 'F'],
               'altim_in_hg': [0, 100, 1, 0, 'inHg'],
               'wind_dir_degrees': [0, 359, 1, 0, 'degrees'],
               'wind_speed_kt': [0, 100, 1, 0, 'kts'],
@@ -284,6 +285,11 @@ def create_map_awc(prop):
             cs = cs_gnrd
             cmin = 0
             cmax = 60
+        elif prop == 'temp_dewpoint_spread':
+            df['temp_dewpoint_spread'] = df['temp_c'] - df['dewpoint_c']
+            cs = cs_rdgn
+            cmin = 0
+            cmax = 5
         else:
             cs = cs_normal
             cmin = df[prop].quantile(0.01)
