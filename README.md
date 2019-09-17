@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/areed145/kk6gpv-flask.svg?style=svg)](https://circleci.com/gh/areed145/kk6gpv-flask)
+
 # kk6gpv-flask
 goal will be to re-create kk6gpv.net as a flask site
 
