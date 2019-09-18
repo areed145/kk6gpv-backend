@@ -54,3 +54,4 @@ goal will be to re-create kk6gpv.net as a flask site
 - live updating plots
 - rebuild flickr gallery functionality
 - add weather maps
+- multi-services in kubernetes
