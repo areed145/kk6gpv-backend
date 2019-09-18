@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: kk6gpv-aprs-prefix
 spec:
-  replicas: 5
+  replicas: 1
   selector:
     matchLabels:
       name: kk6gpv-aprs-prefix
