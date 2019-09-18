@@ -1,8 +1,0 @@
-{
-    "python.pythonPath": "/Users/areed145/Library/Mobile Documents/com~apple~CloudDocs/vcscode/kk6gpv-flask/.venv/bin/python3",
-    "appService.zipIgnorePattern": [
-        ".vscode{,/**}"
-    ],
-    "appService.defaultWebAppToDeploy": "/subscriptions/45b59352-da58-4e3a-beab-1a4518951e4e/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/kk6gpv-flask",
-    "appService.deploySubpath": ""
-}
