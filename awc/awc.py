@@ -13,7 +13,7 @@ from datetime import datetime
 from pymongo import MongoClient
 import pandas as pd
 import time
-from multiprocessing import Pool
+#from multiprocessing import Pool
 
 keys_main = ('station_id', 'raw_text', 'observation_time',
         'temp_c', 'dewpoint_c', 'latitude', 'longitude',
@@ -77,30 +77,31 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                 print('duplicate post')
     except:
         print('failed')
-    awc.close()
 
 if __name__ == '__main__':
     last_hour = datetime.now().hour - 1
     last_minute = datetime.now().minute - 1
     while True:
         if datetime.now().hour != last_hour:
-            pl = Pool(48)
+            #pl = Pool(48)
             inc = 15
             for lat_min in range(-90, 90, inc):
                 for lon_min in range(-180, 180, inc):
-                    pl.apply_async(get_obs, args=(lat_min, lon_min, inc, 1, 2))
-            pl.close()
-            pl.join()
+                    #pl.apply_async(get_obs, args=(lat_min, lon_min, inc, 1, 2))
+                    get_obs(lat_min, lon_min, inc, 1, 2)
+            #pl.close()
+            #pl.join()
             last_hour = datetime.now().hour
             print('got long')
         elif datetime.now().minute != last_minute:
-            ps = Pool(32)
+            #ps = Pool(32)
             inc = 45
             for lat_min in range(-90, 90, inc):
                 for lon_min in range(-180, 180, inc):
-                    ps.apply_async(get_obs, args=(lat_min, lon_min, inc, 0.02, 3))
-            ps.close()
-            ps.join()
+                    #ps.apply_async(get_obs, args=(lat_min, lon_min, inc, 0.02, 3))
+                    get_obs(lat_min, lon_min, inc, 0.02, 3)
+            #ps.close()
+            #ps.join()
             last_minute = datetime.now().minute
             print('got short')
         else:
