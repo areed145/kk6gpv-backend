@@ -32,7 +32,6 @@ jobs:
       - run:
           name: Deploy Code
           command: ./scripts/ci-deploy-web-app.sh
-  build:
     docker:
       - image: circleci/buildpack-deps:stretch
     environment:
