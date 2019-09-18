@@ -2,20 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kk6gpv-web-app
+  name: kk6gpv-aprs-prefix
 spec:
   replicas: 5
   selector:
     matchLabels:
-      name: kk6gpv-web-app
+      name: kk6gpv-aprs-prefix
   template:
     metadata:
       labels:
-        name: kk6gpv-web-app
+        name: kk6gpv-aprs-prefix
     spec:
       containers:
       - name: application
-        image: areed145/kk6gpv:$COMMIT_SHA1
+        image: areed145/kk6gpv-aprs-prefix:$COMMIT_SHA1
         imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 4000
