@@ -13,7 +13,7 @@ sched.add_job(flickr.get_gals, 'interval', hours=1)
 sched.add_job(fetcher_awc.get_awc, 'interval',
               minutes=1, args=[0.02, 45, 6], max_instances=3)
 sched.add_job(fetcher_awc.get_awc, 'interval', minutes=30, args=[1, 10, 18])
-sched.add_job(fetcher_aprs.run)
+#sched.add_job(fetcher_aprs.run)
 # sched.add_job(fetcher_awc.get_awc, args=[6, 10, 18])
 sched.start()
 
