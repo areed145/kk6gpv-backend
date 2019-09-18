@@ -11,9 +11,9 @@ if ($('#iot').length > 0) {
             },
             dataType: "json",
             success: function (data) {
-                Plotly.react('graph_iot', data);
-                // Plotly.plot('graph_iot', data);
-                // Plotly.deleteTraces('graph_iot', 0);
+                // Plotly.react('graph_iot', data);
+                Plotly.plot('graph_iot', data);
+                Plotly.deleteTraces('graph_iot', 0);
             }
         });
     })
@@ -29,9 +29,9 @@ if ($('#iot').length > 0) {
             },
             dataType: "json",
             success: function (data) {
-                Plotly.react('graph_iot', data);
-                // Plotly.plot('graph_iot', data);
-                // Plotly.deleteTraces('graph_iot', 0);
+                // Plotly.react('graph_iot', data);
+                Plotly.plot('graph_iot', data);
+                Plotly.deleteTraces('graph_iot', 0);
             }
         });
     })
@@ -48,9 +48,9 @@ if ($('#iot').length > 0) {
             dataType: "json",
         })
             .done(function (data) {
-                Plotly.react('graph_iot', data);
-                // Plotly.plot('graph_iot', data);
-                // Plotly.deleteTraces('graph_iot', 0);
+                // Plotly.react('graph_iot', data);
+                Plotly.plot('graph_iot', data);
+                Plotly.deleteTraces('graph_iot', 0);
             })
     }, 1000 * 5);
 
