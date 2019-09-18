@@ -6,8 +6,8 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - name: http
-    port: 80
-    targetPort: 4000
+    - name: http
+      port: 80
+      targetPort: 4000
   selector:
     name: kk6gpv-web-app

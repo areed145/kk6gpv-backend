@@ -14,8 +14,8 @@ spec:
         name: kk6gpv-web-app
     spec:
       containers:
-      - name: application
-        image: areed145/kk6gpv-web-app:$COMMIT_SHA1
-        imagePullPolicy: IfNotPresent
-        ports:
-          - containerPort: 4000
+        - name: application
+          image: areed145/kk6gpv-web-app:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 4000
