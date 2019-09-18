@@ -490,8 +490,8 @@ def create_map_aprs(script, prop, time):
         r['latitude'] = np.round(row['latitude'], 3)
         r['longitude'] = np.round(row['longitude'], 3)
         r['speed'] = np.round(row['speed'], 2)
-        r['altitude'] = np.round(row['altitude'], 2)
-        r['course'] = np.round(row['course'], 0)
+        #r['altitude'] = np.round(row['altitude'], 2)
+        #r['course'] = np.round(row['course'], 0)
         rows.append(r)
     print(rows)
 
