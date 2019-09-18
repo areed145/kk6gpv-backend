@@ -5,7 +5,7 @@ jobs:
       - image: circleci/buildpack-deps:stretch
     environment:
       IMAGE_NAME: areed145/kk6gpv
-    working_directory: ~/app
+    working_directory: ~/webapp
     steps:
       - checkout
       - setup_remote_docker
