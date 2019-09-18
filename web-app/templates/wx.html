@@ -1,9 +1,64 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="container">
+<div class="container" id="wx">
   <h1>Station Weather</h1>
   <br>
   <p>Click <a href="/">here</a> to go home.</p>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <label>Time</label>
+      <select class="form-control" id='time_wx'>
+        <option value="t_100">100</option>
+        <option value="t_500">500</option>
+        <option value="t_1000">1000</option>
+        <option value="t_5000">5000</option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="chart" id="fig_td">
+        <script>
+          var graphs = {{ fig_td | safe}};
+          Plotly.plot('fig_td', graphs, {});
+        </script>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="chart" id="fig_pr">
+        <script>
+          var graphs = {{ fig_pr | safe}};
+          Plotly.plot('fig_pr', graphs, {});
+        </script>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="chart" id="fig_pc">
+        <script>
+          var graphs = {{ fig_pc | safe}};
+          Plotly.plot('fig_pc', graphs, {});
+        </script>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="chart" id="fig_wd">
+        <script>
+          var graphs = {{ fig_wd | safe}};
+          Plotly.plot('fig_wd', graphs, {});
+        </script>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="chart" id="fig_su">
+        <script>
+          var graphs = {{ fig_su | safe}};
+          Plotly.plot('fig_su', graphs, {});
+        </script>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -4,12 +4,12 @@ import json
 import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request
-from helpers import figs, flickr, fetcher_awc, fetcher_aprs
+from helpers import figs, fetcher_awc, fetcher_aprs#, flickr
 
 app = Flask(__name__)
 
 sched = BackgroundScheduler(daemon=True)
-sched.add_job(flickr.get_gals, 'interval', hours=1)
+# sched.add_job(flickr.get_gals, 'interval', hours=1)
 # sched.add_job(fetcher_awc.get_awc, 'interval',
 #               minutes=1, args=[0.02, 45, 6], max_instances=3)
 # sched.add_job(fetcher_awc.get_awc, 'interval', minutes=30, args=[1, 10, 18])
@@ -39,7 +39,9 @@ def awc():
 
 @app.route('/wx')
 def wx():
-    return render_template('wx.html')
+    time_wx = 't_100'
+    fig_td, fig_pr, fig_pc, fig_wd, fig_su = figs.create_wx_figs(time_wx, 'KTXHOUST2624')
+    return render_template('wx.html', fig_td=fig_td, fig_pr=fig_pr, fig_pc=fig_pc, fig_wd=fig_wd, fig_su=fig_su)
 
 
 @app.route('/iot')
@@ -156,6 +158,17 @@ def map_aprs_change():
     data["rows"] = rows
     return json.dumps(data, default=myconverter)
 
+@app.route('/graph_wx', methods=['GET', 'POST'])
+def graph_wx_change():
+    time_wx = request.args['time_iot']
+    fig_td, fig_pr, fig_pc, fig_wd, fig_su = figs.create_wx_figs(time_wx, 'KTXHOUST2624')
+    data = {}
+    data["fig_td"] = json.loads(fig_td)
+    data["fig_pr"] = json.loads(fig_pr)
+    data["fig_pc"] = json.loads(fig_pc)
+    data["fig_wd"] = json.loads(fig_wd)
+    data["fig_su"] = json.loads(fig_su)
+    return json.dumps(data, default=myconverter)
 
 @app.route('/graph_iot', methods=['GET', 'POST'])
 def graph_iot_change():
