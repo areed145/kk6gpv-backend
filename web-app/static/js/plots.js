@@ -67,7 +67,7 @@ if ($('#aprs').length > 0) {
             content += '<td>' + rows[i].to + '</td>';
             content += '<td>' + rows[i].latitude + '</td>';
             content += '<td>' + rows[i].longitude + '</td>';
-            content += '<td>' + rows[i].speed + '</td>';
+            // content += '<td>' + rows[i].speed + '</td>';
             // content += '<td>' + rows[i].altitude + '</td>';
             // content += '<td>' + rows[i].course + '</td>';
             // content += '<td>' + rows[i].raw + '</td>';
