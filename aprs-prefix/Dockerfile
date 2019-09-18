@@ -4,7 +4,7 @@ LABEL maintainer="areed145@gmail.com"
 
 WORKDIR /aprs-prefix
 
-COPY . /aprs-refix
+COPY . /aprs-prefix
 
 # We copy just the requirements.txt first to leverage Docker cache
 RUN pip install --upgrade pip && \
