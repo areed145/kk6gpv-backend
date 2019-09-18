@@ -2,9 +2,9 @@ FROM python:3.7-slim-buster
 
 LABEL maintainer="areed145@gmail.com"
 
-WORKDIR /aprs_mongodb_entry
+WORKDIR /aprs-entry
 
-COPY . /aprs_mongodb_entry
+COPY . /aprs-entry
 
 # We copy just the requirements.txt first to leverage Docker cache
 RUN pip install --upgrade pip && \
@@ -14,4 +14,4 @@ RUN pip install --upgrade pip && \
 
 ENV NAME World
 
-CMD ["python", "aprs_mongodb_entry.py"]
+CMD ["python", "aprs-entry.py"]
