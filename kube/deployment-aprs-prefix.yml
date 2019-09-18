@@ -16,6 +16,6 @@ spec:
       containers:
         - name: application
           image: areed145/kk6gpv-aprs-prefix:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 4000
