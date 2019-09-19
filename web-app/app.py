@@ -4,12 +4,12 @@ import json
 import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request
-from helpers import figs, fetcher_awc, fetcher_aprs  # , flickr
+from helpers import figs, fetcher_awc, fetcher_aprs, flickr
 
 app = Flask(__name__)
 
 sched = BackgroundScheduler(daemon=True)
-# sched.add_job(flickr.get_gals, 'interval', hours=1)
+sched.add_job(flickr.get_gals, 'interval', hours=1)
 # sched.add_job(fetcher_awc.get_awc, 'interval',
 #               minutes=1, args=[0.02, 45, 6], max_instances=3)
 # sched.add_job(fetcher_awc.get_awc, 'interval', minutes=30, args=[1, 10, 18])
