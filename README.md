@@ -39,7 +39,6 @@ goal will be to re-create kk6gpv.net as a flask site
 - incorporate fetchers
 - UI
 - rebuild flickr photo gallery functionality
-- add station weather plots
 - move gallery listing to db
 - incorporate Plotly.react in other plots
 - port DOGGR data
@@ -55,3 +54,4 @@ goal will be to re-create kk6gpv.net as a flask site
 - rebuild flickr gallery functionality
 - add weather maps
 - multi-services in kubernetes?
+- add station weather plots
