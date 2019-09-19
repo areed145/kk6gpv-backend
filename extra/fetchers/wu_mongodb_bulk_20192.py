@@ -83,6 +83,6 @@ if __name__ == '__main__':
     #sid = 'KTXHOUST686'
     #sid = 'KTXHOUST1930'
     sid = 'KTXHOUST2624'
-    for m in range(8,9):
+    for m in range(9,11):
         for d in range(1,31):
             get_history(sid, m, d, 2019)
