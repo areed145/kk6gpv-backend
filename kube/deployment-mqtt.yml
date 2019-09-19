@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: application
-          image: areed145/kk6gpv-mqtt:latest
+          image: areed145/kk6gpv-mqtt:$COMMIT_SHA1
           imagePullPolicy: Always
           ports:
             - containerPort: 4000

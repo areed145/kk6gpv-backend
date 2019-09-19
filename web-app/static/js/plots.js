@@ -6,7 +6,7 @@ if ($('#wx').length > 0) {
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
-                'time_iot': document.getElementById('time_iot').value,
+                'time_wx': document.getElementById('time_wx').value,
             },
             dataType: "json",
             success: function (data) {
@@ -25,7 +25,7 @@ if ($('#wx').length > 0) {
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
-                'time_iot': document.getElementById('time_iot').value,
+                'time_wx': document.getElementById('time_wx').value,
             },
             dataType: "json",
         })
@@ -208,7 +208,7 @@ if ($('#aprs').length > 0) {
                 // Plotly.plot('map_aprs', data);
                 // Plotly.deleteTraces('map_aprs', 0);    
             })
-    }, 1000 * 60);
+    }, 1000 * 15);
 
 }
 

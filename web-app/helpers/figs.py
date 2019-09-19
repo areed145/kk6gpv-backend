@@ -481,17 +481,23 @@ def create_map_aprs(script, prop, time):
 
     df['timestamp_'] = df['timestamp_'].apply(
         lambda x: x.strftime('%Y-%m-%d %H:%M:%S'))
+    df['latitude'] = np.round(df['latitude'], 3)
+    df['longitude'] = np.round(df['longitude'], 3)
+    df['speed'] = np.round(df['speed'], 2)
+    df['altitude'] = np.round(df['altitude'], 1)
+    df['course'] = np.round(df['course'], 1)
+    df = df.fillna('')
     rows = []
     for _, row in df.iterrows():
         r = {}
         r['timestamp_'] = row['timestamp_']
         r['from'] = row['from']
         r['to'] = row['to']
-        r['latitude'] = np.round(row['latitude'], 3)
-        r['longitude'] = np.round(row['longitude'], 3)
-        #r['speed'] = np.round(row['speed'], 2)
-        #r['altitude'] = np.round(row['altitude'], 2)
-        #r['course'] = np.round(row['course'], 0)
+        r['latitude'] = row['latitude']
+        r['longitude'] = row['longitude']
+        r['speed'] = row['speed']
+        r['altitude'] = row['altitude']
+        r['course'] = row['course']
         rows.append(r)
     print(rows)
 
