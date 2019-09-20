@@ -89,22 +89,22 @@ if __name__ == '__main__':
             try:
                 get_current(sid)
                 last_minute = datetime.now().minute
-                print('getting current')
+                print('getting current '+str(datetime.now()))
             except:
-                print('failed current')
+                print('failed current '+str(datetime.now()))
                 pass
         else:
-            print('skipping current')
+            print('skipping current '+str(datetime.now()))
         if(datetime.now().hour != last_hour):
             try:
                 get_history(sid, datetime.utcnow().month, datetime.utcnow().day, datetime.utcnow().year)
                 yesterday = datetime.utcnow() - timedelta(days=1)
                 get_history(sid, yesterday.month, yesterday.day, yesterday.year)
                 last_hour = datetime.now().hour
-                print('getting history')
+                print('getting history '+str(datetime.now()))
             except:
-                print('failed history')
+                print('failed history '+str(datetime.now()))
                 pass
         else:
-            print('skipping history')
+            print('skipping history '+str(datetime.now()))
         time.sleep(30)
