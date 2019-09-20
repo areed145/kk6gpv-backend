@@ -55,3 +55,4 @@ goal will be to re-create kk6gpv.net as a flask site
 - add weather maps
 - multi-services in kubernetes?
 - add station weather plots
+- move to local mongodb
