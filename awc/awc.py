@@ -16,12 +16,13 @@ import time
 #from multiprocessing import Pool
 
 keys_main = ('station_id', 'raw_text', 'observation_time',
-        'temp_c', 'dewpoint_c', 'latitude', 'longitude',
-        'wind_dir_degrees', 'wind_degrees', 'wind_speed_kt', 'wind_gust_kt',
-        'altim_in_hg', 'visibility_statute_mi', 'flight_category',
-        'metar_type', 'elevation_m', 'precip_in', 'wx_string')
+             'temp_c', 'dewpoint_c', 'latitude', 'longitude',
+             'wind_dir_degrees', 'wind_degrees', 'wind_speed_kt', 'wind_gust_kt',
+             'altim_in_hg', 'visibility_statute_mi', 'flight_category',
+             'metar_type', 'elevation_m', 'precip_in', 'wx_string')
 keys_qc = ('auto', 'auto_station', 'maintenance_indicator_on', 'no_signal')
 keys_sc = ('sky_cover', 'cloud_base_ft_agl')
+
 
 def convert(val):
     try:
@@ -32,18 +33,20 @@ def convert(val):
         val = None
     return val
 
+
 def get_obs(lat_min, lon_min, inc, timeback, max_pool):
     url = 'https://www.aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&mostRecentForEachStation=true'
     url += '&minLon='+str(lon_min)
-    url += '&maxLon='+str(min(180,lon_min+inc+1))
+    url += '&maxLon='+str(min(180, lon_min+inc+1))
     url += '&minLat='+str(lat_min)
-    url += '&maxLat='+str(min(90,lat_min+inc+1))
+    url += '&maxLat='+str(min(90, lat_min+inc+1))
     url += '&hoursBeforeNow='+str(timeback)
 
-    client=MongoClient('mongodb+srv://kk6gpv:ObqL7MKu4IrEvgyE@cluster0-li5mj.gcp.mongodb.net/test?retryWrites=true', maxPoolSize=max_pool)
-    db=client.wx
-    awc=db.awc
-    
+    #client=MongoClient('mongodb+srv://kk6gpv:ObqL7MKu4IrEvgyE@cluster0-li5mj.gcp.mongodb.net/test?retryWrites=true', maxPoolSize=max_pool)
+    client = MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
+    db = client.wx
+    awc = db.awc
+
     try:
         xml = urllib.request.urlopen(url).read()
         tree = ET.fromstring(xml)
@@ -57,16 +60,18 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                     pass
             for key in keys_qc:
                 try:
-                    message['qc_'+key] = convert(ob.find('quality_control_flags').find(key).text)
+                    message['qc_' +
+                            key] = convert(ob.find('quality_control_flags').find(key).text)
                 except:
                     pass
-            for idx,sc in enumerate(ob.findall('sky_condition')):
+            for idx, sc in enumerate(ob.findall('sky_condition')):
                 for key in keys_sc:
                     try:
                         message[key+'_'+str(idx)] = convert(sc.attrib[key])
                     except:
                         pass
-            message['observation_time'] = pd.to_datetime(message['observation_time'])
+            message['observation_time'] = pd.to_datetime(
+                message['observation_time'])
             message['timestamp'] = datetime.utcnow()
             message['topic'] = 'wx/awc'
             message['ttl'] = datetime.utcnow()
@@ -77,6 +82,7 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                 print('duplicate post')
     except:
         print('failed')
+
 
 if __name__ == '__main__':
     last_hour = datetime.now().hour - 1
@@ -89,8 +95,8 @@ if __name__ == '__main__':
                 for lon_min in range(-180, 180, inc):
                     #pl.apply_async(get_obs, args=(lat_min, lon_min, inc, 1, 2))
                     get_obs(lat_min, lon_min, inc, 1, 2)
-            #pl.close()
-            #pl.join()
+            # pl.close()
+            # pl.join()
             last_hour = datetime.now().hour
             print('got long')
         elif datetime.now().minute != last_minute:
@@ -100,8 +106,8 @@ if __name__ == '__main__':
                 for lon_min in range(-180, 180, inc):
                     #ps.apply_async(get_obs, args=(lat_min, lon_min, inc, 0.02, 3))
                     get_obs(lat_min, lon_min, inc, 0.02, 3)
-            #ps.close()
-            #ps.join()
+            # ps.close()
+            # ps.join()
             last_minute = datetime.now().minute
             print('got short')
         else:

@@ -4,7 +4,7 @@ import json
 import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request
-from helpers import figs, fetcher_awc, fetcher_aprs, flickr
+from helpers import figs, flickr
 
 app = Flask(__name__)
 
