@@ -22,7 +22,7 @@ raws = list(raw_from.find())
 # raw_to.insert_many(raws)
 
 len(raws)
-skip = 31000
+skip = 185244
 
 for idx, a in enumerate(raws[skip:]):
    try:

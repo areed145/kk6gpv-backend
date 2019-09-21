@@ -85,6 +85,13 @@ if __name__ == '__main__':
     #sid = 'KTXHOUST1930'
     #sid = 'KTXHOUST2624'
     sid = 'KTXHOUST1941'
-    for m in range(1,11):
+    for m in range(7,11):
         for d in range(1,31):
-            get_history(sid, m, d, 2019)
+            success = False
+            while success == False:
+                try:
+                    get_history(sid, m, d, 2019)
+                    success = True
+                except:
+                    print('sleeping')
+                    time.sleep(5)

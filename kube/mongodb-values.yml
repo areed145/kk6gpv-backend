@@ -51,7 +51,7 @@ persistentVolume:
   #storageClass: "-"
   accessModes:
     - ReadWriteOnce
-  size: 40Gi
+  size: 15Gi
   annotations: {}
 serviceAnnotations: {}
 terminationGracePeriodSeconds: 30
