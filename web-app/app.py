@@ -17,6 +17,7 @@ sched.add_job(flickr.get_gals, 'interval', hours=1)
 # sched.add_job(fetcher_awc.get_awc, args=[6, 10, 18])
 sched.start()
 
+sid = 'KTXHOUST1941'
 
 def myconverter(o):
     if isinstance(o, datetime.datetime):
@@ -41,7 +42,7 @@ def awc():
 def wx():
     time_wx = 't_100'
     fig_td, fig_pr, fig_pc, fig_wd, fig_su = figs.create_wx_figs(
-        time_wx, 'KTXHOUST2624')
+        time_wx, sid)
     return render_template('wx.html', fig_td=fig_td, fig_pr=fig_pr, fig_pc=fig_pc, fig_wd=fig_wd, fig_su=fig_su)
 
 
@@ -164,7 +165,7 @@ def map_aprs_change():
 def graph_wx_change():
     time_wx = request.args['time_wx']
     fig_td, fig_pr, fig_pc, fig_wd, fig_su = figs.create_wx_figs(
-        time_wx, sid = 'KTXHOUST1941')
+        time_wx, sid)
     data = {}
     data["fig_td"] = json.loads(fig_td)
     data["fig_pr"] = json.loads(fig_pr)
