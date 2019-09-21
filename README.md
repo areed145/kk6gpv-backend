@@ -36,6 +36,7 @@ goal will be to re-create kk6gpv.net as a flask site
      - doggr application
 
 ## todo
+- add old mongodb data (delete incorrect, load correct)
 - incorporate fetchers
 - UI
 - rebuild flickr photo gallery functionality
