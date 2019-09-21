@@ -164,7 +164,7 @@ def map_aprs_change():
 def graph_wx_change():
     time_wx = request.args['time_wx']
     fig_td, fig_pr, fig_pc, fig_wd, fig_su = figs.create_wx_figs(
-        time_wx, 'KTXHOUST2624')
+        time_wx, 'sid = 'KTXHOUST1941')
     data = {}
     data["fig_td"] = json.loads(fig_td)
     data["fig_pr"] = json.loads(fig_pr)

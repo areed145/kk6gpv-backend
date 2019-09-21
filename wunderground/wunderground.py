@@ -82,7 +82,8 @@ if __name__ == '__main__':
     #sid = 'KTXHOUST1886'
     #sid = 'KTXHOUST686'
     #sid = 'KTXHOUST1930'
-    sid = 'KTXHOUST2624'
+    #sid = 'KTXHOUST2624'
+    sid = 'KTXHOUST1941'
     last_hour = datetime.now().hour - 1
     last_minute = datetime.now().minute - 1
     while True:
