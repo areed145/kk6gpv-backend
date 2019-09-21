@@ -75,14 +75,16 @@ def get_history(sid, m, d, y):
 
 if __name__ == '__main__':
     # MongoDB client
-    client=MongoClient('mongodb+srv://kk6gpv:ObqL7MKu4IrEvgyE@cluster0-li5mj.gcp.mongodb.net/test?retryWrites=true')
+    #client=MongoClient('mongodb+srv://kk6gpv:ObqL7MKu4IrEvgyE@cluster0-li5mj.gcp.mongodb.net/test?retryWrites=true')
+    client = MongoClient('mongodb://localhost:27017/', username='kk6gpv', password='kk6gpv', authSource='admin')
     db=client.wx
     raw=db.raw
 
     #sid = 'KTXHOUST1886'
     #sid = 'KTXHOUST686'
     #sid = 'KTXHOUST1930'
-    sid = 'KTXHOUST2624'
-    for m in range(9,11):
+    #sid = 'KTXHOUST2624'
+    sid = 'KTXHOUST1941'
+    for m in range(1,11):
         for d in range(1,31):
             get_history(sid, m, d, 2019)
