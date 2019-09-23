@@ -17,12 +17,12 @@ client_to = MongoClient('mongodb://localhost:27017/', username='kk6gpv', passwor
 db_to = client_to.aprs
 raw_to = db_to.raw
 
-raws = list(raw_from.find())
+raws = list(raw_from.find({}))
 
 # raw_to.insert_many(raws)
 
 len(raws)
-skip = 185244
+skip = 252320
 
 for idx, a in enumerate(raws[skip:]):
    try:
