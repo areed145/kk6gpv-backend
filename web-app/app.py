@@ -126,9 +126,9 @@ def oilgas():
     return render_template('oilgas.html')
 
 
-@app.route('/test')
+@app.route('/about')
 def test():
-    return render_template('test.html')
+    return render_template('about.html')
 
 
 @app.route('/bar', methods=['GET', 'POST'])
