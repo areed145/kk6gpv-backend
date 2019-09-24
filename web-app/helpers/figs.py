@@ -133,7 +133,7 @@ def create_graph_iot(sensor, time):
     graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
-def create_oilgas_map():
+def create_map_oilgas():
     db = client.petroleum
     df = list(db.doggr.find({},{'latitude':1,'longitude':1}))
     data = [go.Scattermapbox(lat=df['latitude'],
