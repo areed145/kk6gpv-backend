@@ -57,7 +57,7 @@ def iot():
 @app.route('/aprs')
 def aprs():
     type_aprs = 'prefix'
-    prop_aprs = 'altitude'
+    prop_aprs = 'none'
     time_aprs = 't_100'
     map_aprs, plot_speed, plot_alt, plot_course, rows = figs.create_map_aprs(
         type_aprs, prop_aprs, time_aprs)

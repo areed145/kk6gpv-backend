@@ -133,29 +133,30 @@ def create_graph_iot(sensor, time):
     graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
+
 def create_map_oilgas():
     db = client.petroleum
-    df = list(db.doggr.find({},{'latitude':1,'longitude':1}))
+    df = pd.DataFrame(list(db.doggr.find({}, {'latitude': 1, 'longitude': 1})))
     data = [go.Scattermapbox(lat=df['latitude'],
-                                lon=df['longitude'],
-                                #  text=df['raw_text'],
-                                mode='markers',
-                                #  marker=dict(size=10,
-                                #              color=params[prop][2] *
-                                #              df[prop] + params[prop][3],
-                                #              colorbar=dict(
-                                #                  title=params[prop][4]),
-                                #              colorscale=cs,
-                                #              cmin=params[prop][2] *
-                                #              cmin + params[prop][3],
-                                #              cmax=params[prop][2] *
-                                #              cmax + params[prop][3],
-                                #              )
-                            )
+                             lon=df['longitude'],
+                             #  text=df['raw_text'],
+                             mode='markers',
+                             #  marker=dict(size=10,
+                             #              color=params[prop][2] *
+                             #              df[prop] + params[prop][3],
+                             #              colorbar=dict(
+                             #                  title=params[prop][4]),
+                             #              colorscale=cs,
+                             #              cmin=params[prop][2] *
+                             #              cmin + params[prop][3],
+                             #              cmax=params[prop][2] *
+                             #              cmax + params[prop][3],
+                             #              )
+                             )
             ]
     layout = go.Layout(autosize=True,
                        # height=1000,
-                    #    showlegend=True,
+                       #    showlegend=True,
                        hovermode='closest',
                        uirevision=True,
                        margin=dict(r=0, t=0, b=0, l=0, pad=0),
