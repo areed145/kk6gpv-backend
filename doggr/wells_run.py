@@ -17,7 +17,7 @@ import pymongo
 
 d = pd.read_csv('AllWells_20180131.csv')
 apis = d['API'].copy(deep=True)
-apis.sort_values(inplace=True, ascending=True)
+apis.sort_values(inplace=True, ascending=False)
 apistodo = apis
 #apistodo = apis[(apis >= 2926474) & (apis <= 9999999)]
 
