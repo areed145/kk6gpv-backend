@@ -133,6 +133,44 @@ def create_graph_iot(sensor, time):
     graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
+def create_oilgas_map():
+    db = client.petroleum
+    df = list(db.doggr.find({},{'latitude':1,'longitude':1}))
+    data = [go.Scattermapbox(lat=df['latitude'],
+                                lon=df['longitude'],
+                                #  text=df['raw_text'],
+                                mode='markers',
+                                #  marker=dict(size=10,
+                                #              color=params[prop][2] *
+                                #              df[prop] + params[prop][3],
+                                #              colorbar=dict(
+                                #                  title=params[prop][4]),
+                                #              colorscale=cs,
+                                #              cmin=params[prop][2] *
+                                #              cmin + params[prop][3],
+                                #              cmax=params[prop][2] *
+                                #              cmax + params[prop][3],
+                                #              )
+                            )
+            ]
+    layout = go.Layout(autosize=True,
+                       # height=1000,
+                    #    showlegend=True,
+                       hovermode='closest',
+                       uirevision=True,
+                       margin=dict(r=0, t=0, b=0, l=0, pad=0),
+                       mapbox=dict(bearing=0,
+                                   center=dict(lat=38, lon=-96),
+                                   accesstoken=mapbox_access_token,
+                                   style='satellite-streets',
+                                   pitch=0,
+                                   zoom=3
+                                   )
+                       )
+    graphJSON = json.dumps(dict(data=data, layout=layout),
+                           cls=plotly.utils.PlotlyJSONEncoder)
+    return graphJSON
+
 
 def create_map_awc(prop):
     params = {'flight_category': [0, 0, 0, 0, ''],

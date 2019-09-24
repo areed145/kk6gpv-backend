@@ -12,20 +12,14 @@ import numpy as np
 import requests
 import re
 import datetime
+from pymongo import MongoClient
+import pymongo
 
-d = pd.read_csv('doggr/AllWells_20180131.csv')
+d = pd.read_csv('AllWells_20180131.csv')
 apis = d['API'].copy(deep=True)
 apis.sort_values(inplace=True, ascending=True)
 apistodo = apis
 #apistodo = apis[(apis >= 2926474) & (apis <= 2926490)]
-columns = ['api', 'lease', 'well', 'county', 'countycode', 'district', 'operator',
-           'operatorcode', 'field', 'fieldcode', 'area', 'areacode', 'section', 
-           'township', 'rnge', 'bm', 'wellstatus', 'pwt', 'spuddate', 'gissrc', 
-           'elev', 'latitude', 'longitude', 'date', 'oil', 'water', 'gas', 
-           'daysprod', 'oilgrav', 'pcsg', 'ptbg', 'btu', 'method', 'waterdisp', 
-           'pwtstatus_p', 'welltype_p', 'status_p', 'poolcode_p', 'wtrstm', 
-           'gasair', 'daysinj', 'pinjsurf', 'wtrsrc', 'wtrknd', 'pwtstatus_i', 
-           'welltype_i', 'status_i', 'poolcode_i']
 
 class DownloadWorker(Thread):
     def __init__(self, queue):
@@ -35,7 +29,7 @@ class DownloadWorker(Thread):
     def run(self):
         while True:
             api, percent, ct = self.queue.get()
-            url = 'https://secure.conservation.ca.gov/WellSearch/Details?api='+'{num:08d}'.format(num=api)
+            url = 'https://secure.conservation.ca.gov/WellSearch/Details?api='+'{num:08d}'.format(num=int(api))
             print(url+', '+str(ct)+', '+str(percent))
             page = requests.get(url).text 
             lease = re.findall('Lease</label> <br />\s*(.*?)\s*</div', page)[0]
@@ -60,7 +54,7 @@ class DownloadWorker(Thread):
             elev = re.findall('Datum</label> <br />\s*(.*?)\s*</div', page)[0]
             latitude = re.findall('Latitude</label> <br />\s*(.*?)\s*</div', page)[0]
             longitude = re.findall('Longitude</label> <br />\s*(.*?)\s*</div', page)[0]                  
-            hh = pd.DataFrame(columns=columns, index=[1])
+            hh = {}
             hh['lease'] = lease
             hh['well'] = well
             hh['county'] = county
@@ -78,39 +72,28 @@ class DownloadWorker(Thread):
             hh['bm'] = bm
             hh['wellstatus'] = wellstatus
             hh['pwt'] = pwt
-            hh['spuddate'] = spuddate
+            try:
+                hh['spuddate'] = pd.to_datetime(spuddate)
+            except:
+                hh['spuddate'] = ''
             hh['gissrc'] = gissrc
-            hh['elev'] = elev
-            hh['latitude'] = latitude
-            hh['longitude'] = longitude
-            hh['api'] = '{num:08d}'.format(num=api)
+            try:
+                hh['elev'] = float(elev)
+            except:
+                hh['elev'] = elev
+            try:
+                hh['latitude'] = float(latitude)
+            except:
+                hh['latitude'] = latitude
+            try:
+                hh['longitude'] = float(longitude)
+            except:
+                hh['longitude'] = longitude
+            hh['api'] = '{num:08d}'.format(num=int(api))
             prod = re.findall('{\"Production+(.*?)}', page)
             pp = pd.DataFrame()
             for idx, i in enumerate(prod):
                 p = pd.DataFrame(index=[re.findall('Date\(+(.*?)\)', i)[0]])
-                p['lease'] = lease
-                p['well'] = well
-                p['county'] = county
-                p['countycode'] = countycode
-                p['district'] = district
-                p['operator'] = operator
-                p['operatorcode'] = operatorcode
-                p['field'] = field
-                p['fieldcode'] = fieldcode
-                p['area'] = area
-                p['areacode'] = areacode
-                p['section'] = section
-                p['township'] = township
-                p['rnge'] = rnge
-                p['bm'] = bm
-                p['wellstatus'] = wellstatus
-                p['pwt'] = pwt
-                p['spuddate'] = spuddate
-                p['gissrc'] = gissrc
-                p['elev'] = elev
-                p['latitude'] = latitude
-                p['longitude'] = longitude
-                p['api'] = '{num:08d}'.format(num=api)
                 if len(prod)>0:
                     p['date'] = datetime.datetime.fromtimestamp(int(re.findall('Date\(+(.*?)\)', i)[0][:-3])).strftime('%Y-%m-%d')
                     p['oil'] = re.findall('OilProduced":+(.*?),', i)[0]
@@ -129,33 +112,18 @@ class DownloadWorker(Thread):
                     p['poolcode_p'] = re.findall('PoolCode":+(.*?),', i)[0].replace('"', '')
                     if re.findall('YearlySum":+(.*?),', i)[0] != 'true':
                         pp = pp.append(p).replace('null', np.nan, regex=True)
+            if len(pp)>0:
+                pp['date'] = pd.to_datetime(pp['date'])
+                for col in ['oil','water','gas','daysprod','oilgrav','pcsg','ptbg','btu']:
+                    pp[col] = pd.to_numeric(pp[col])
+                ps = []
+                for idx, row in pp.iterrows():
+                    ps.append(row.to_dict())
+                hh['prod'] = ps
             inj = re.findall('{\"Injection+(.*?)}', page)
-            ii = pd.DataFrame()
+            jj = pd.DataFrame()
             for idx, i in enumerate(inj):
                 j = pd.DataFrame(index=[re.findall('Date\(+(.*?)\)', i)[0]])
-                j['lease'] = lease
-                j['well'] = well
-                j['county'] = county
-                j['countycode'] = countycode
-                j['district'] = district
-                j['operator'] = operator
-                j['operatorcode'] = operatorcode
-                j['field'] = field
-                j['fieldcode'] = fieldcode
-                j['area'] = area
-                j['areacode'] = areacode
-                j['section'] = section
-                j['township'] = township
-                j['rnge'] = rnge
-                j['bm'] = bm
-                j['wellstatus'] = wellstatus
-                j['pwt'] = pwt
-                j['spuddate'] = spuddate
-                j['gissrc'] = gissrc
-                j['elev'] = elev
-                j['latitude'] = latitude
-                j['longitude'] = longitude
-                j['api'] = '{num:08d}'.format(num=api)
                 if len(inj)>0: 
                     j['date'] = datetime.datetime.fromtimestamp(int(re.findall('Date\(+(.*?)\)', i)[0][:-3])).strftime('%Y-%m-%d')
                     j['wtrstm'] = re.findall('WaterOrSteamInjected":+(.*?),', i)[0]
@@ -168,28 +136,27 @@ class DownloadWorker(Thread):
                     j['welltype_i'] = re.findall('WellType":+(.*?),', i)[0].replace('"', '')
                     j['status_i'] = re.findall('Status":+(.*?),', i)[0].replace('"', '')
                     j['poolcode_i'] = re.findall('PoolCode":+(.*?),', i)[0].replace('"', '')
-                if re.findall('YearlySum":+(.*?),', i)[0] != 'true':
-                    ii = ii.append(j).replace('null', np.nan, regex=True)
-            data = hh
-            if len(pp)>0:
-                if len(ii)>0:
-                    pi = pp.merge(ii, how='outer')
-                    data = data.merge(pi, how='outer')
-                else:
-                    data = data.merge(pp, how='outer')
-            else:
-                if len(ii)>0:
-                    data = data.merge(ii, how='outer')
-                else:
-                    pass            
-            data = data[columns]
-            #data = data.convert_objects(convert_dates=False, convert_numeric=True)
-            data.to_csv('doggr/wells/'+str(api)+'.csv', index=False)
+                    if re.findall('YearlySum":+(.*?),', i)[0] != 'true':
+                        jj = jj.append(j).replace('null', np.nan, regex=True)
+            if len(jj)>0:
+                jj['date'] = pd.to_datetime(jj['date'])
+                for col in ['wtrstm','gasair','daysinj','pinjsurf']:
+                    jj[col] = pd.to_numeric(jj[col])
+                js = []
+                for idx, row in jj.iterrows():
+                    js.append(row.to_dict())
+                hh['inj'] = js
+
+            client = MongoClient('mongodb://localhost:27017/', username='kk6gpv', password='kk6gpv', authSource='admin')
+            db=client.petroleum
+            doggr=db.doggr
+
+            doggr.insert_one(hh)
             self.queue.task_done()
             
 def main():
     queue = Queue()
-    for x in range(20):
+    for x in range(50):
         worker = DownloadWorker(queue)
         worker.daemon = True
         worker.start()
@@ -199,4 +166,3 @@ def main():
     queue.join()
     
 main()
-#datas.to_gbq('doggr.t_doggr_prodinj', 'kk6gpv', if_exists='append')

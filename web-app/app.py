@@ -123,7 +123,8 @@ def fishing():
 
 @app.route('/oilgas')
 def oilgas():
-    return render_template('oilgas.html')
+    map_oilgas = figs.create_map_oilgas()
+    return render_template('oilgas.html', plot=map_oilgas)
 
 
 @app.route('/about')

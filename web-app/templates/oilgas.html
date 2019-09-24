@@ -2,8 +2,22 @@
 
 {% block body %}
 <div class="container">
-  <h1>Oil & Gas</h1>
-  <br>
-  <p>Click <a href="/">here</a> to go home.</p>
+    <h1>Aviation Weather</h1>
+    <br>
+    <p>Click <a href="/">here</a> to go home.</p>
+</div>
+<div class="container" id="oilgas">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart" id="map_oilgas">
+                <script>
+                    var graphs = {{ plot | safe}};
+                    Plotly.plot('map_oilgas', graphs, {});
+                </script>
+            </div>
+        </div>
+    </div>
+    <div id="log-event"></div>
+    <div id="log-layout"></div>
 </div>
 {% endblock %}
