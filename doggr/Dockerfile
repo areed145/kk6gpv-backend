@@ -14,4 +14,4 @@ RUN pip install --upgrade pip && \
 
 ENV NAME World
 
-CMD ["python", "aprs-radius.py"]
+CMD ["python", "wells_run.py"]
