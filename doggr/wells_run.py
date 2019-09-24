@@ -19,7 +19,7 @@ d = pd.read_csv('AllWells_20180131.csv')
 apis = d['API'].copy(deep=True)
 apis.sort_values(inplace=True, ascending=False)
 apistodo = apis
-apistodo = apis[(apis >= 1900000) & (apis <= 99999999)]
+#apistodo = apis[(apis >= 1900000) & (apis <= 99999999)]
 
 class DownloadWorker(Thread):
     def __init__(self, queue):
@@ -155,7 +155,7 @@ class DownloadWorker(Thread):
 
             try:
                 doggr.insert_one(hh)
-                print(str(api)+'success')
+                print(str(api)+' succeeded')
             except:
                 print(str(api)+' failed')
                 pass
