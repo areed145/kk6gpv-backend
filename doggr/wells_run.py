@@ -19,7 +19,7 @@ d = pd.read_csv('AllWells_20180131.csv')
 apis = d['API'].copy(deep=True)
 apis.sort_values(inplace=True, ascending=True)
 apistodo = apis
-#apistodo = apis[(apis >= 2926474) & (apis <= 2926490)]
+#apistodo = apis[(apis >= 2926474) & (apis <= 9999999)]
 
 class DownloadWorker(Thread):
     def __init__(self, queue):
@@ -151,7 +151,13 @@ class DownloadWorker(Thread):
             db=client.petroleum
             doggr=db.doggr
 
-            doggr.insert_one(hh)
+            try:
+                doggr.insert_one(hh)
+                print(str(api)+'success')
+            except:
+                print(str(api)+' failed')
+                pass
+            
             self.queue.task_done()
             
 def main():
