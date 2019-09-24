@@ -19,7 +19,7 @@ d = pd.read_csv('AllWells_20180131.csv')
 apis = d['API'].copy(deep=True)
 apis.sort_values(inplace=True, ascending=False)
 apistodo = apis
-#apistodo = apis[(apis >= 1900000) & (apis <= 99999999)]
+#apistodo = apis[(apis >= 1900000) & (apis <= 28320060)]
 
 class DownloadWorker(Thread):
     def __init__(self, queue):
@@ -149,7 +149,7 @@ class DownloadWorker(Thread):
                     js.append(row.to_dict())
                 hh['inj'] = js
 
-            client=MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
+            client = MongoClient('mongodb://localhost:27017/', username='kk6gpv', password='kk6gpv', authSource='admin')
             db=client.petroleum
             doggr=db.doggr
 
