@@ -85,7 +85,7 @@ if __name__ == '__main__':
     #sid = 'KTXHOUST1930'
     #sid = 'KTXHOUST2624'
     sid = 'KTXHOUST1941'
-    for m in range(7,11):
+    for m in range(9,11):
         for d in range(1,31):
             success = False
             while success == False:

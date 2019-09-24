@@ -19,7 +19,7 @@ d = pd.read_csv('AllWells_20180131.csv')
 apis = d['API'].copy(deep=True)
 apis.sort_values(inplace=True, ascending=True)
 apistodo = apis
-#apistodo = apis[(apis >= 2926474) & (apis <= 2926490)]
+apistodo = apis[(apis >= 1900000) & (apis <= 99999999)]
 
 class DownloadWorker(Thread):
     def __init__(self, queue):
@@ -114,6 +114,7 @@ class DownloadWorker(Thread):
                         pp = pp.append(p).replace('null', np.nan, regex=True)
             if len(pp)>0:
                 pp['date'] = pd.to_datetime(pp['date'])
+                pp['date'] = pp['date'].fillna('')
                 for col in ['oil','water','gas','daysprod','oilgrav','pcsg','ptbg','btu']:
                     pp[col] = pd.to_numeric(pp[col])
                 ps = []
@@ -140,6 +141,7 @@ class DownloadWorker(Thread):
                         jj = jj.append(j).replace('null', np.nan, regex=True)
             if len(jj)>0:
                 jj['date'] = pd.to_datetime(jj['date'])
+                jj['date'] = jj['date'].fillna('')
                 for col in ['wtrstm','gasair','daysinj','pinjsurf']:
                     jj[col] = pd.to_numeric(jj[col])
                 js = []
@@ -150,8 +152,10 @@ class DownloadWorker(Thread):
             client = MongoClient('mongodb://localhost:27017/', username='kk6gpv', password='kk6gpv', authSource='admin')
             db=client.petroleum
             doggr=db.doggr
-
-            doggr.insert_one(hh)
+            try:
+                doggr.insert_one(hh)
+            except:
+                print('pass')
             self.queue.task_done()
             
 def main():
