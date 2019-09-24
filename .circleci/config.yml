@@ -224,7 +224,7 @@ jobs:
       - run:
           name: Deploy Code
           command: ./scripts/ci-deploy-wunderground.sh
-build_doggr:
+  build_doggr:
     docker:
       - image: circleci/buildpack-deps:stretch
     environment:
