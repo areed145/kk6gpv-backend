@@ -158,7 +158,6 @@ class DownloadWorker(Thread):
                 print(str(api)+' succeeded')
             except:
                 print(str(api)+' failed')
-                pass
             
             self.queue.task_done()
             
