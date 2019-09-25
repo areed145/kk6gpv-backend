@@ -602,8 +602,8 @@ def create_wx_figs(time, sid):
     df_wx_raw['wind_degrees_cat'] = np.floor(
         df_wx_raw['wind_degrees'] / 15) * 15
     df_wx_raw.loc[df_wx_raw['wind_degrees_cat'] == 360, 'wind_degrees_cat'] = 0
-    df_wx_raw['wind_degrees_cat'] = df_wx_raw['wind_degrees_cat'].astype(
-        int).astype(str)
+    df_wx_raw['wind_degrees_cat'] = df_wx_raw['wind_degrees_cat'].fillna(
+        0).astype(int).astype(str)
 
     df_wx_raw.loc[df_wx_raw['wind_mph'] == 0, 'wind_degrees'] = pd.np.nan
 
