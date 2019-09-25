@@ -124,9 +124,9 @@ def create_graph_iot(sensor, time):
     df = pd.DataFrame(
         list(db.raw.find({'entity_id': sensor}).sort([('_id', -1)]).limit(time)))
     data = [go.Scattergl(x=df['last_changed'],
-                       y=df['state'],
-                       name=df['entity_id'][0],
-                       line=dict(  # color = 'rgb(255, 95, 63)',
+                         y=df['state'],
+                         name=df['entity_id'][0],
+                         line=dict(  # color = 'rgb(255, 95, 63)',
         shape='vh',
         width=3),
         mode='lines')]
@@ -437,12 +437,12 @@ def create_map_aprs(script, prop, time):
 
     data_speed = [
         go.Scattergl(x=df['timestamp_'],
-                   y=df['speed'],
-                   name='Speed (mph)',
-                   line=dict(color='rgb(255, 127, 63)',
-                             width=2, shape='linear'),
-                   # xaxis='x', yaxis='y',
-                   mode='lines'),
+                     y=df['speed'],
+                     name='Speed (mph)',
+                     line=dict(color='rgb(255, 127, 63)',
+                               width=2, shape='linear'),
+                     # xaxis='x', yaxis='y',
+                     mode='lines'),
     ]
 
     layout_speed = go.Layout(autosize=True,
@@ -461,12 +461,12 @@ def create_map_aprs(script, prop, time):
 
     data_alt = [
         go.Scattergl(x=df['timestamp_'],
-                   y=df['altitude'],
-                   name='Altitude (ft)',
-                   line=dict(color='rgb(255, 95, 63)',
-                             width=2, shape='linear'),
-                   # xaxis='x', yaxis='y',
-                   mode='lines'),
+                     y=df['altitude'],
+                     name='Altitude (ft)',
+                     line=dict(color='rgb(255, 95, 63)',
+                               width=2, shape='linear'),
+                     # xaxis='x', yaxis='y',
+                     mode='lines'),
     ]
 
     layout_alt = go.Layout(autosize=True,
@@ -484,12 +484,12 @@ def create_map_aprs(script, prop, time):
 
     data_course = [
         go.Scattergl(x=df['timestamp_'],
-                   y=df['course'],
-                   name='Course (degrees)',
-                   line=dict(color='rgb(255, 63, 63)',
-                             width=2, shape='linear'),
-                   # xaxis='x', yaxis='y',
-                   mode='lines'),
+                     y=df['course'],
+                     name='Course (degrees)',
+                     line=dict(color='rgb(255, 63, 63)',
+                               width=2, shape='linear'),
+                     # xaxis='x', yaxis='y',
+                     mode='lines'),
     ]
 
     layout_course = go.Layout(autosize=True,
@@ -640,17 +640,17 @@ def create_wx_figs(time, sid):
 
     data_td = [
         go.Scattergl(x=df_wx_raw.index,
-                   y=df_wx_raw['temp_f'],
-                   name='Temperature (F)',
-                   line=dict(color='rgb(255, 95, 63)', width=3),
-                   xaxis='x', yaxis='y',
-                   mode='lines'),
+                     y=df_wx_raw['temp_f'],
+                     name='Temperature (F)',
+                     line=dict(color='rgb(255, 95, 63)', width=3),
+                     xaxis='x', yaxis='y',
+                     mode='lines'),
         go.Scattergl(x=df_wx_raw.index,
-                   y=df_wx_raw['dewpoint_f'],
-                   name='Dewpoint (F)',
-                   line=dict(color='rgb(255, 127, 63)', width=3),
-                   xaxis='x', yaxis='y2',
-                   mode='lines'),
+                     y=df_wx_raw['dewpoint_f'],
+                     name='Dewpoint (F)',
+                     line=dict(color='rgb(255, 127, 63)', width=3),
+                     xaxis='x', yaxis='y2',
+                     mode='lines'),
     ]
 
     layout_td = go.Layout(autosize=True,
@@ -669,24 +669,27 @@ def create_wx_figs(time, sid):
                                       fixedrange=True,
                                       titlefont=dict(color='rgb(255, 127, 63)')
                                       ),
-                          xaxis=dict(type='date', fixedrange=True, range=[dt_min, dt_max],),
+                          xaxis=dict(type='date',
+                                     #fixedrange=True,
+                                     range=[dt_min, dt_max],
+                                     ),
                           margin=dict(r=50, t=30, b=30, l=60, pad=0),
                           showlegend=False,
                           )
 
     data_pr = [
         go.Scattergl(x=df_wx_raw.index,
-                   y=df_wx_raw['pressure_in'],
-                   name='Pressure (inHg)',
-                   line=dict(color='rgb(127, 255, 63)', width=3),
-                   xaxis='x', yaxis='y',
-                   mode='lines'),
+                     y=df_wx_raw['pressure_in'],
+                     name='Pressure (inHg)',
+                     line=dict(color='rgb(127, 255, 63)', width=3),
+                     xaxis='x', yaxis='y',
+                     mode='lines'),
         go.Scattergl(x=df_wx_raw.index,
-                   y=df_wx_raw['relative_humidity'],
-                   name='Humidity (%)',
-                   line=dict(color='rgb(63, 127, 255)', width=3),
-                   xaxis='x', yaxis='y2',
-                   mode='lines'),
+                     y=df_wx_raw['relative_humidity'],
+                     name='Humidity (%)',
+                     line=dict(color='rgb(63, 127, 255)', width=3),
+                     xaxis='x', yaxis='y2',
+                     mode='lines'),
     ]
 
     layout_pr = go.Layout(autosize=True,
@@ -705,24 +708,27 @@ def create_wx_figs(time, sid):
                                       fixedrange=True,
                                       titlefont=dict(color='rgb(63, 127, 255)')
                                       ),
-                          xaxis=dict(type='date', fixedrange=True, range=[dt_min, dt_max],),
+                          xaxis=dict(type='date',
+                                     #fixedrange=True,
+                                     range=[dt_min, dt_max],
+                                     ),
                           margin=dict(r=50, t=30, b=30, l=60, pad=0),
                           showlegend=False,
                           )
 
     data_pc = [
         go.Scattergl(x=df_wx_raw.index,
-                   y=df_wx_raw['precip_1hr_in'],
-                   name='Precip (in/hr)',
-                   line=dict(color='rgb(31, 190, 255)', width=3),
-                   xaxis='x', yaxis='y',
-                   mode='lines'),
+                     y=df_wx_raw['precip_1hr_in'],
+                     name='Precip (in/hr)',
+                     line=dict(color='rgb(31, 190, 255)', width=3),
+                     xaxis='x', yaxis='y',
+                     mode='lines'),
         go.Scattergl(x=df_wx_raw.index,
-                   y=df_wx_raw['precip_cum_in'],
-                   name='Precip Cumulative (in)',
-                   line=dict(color='rgb(63, 255, 255)', width=3),
-                   xaxis='x', yaxis='y2',
-                   mode='lines'),
+                     y=df_wx_raw['precip_cum_in'],
+                     name='Precip Cumulative (in)',
+                     line=dict(color='rgb(63, 255, 255)', width=3),
+                     xaxis='x', yaxis='y2',
+                     mode='lines'),
     ]
 
     layout_pc = go.Layout(autosize=True,
@@ -741,30 +747,34 @@ def create_wx_figs(time, sid):
                                       fixedrange=True,
                                       titlefont=dict(color='rgb(63, 255, 255)')
                                       ),
-                          xaxis=dict(type='date', fixedrange=True, range=[dt_min, dt_max],),
+                          xaxis=dict(type='date',
+                                     #fixedrange=True,
+                                     range=[dt_min, dt_max],
+                                     ),
                           margin=dict(r=50, t=30, b=30, l=60, pad=0),
                           showlegend=False,
                           )
 
     data_wd = [
         go.Scattergl(x=df_wx_raw.index,
-                   y=df_wx_raw['wind_degrees'],
-                   name='Wind Direction (degrees)',
-                   marker=dict(color='rgb(190, 63, 255)', size=8, symbol='x'),
-                   xaxis='x', yaxis='y',
-                   mode='markers'),
+                     y=df_wx_raw['wind_degrees'],
+                     name='Wind Direction (degrees)',
+                     marker=dict(color='rgb(190, 63, 255)',
+                                 size=8, symbol='x'),
+                     xaxis='x', yaxis='y',
+                     mode='markers'),
         go.Scattergl(x=df_wx_raw.index,
-                   y=df_wx_raw['wind_gust_mph'] * 0.869,
-                   name='Wind Gust (kts)',
-                   line=dict(color='rgb(31, 190, 15)', width=3),
-                   xaxis='x', yaxis='y2',
-                   mode='lines'),
+                     y=df_wx_raw['wind_gust_mph'] * 0.869,
+                     name='Wind Gust (kts)',
+                     line=dict(color='rgb(31, 190, 15)', width=3),
+                     xaxis='x', yaxis='y2',
+                     mode='lines'),
         go.Scattergl(x=df_wx_raw.index,
-                   y=df_wx_raw['wind_mph'] * 0.869,
-                   name='Wind Speed (kts)',
-                   line=dict(color='rgb(127, 255, 31)', width=3),
-                   xaxis='x', yaxis='y2',
-                   mode='lines'),
+                     y=df_wx_raw['wind_mph'] * 0.869,
+                     name='Wind Speed (kts)',
+                     line=dict(color='rgb(127, 255, 31)', width=3),
+                     xaxis='x', yaxis='y2',
+                     mode='lines'),
     ]
 
     layout_wd = go.Layout(autosize=True,
@@ -783,24 +793,27 @@ def create_wx_figs(time, sid):
                                       fixedrange=True,
                                       titlefont=dict(color='rgb(127, 255, 31)')
                                       ),
-                          xaxis=dict(type='date', fixedrange=True, range=[dt_min, dt_max],),
+                          xaxis=dict(type='date',
+                                     #fixedrange=True,
+                                     range=[dt_min, dt_max],
+                                     ),
                           margin=dict(r=50, t=30, b=30, l=60, pad=0),
                           showlegend=False,
                           )
 
     data_su = [
         go.Scattergl(x=df_wx_raw.index,
-                   y=df_wx_raw['solar_radiation'],
-                   name='Solar Radiation (W/m<sup>2</sup>)',
-                   line=dict(color='rgb(255, 63, 127)', width=3),
-                   xaxis='x', yaxis='y',
-                   mode='lines'),
+                     y=df_wx_raw['solar_radiation'],
+                     name='Solar Radiation (W/m<sup>2</sup>)',
+                     line=dict(color='rgb(255, 63, 127)', width=3),
+                     xaxis='x', yaxis='y',
+                     mode='lines'),
         go.Scattergl(x=df_wx_raw.index,
-                   y=df_wx_raw['UV'],
-                   name='UV',
-                   line=dict(color='rgb(255, 190, 63)', width=3),
-                   xaxis='x', yaxis='y2',
-                   mode='lines'),
+                     y=df_wx_raw['UV'],
+                     name='UV',
+                     line=dict(color='rgb(255, 190, 63)', width=3),
+                     xaxis='x', yaxis='y2',
+                     mode='lines'),
     ]
 
     layout_su = go.Layout(autosize=True,
@@ -819,7 +832,10 @@ def create_wx_figs(time, sid):
                                       fixedrange=True,
                                       titlefont=dict(color='rgb(255, 190, 63)')
                                       ),
-                          xaxis=dict(type='date', fixedrange=True, range=[dt_min, dt_max],),
+                          xaxis=dict(type='date',
+                                     #fixedrange=True,
+                                     range=[dt_min, dt_max],
+                                     ),
                           margin=dict(r=50, t=30, b=30, l=60, pad=0),
                           showlegend=False,
                           )
