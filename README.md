@@ -3,7 +3,7 @@ goal will be to re-create kk6gpv.net as a flask site
 
 [![build status](https://img.shields.io/circleci/build/gh/areed145/kk6gpv-flask)](https://circleci.com/gh/areed145/kk6gpv-flask)
 
-[![size](https://img.shields.io/github/repo-size/areed145/kk6gpv-flask)]
+![size](https://img.shields.io/github/repo-size/areed145/kk6gpv-flask)
 
 ## stack
 - python
