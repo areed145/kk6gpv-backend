@@ -8,6 +8,9 @@ from datetime import datetime
 
 #client = MongoClient('mongodb+srv://web:web@cluster0-li5mj.gcp.mongodb.net')
 client = MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
+# client = MongoClient('mongodb://localhost:27017/',
+#                      username='kk6gpv', password='kk6gpv', authSource='admin')
+
 
 mapbox_access_token = 'pk.eyJ1IjoiYXJlZWQxNDUiLCJhIjoiY2phdzNsN2ZoMGh0bjMybzF3cTkycWYyciJ9.4aS7z-guI2VDlP3duMg2FA'
 
@@ -86,7 +89,15 @@ def create_plot(feature):
             y=random_y,
             mode='markers'
         )]
-    graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
+    layout = go.Layout(autosize=True,
+                       # height=1000,
+                       #    showlegend=True,
+                       hovermode='closest',
+                       uirevision=True,
+                       margin=dict(r=0, t=0, b=0, l=0, pad=0),
+                       )
+    graphJSON = json.dumps(dict(data=data, layout=layout),
+                           cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
 
@@ -114,7 +125,15 @@ def create_plot2(type, prop, time):
             y=random_y,
             mode='markers'
         )]
-    graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
+    layout = go.Layout(autosize=True,
+                       # height=1000,
+                       #    showlegend=True,
+                       hovermode='closest',
+                       uirevision=True,
+                       margin=dict(r=0, t=0, b=0, l=0, pad=0),
+                       )
+    graphJSON = json.dumps(dict(data=data, layout=layout),
+                           cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
 
@@ -123,6 +142,7 @@ def create_graph_iot(sensor, time):
     db = client.iot
     df = pd.DataFrame(
         list(db.raw.find({'entity_id': sensor}).sort([('_id', -1)]).limit(time)))
+
     data = [go.Scatter(x=df['last_changed'],
                        y=df['state'],
                        name=df['entity_id'][0],
@@ -130,7 +150,16 @@ def create_graph_iot(sensor, time):
         shape='vh',
         width=3),
         mode='lines')]
-    graphJSON = json.dumps(data, cls=plotly.utils.PlotlyJSONEncoder)
+
+    layout = go.Layout(autosize=True,
+                       # height=1000,
+                       #    showlegend=True,
+                       hovermode='closest',
+                       uirevision=True,
+                       margin=dict(r=50, t=30, b=30, l=60, pad=0),
+                       )
+    graphJSON = json.dumps(dict(data=data, layout=layout),
+                           cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
 
@@ -891,8 +920,6 @@ def create_wx_figs(time, sid):
         # height=400,
         width=500,
     )
-
-    fig = go.Figure(data=data, layout=layout)
 
     graphJSON_td = json.dumps(dict(data=data_td, layout=layout_td),
                               cls=plotly.utils.PlotlyJSONEncoder)

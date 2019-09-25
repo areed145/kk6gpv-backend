@@ -36,7 +36,7 @@
             <div class="chart" id="map_awc">
                 <script>
                     var graphs = {{ plot | safe}};
-                    Plotly.plot('map_awc', graphs, {});
+                    Plotly.plot('map_awc', graphs.data, graphs.layout, {displayModeBar: false});
                 </script>
             </div>
         </div>

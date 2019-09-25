@@ -166,7 +166,7 @@ def map_aprs_change():
 @app.route('/graph_wx', methods=['GET', 'POST'])
 def graph_wx_change():
     time_wx = request.args['time_wx']
-    fig_td, fig_pr, fig_pc, fig_wd, fig_su = figs.create_wx_figs(
+    fig_td, fig_pr, fig_pc, fig_wd, fig_su, fig_wr = figs.create_wx_figs(
         time_wx, sid)
     data = {}
     data["fig_td"] = json.loads(fig_td)

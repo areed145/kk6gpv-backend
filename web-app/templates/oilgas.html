@@ -12,7 +12,7 @@
             <div class="chart" id="map_oilgas">
                 <script>
                     var graphs = {{ plot | safe}};
-                    Plotly.plot('map_oilgas', graphs, {});
+                    Plotly.plot('map_oilgas', graphs.data, graphs.layout, {displayModeBar: false});
                 </script>
             </div>
         </div>

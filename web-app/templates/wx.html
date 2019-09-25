@@ -25,7 +25,7 @@
       <div class="chart" id="fig_td">
         <script>
           var graphs = {{ fig_td | safe}};
-          Plotly.plot('fig_td', graphs, {});
+          Plotly.plot('fig_td', graphs.data, graphs.layout, { displayModeBar: false });
         </script>
       </div>
     </div>
@@ -33,7 +33,7 @@
       <div class="chart" id="fig_pr">
         <script>
           var graphs = {{ fig_pr | safe}};
-          Plotly.plot('fig_pr', graphs, {});
+          Plotly.plot('fig_pr', graphs.data, graphs.layout, { displayModeBar: false });
         </script>
       </div>
     </div>
@@ -41,7 +41,7 @@
       <div class="chart" id="fig_pc">
         <script>
           var graphs = {{ fig_pc | safe}};
-          Plotly.plot('fig_pc', graphs, {});
+          Plotly.plot('fig_pc', graphs.data, graphs.layout, { displayModeBar: false });
         </script>
       </div>
     </div>
@@ -49,7 +49,7 @@
       <div class="chart" id="fig_wd">
         <script>
           var graphs = {{ fig_wd | safe}};
-          Plotly.plot('fig_wd', graphs, {});
+          Plotly.plot('fig_wd', graphs.data, graphs.layout, { displayModeBar: false });
         </script>
       </div>
     </div>
@@ -57,7 +57,7 @@
       <div class="chart" id="fig_su">
         <script>
           var graphs = {{ fig_su | safe}};
-          Plotly.plot('fig_su', graphs, {});
+          Plotly.plot('fig_su', graphs.data, graphs.layout, { displayModeBar: false });
         </script>
       </div>
     </div>
@@ -65,7 +65,7 @@
       <div class="chart" id="fig_wr">
         <script>
           var graphs = {{ fig_wr | safe}};
-          Plotly.plot('fig_wr', graphs, {});
+          Plotly.newPlot('fig_wr', graphs.data, graphs.layout, { displayModeBar: false });
         </script>
       </div>
     </div>

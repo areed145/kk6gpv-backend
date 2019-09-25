@@ -75,7 +75,7 @@
       <div class="chart" id="graph_iot">
         <script>
           var graphs = {{ plot | safe}};
-          Plotly.plot('graph_iot', graphs, {});
+          Plotly.plot('graph_iot', graphs.data, graphs.layout, {displayModeBar: false});
         </script>
       </div>
     </div>
