@@ -28,8 +28,8 @@ db = client.petroleum
 exists = pd.DataFrame(list(db.doggr.find({}, {'api': 1})))
 exists = exists['api'].astype('int').astype('str').to_list()
 
-# print(exists[:10])
-# print(apistodo[:10])
+print(exists[:10])
+print(apistodo[:10])
 
 for well in exists:
     try:
@@ -218,7 +218,7 @@ class DownloadWorker(Thread):
 
 def main():
     queue = Queue()
-    for x in range(50):
+    for x in range(10):
         worker = DownloadWorker(queue)
         worker.daemon = True
         worker.start()
