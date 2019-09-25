@@ -1,7 +1,9 @@
 # kk6gpv-flask
 goal will be to re-create kk6gpv.net as a flask site
 
-[![CircleCI](https://circleci.com/gh/areed145/kk6gpv-flask.svg?style=svg)](https://circleci.com/gh/areed145/kk6gpv-flask)
+[![build status](https://img.shields.io/circleci/build/gh/areed145/kk6gpv-flask)](https://circleci.com/gh/areed145/kk6gpv-flask)
+
+[![size](https://img.shields.io/github/repo-size/areed145/kk6gpv-flask)]
 
 ## stack
 - python

@@ -23,8 +23,7 @@ apistodo = apis
 #apistodo = apis[(apis >= 0) & (apis <= 28000000)]
 apistodo = apistodo.astype('str').to_list()
 
-client = MongoClient('mongodb://localhost:27017/',
-                     username='kk6gpv', password='kk6gpv', authSource='admin')
+client = MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
 db = client.petroleum
 exists = pd.DataFrame(list(db.doggr.find({}, {'api': 1})))
 exists = exists['api'].astype('int').astype('str').to_list()
