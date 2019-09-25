@@ -918,7 +918,7 @@ def create_wx_figs(time, sid):
         ),
         #showlegend = False,
         # height=400,
-        width=500,
+        # width=500,
     )
 
     graphJSON_td = json.dumps(dict(data=data_td, layout=layout_td),
