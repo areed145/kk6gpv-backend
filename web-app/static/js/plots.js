@@ -10,11 +10,11 @@ if ($('#wx').length > 0) {
             },
             dataType: "json",
             success: function (data) {
-                Plotly.react('fig_td', data.fig_td);
-                Plotly.react('fig_pr', data.fig_pr);
-                Plotly.react('fig_pc', data.fig_pc);
-                Plotly.react('fig_wd', data.fig_wd);
-                Plotly.react('fig_su', data.fig_su);
+                Plotly.plot('fig_td', data.fig_td);
+                Plotly.plot('fig_pr', data.fig_pr);
+                Plotly.plot('fig_pc', data.fig_pc);
+                Plotly.plot('fig_wd', data.fig_wd);
+                Plotly.plot('fig_su', data.fig_su);
             }
         });
     })
@@ -30,11 +30,11 @@ if ($('#wx').length > 0) {
             dataType: "json",
         })
             .done(function (data) {
-                Plotly.react('fig_td', data.fig_td);
-                Plotly.react('fig_pr', data.fig_pr);
-                Plotly.react('fig_pc', data.fig_pc);
-                Plotly.react('fig_wd', data.fig_wd);
-                Plotly.react('fig_su', data.fig_su);
+                Plotly.plot('fig_td', data.fig_td);
+                Plotly.plot('fig_pr', data.fig_pr);
+                Plotly.plot('fig_pc', data.fig_pc);
+                Plotly.plot('fig_wd', data.fig_wd);
+                Plotly.plot('fig_su', data.fig_su);
             })
     }, 1000 * 30);
 
