@@ -15,6 +15,7 @@ if ($('#wx').length > 0) {
                 Plotly.react('fig_pc', data.fig_pc);
                 Plotly.react('fig_wd', data.fig_wd);
                 Plotly.react('fig_su', data.fig_su);
+                Plotly.react('fig_wr', data.fig_wr);
             }
         });
     })
@@ -35,6 +36,7 @@ if ($('#wx').length > 0) {
                 Plotly.react('fig_pc', data.fig_pc);
                 Plotly.react('fig_wd', data.fig_wd);
                 Plotly.react('fig_su', data.fig_su);
+                Plotly.react('fig_wr', data.fig_wr);
             })
     }, 1000 * 30);
 

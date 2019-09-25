@@ -19,6 +19,7 @@ sched.start()
 
 sid = 'KTXHOUST1941'
 
+
 def myconverter(o):
     if isinstance(o, datetime.datetime):
         return o.__str__()
@@ -41,9 +42,9 @@ def awc():
 @app.route('/wx')
 def wx():
     time_wx = 't_100'
-    fig_td, fig_pr, fig_pc, fig_wd, fig_su = figs.create_wx_figs(
+    fig_td, fig_pr, fig_pc, fig_wd, fig_su, fig_wr = figs.create_wx_figs(
         time_wx, sid)
-    return render_template('wx.html', fig_td=fig_td, fig_pr=fig_pr, fig_pc=fig_pc, fig_wd=fig_wd, fig_su=fig_su)
+    return render_template('wx.html', fig_td=fig_td, fig_pr=fig_pr, fig_pc=fig_pc, fig_wd=fig_wd, fig_su=fig_su, fig_wr=fig_wr)
 
 
 @app.route('/iot')
@@ -173,6 +174,7 @@ def graph_wx_change():
     data["fig_pc"] = json.loads(fig_pc)
     data["fig_wd"] = json.loads(fig_wd)
     data["fig_su"] = json.loads(fig_su)
+    data["fig_wr"] = json.loads(fig_wr)
     return json.dumps(data, default=myconverter)
 
 

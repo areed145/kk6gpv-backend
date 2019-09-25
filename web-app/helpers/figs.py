@@ -840,6 +840,60 @@ def create_wx_figs(time, sid):
                           showlegend=False,
                           )
 
+    t1 = go.Barpolar(r=wind_temp['>10'], theta=wind_temp['wind_cat'],
+                     name='>10 mph', width=10,
+                     base=0,
+                     marker=dict(color='#ffff00', line=dict(color='#ffff00')),
+                     )
+    t2 = go.Barpolar(r=wind_temp['5-10'], theta=wind_temp['wind_cat'],
+                     name='5-10 mph', width=10,
+                     base=0,
+                     marker=dict(color='#ffcc00', line=dict(color='#ffcc00')),
+                     )
+    t3 = go.Barpolar(r=wind_temp['2-5'], theta=wind_temp['wind_cat'],
+                     name='2-5 mph', width=10,
+                     base=0,
+                     marker=dict(color='#bfff00', line=dict(color='#bfff00')),
+                     )
+    t4 = go.Barpolar(r=wind_temp['1-2'], theta=wind_temp['wind_cat'],
+                     name='1-2 mph', width=10,
+                     base=0,
+                     marker=dict(color='#00cc00', line=dict(color='#00cc00')),
+                     )
+    t5 = go.Barpolar(r=wind_temp['0-1'], theta=wind_temp['wind_cat'],
+                     name='0-1 mph', width=10,
+                     base=0,
+                     marker=dict(color='#009999', line=dict(color='#009999')),
+                     )
+    t6 = go.Barpolar(r=wind_temp['calm'], theta=wind_temp['wind_cat'],
+                     name='calm', width=10,
+                     base=0,
+                     marker=dict(color='#3366ff', line=dict(color='#3366ff')),
+                     )
+
+    data_wr = [t1, t2, t3, t4, t5, t6]
+
+    layout_wr = go.Layout(
+        polar=dict(
+            radialaxis=dict(
+                #visible = False,
+                showline=False,
+                showticklabels=False,
+                ticks='',
+                range=[0, wind_temp['>10'].max()],
+            ),
+            angularaxis=dict(
+                rotation=90,
+                direction="clockwise",
+            )
+        ),
+        #showlegend = False,
+        # height=400,
+        width=500,
+    )
+
+    fig = go.Figure(data=data, layout=layout)
+
     graphJSON_td = json.dumps(dict(data=data_td, layout=layout_td),
                               cls=plotly.utils.PlotlyJSONEncoder)
 
@@ -855,4 +909,7 @@ def create_wx_figs(time, sid):
     graphJSON_su = json.dumps(dict(data=data_su, layout=layout_su),
                               cls=plotly.utils.PlotlyJSONEncoder)
 
-    return graphJSON_td, graphJSON_pr, graphJSON_pc, graphJSON_wd, graphJSON_su
+    graphJSON_wr = json.dumps(dict(data=data_wr, layout=layout_wr),
+                              cls=plotly.utils.PlotlyJSONEncoder)
+
+    return graphJSON_td, graphJSON_pr, graphJSON_pc, graphJSON_wd, graphJSON_su, graphJSON_wr

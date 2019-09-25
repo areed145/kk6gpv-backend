@@ -61,6 +61,14 @@
         </script>
       </div>
     </div>
+    <div class="col-md-12">
+      <div class="chart" id="fig_wr">
+        <script>
+          var graphs = {{ fig_wr | safe}};
+          Plotly.plot('fig_wr', graphs, {});
+        </script>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
