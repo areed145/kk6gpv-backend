@@ -30,10 +30,11 @@ if ($('#wx').length > 0) {
             dataType: "json",
         })
             .done(function (data) {
-                Plotly.react('map_aprs', data.map_aprs);
-                Plotly.react('plot_speed', data.plot_speed);
-                Plotly.react('plot_alt', data.plot_alt);
-                Plotly.react('plot_course', data.plot_course);
+                Plotly.react('fig_td', data.fig_td);
+                Plotly.react('fig_pr', data.fig_pr);
+                Plotly.react('fig_pc', data.fig_pc);
+                Plotly.react('fig_wd', data.fig_wd);
+                Plotly.react('fig_su', data.fig_su);
             })
     }, 1000 * 30);
 

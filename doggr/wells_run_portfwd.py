@@ -17,9 +17,24 @@ import pymongo
 
 d = pd.read_csv('AllWells_20180131.csv')
 apis = d['API'].copy(deep=True)
-apis.sort_values(inplace=True, ascending=False)
+apis.sort_values(inplace=True, ascending=True)
 apistodo = apis
-#apistodo = apis[(apis >= 1900000) & (apis <= 28320060)]
+#apistodo = apis[(apis >= 0) & (apis <= 28000000)]
+apistodo = apistodo.astype('str').to_list()
+
+client = MongoClient('mongodb://localhost:27017/', username='kk6gpv', password='kk6gpv', authSource='admin')
+db=client.petroleum
+exists = pd.DataFrame(list(db.doggr.find({}, {'api': 1})))
+exists = exists['api'].astype('int').astype('str').to_list()
+
+#print(exists[:10])
+#print(apistodo[:10])
+
+for well in exists:
+    try:
+        apistodo.remove(well)
+    except:
+        pass
 
 class DownloadWorker(Thread):
     def __init__(self, queue):
