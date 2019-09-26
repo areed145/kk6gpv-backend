@@ -147,8 +147,6 @@ def create_plot(feature):
 
 def create_graph_iot(sensor, time):
     start, now = get_time_range(time)
-    start = str(start)
-    now = str(now)
     db = client.iot
     df = pd.DataFrame(
         list(db.raw.find({'entity_id':sensor,'timestamp_':{'$gt':start,'$lte':now}}).sort([('timestamp_', -1)])))
@@ -614,7 +612,7 @@ def create_map_aprs(script, prop, time):
         r['altitude'] = row['altitude']
         r['course'] = row['course']
         rows.append(r)
-    print(rows)
+    #print(rows)
 
     return graphJSON_map, graphJSON_speed, graphJSON_alt, graphJSON_course, rows
 
