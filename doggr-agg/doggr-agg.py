@@ -1,9 +1,6 @@
 import numpy as np
 import pandas as pd
 from pymongo import MongoClient
-import plotly
-import plotly.graph_objs as go
-import json
 from datetime import datetime
 import time
 
