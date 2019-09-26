@@ -36,20 +36,22 @@ goal will be to re-create kk6gpv.net as a flask site
      - doggr application
 
 ## todo
-- add old mongodb data (delete incorrect, load correct)
-- incorporate fetchers
 - UI
 - rebuild flickr photo gallery functionality
 - move gallery listing to db
-- incorporate Plotly.react in other plots
-- port DOGGR data
 - figure out how to add raster layers to maps (leaflet? instaead of plotly for mapbox)
-- builder like blog for writing about proejcts
+- builder like blog for writing about projects
 - details pages for APRS info
 - styling
-- convert time queries to date range
+- optimize deployment
 
 ## done
+- add old mongodb data (delete incorrect, load correct)
+- move to kubernetes cluster
+- incorporate fetchers
+- incorporate Plotly.react in other plots
+- port DOGGR data
+- convert time queries to date range
 - connect to mongodb
 - live updating plots
 - rebuild flickr gallery functionality
