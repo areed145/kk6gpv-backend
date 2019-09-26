@@ -7,7 +7,7 @@ import json
 from datetime import datetime, timedelta
 
 #client = MongoClient('mongodb+srv://web:web@cluster0-li5mj.gcp.mongodb.net')
-# client = MongoClient('mongodb://localhost:27017/', username='kk6gpv', password='kk6gpv', authSource='admin')
+#client = MongoClient('mongodb://localhost:27017/', username='kk6gpv', password='kk6gpv', authSource='admin')
 client = MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
 
 mapbox_access_token = 'pk.eyJ1IjoiYXJlZWQxNDUiLCJhIjoiY2phdzNsN2ZoMGh0bjMybzF3cTkycWYyciJ9.4aS7z-guI2VDlP3duMg2FA'
@@ -62,6 +62,41 @@ cs_circle = [
     [0.933, '#e2aba1'],
     [1.000, '#f7856f'],
 ]
+
+scl_oil = [
+    [0.00,'#d6ed42'],
+    [0.10,'#78ed42'],
+    [0.50,'#50bf37'],
+    [1.00,'#06721e']
+    ];
+    
+scl_wtr = [
+    [0.00,'#caf0f7'],
+    [0.33,'#64d6ea'],
+    [0.66,'#4286f4'],
+    [1.00,'#0255db']
+    ];
+    
+scl_gas = [
+    [0.00,'#fcbfbf'],
+    [0.33,'#f28282'],
+    [0.66,'#ef2626'],
+    [1.00,'#7a0707']
+    ];
+    
+scl_stm = [
+    [0.00,'#edb6d7'],
+    [0.33,'#ed87c4'],
+    [0.66,'#e22f9b'],
+    [1.00,'#930b5d']
+    ];
+    
+scl_cyc = [
+    [0.00,'#fff1c6'],
+    [0.33,'#f7dd8a'],
+    [0.66,'#fcd555'],
+    [1.00,'#ffc300']
+    ];
 
 def get_time_range(time):
     unit = time[0]
@@ -143,23 +178,48 @@ def create_graph_iot(sensor, time):
 
 def create_map_oilgas():
     db = client.petroleum
-    df = pd.DataFrame(list(db.doggr.find({}, {'latitude': 1, 'longitude': 1})))
-    data = [go.Scattermapbox(lat=df['latitude'],
-                             lon=df['longitude'],
-                             #  text=df['raw_text'],
+    df_wells = pd.DataFrame(list(db.doggr.find({}, {'latitude': 1, 'longitude': 1})))
+    df_prod = pd.DataFrame(list(db.prod.find({})))
+    # df_inj = pd.DataFrame(list(db.inj.find({})))
+
+    cs = scl_oil
+    prop = 'oil'
+    cmin = df_prod[prop].quantile(0.01)
+    cmax = df_prod[prop].quantile(0.75)
+
+    data = [go.Scattermapbox(lat=df_prod['latitude'],
+                             lon=df_prod['longitude'],
                              mode='markers',
-                             #  marker=dict(size=10,
-                             #              color=params[prop][2] *
-                             #              df[prop] + params[prop][3],
-                             #              colorbar=dict(
-                             #                  title=params[prop][4]),
-                             #              colorscale=cs,
-                             #              cmin=params[prop][2] *
-                             #              cmin + params[prop][3],
-                             #              cmax=params[prop][2] *
-                             #              cmax + params[prop][3],
-                             #              )
-                             )
+                             name='oil',
+                             marker=dict(size=10,
+                                color=df_prod[prop],
+                                colorbar=dict(
+                                    title='oil',
+                                    lenmode='fraction',
+                                    len=0.80,
+                                    ),
+                                colorscale=cs,
+                                cmin=cmin,
+                                cmax=cmax,
+                                )
+                            ),
+            # go.Scattermapbox(lat=df_inj['latitude'],
+            #                  lon=df_inj['longitude'],
+            #                  mode='markers',
+            #                  marker=dict(
+            #                      size=1,
+            #                      color='black',
+            #                      ),
+            #                  ),
+            go.Scattermapbox(lat=df_wells['latitude'],
+                             lon=df_wells['longitude'],
+                             mode='markers',
+                             name='wells',
+                             marker=dict(
+                                 size=4,
+                                 color='black',
+                                 ),
+                             ),
             ]
     layout = go.Layout(autosize=True,
                        # height=1000,
@@ -168,11 +228,11 @@ def create_map_oilgas():
                        uirevision=True,
                        margin=dict(r=0, t=0, b=0, l=0, pad=0),
                        mapbox=dict(bearing=0,
-                                   center=dict(lat=38, lon=-96),
+                                   center=dict(lat=36, lon=-119),
                                    accesstoken=mapbox_access_token,
                                    style='satellite-streets',
                                    pitch=0,
-                                   zoom=3
+                                   zoom=5
                                    )
                        )
     graphJSON = json.dumps(dict(data=data, layout=layout),
