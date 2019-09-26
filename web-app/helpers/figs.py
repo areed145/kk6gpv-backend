@@ -64,39 +64,40 @@ cs_circle = [
 ]
 
 scl_oil = [
-    [0.00,'#d6ed42'],
-    [0.10,'#78ed42'],
-    [0.50,'#50bf37'],
-    [1.00,'#06721e']
-    ];
-    
+    [0.00, '#d6ed42'],
+    [0.10, '#78ed42'],
+    [0.50, '#50bf37'],
+    [1.00, '#06721e']
+]
+
 scl_wtr = [
-    [0.00,'#caf0f7'],
-    [0.33,'#64d6ea'],
-    [0.66,'#4286f4'],
-    [1.00,'#0255db']
-    ];
-    
+    [0.00, '#caf0f7'],
+    [0.33, '#64d6ea'],
+    [0.66, '#4286f4'],
+    [1.00, '#0255db']
+]
+
 scl_gas = [
-    [0.00,'#fcbfbf'],
-    [0.33,'#f28282'],
-    [0.66,'#ef2626'],
-    [1.00,'#7a0707']
-    ];
-    
+    [0.00, '#fcbfbf'],
+    [0.33, '#f28282'],
+    [0.66, '#ef2626'],
+    [1.00, '#7a0707']
+]
+
 scl_stm = [
-    [0.00,'#edb6d7'],
-    [0.33,'#ed87c4'],
-    [0.66,'#e22f9b'],
-    [1.00,'#930b5d']
-    ];
-    
+    [0.00, '#edb6d7'],
+    [0.33, '#ed87c4'],
+    [0.66, '#e22f9b'],
+    [1.00, '#930b5d']
+]
+
 scl_cyc = [
-    [0.00,'#fff1c6'],
-    [0.33,'#f7dd8a'],
-    [0.66,'#fcd555'],
-    [1.00,'#ffc300']
-    ];
+    [0.00, '#fff1c6'],
+    [0.33, '#f7dd8a'],
+    [0.66, '#fcd555'],
+    [1.00, '#ffc300']
+]
+
 
 def get_time_range(time):
     unit = time[0]
@@ -109,6 +110,7 @@ def get_time_range(time):
     if unit == 'd':
         start = now - timedelta(days=val)
     return start, now
+
 
 def create_plot(feature):
     if feature == 'bar':
@@ -149,7 +151,7 @@ def create_graph_iot(sensor, time):
     start, now = get_time_range(time)
     db = client.iot
     df = pd.DataFrame(
-        list(db.raw.find({'entity_id':sensor,'timestamp_':{'$gt':start,'$lte':now}}).sort([('timestamp_', -1)])))
+        list(db.raw.find({'entity_id': sensor, 'timestamp_': {'$gt': start, '$lte': now}}).sort([('timestamp_', -1)])))
 
     data = [go.Scatter(x=df['timestamp_'],
                        y=df['state'],
@@ -158,9 +160,9 @@ def create_graph_iot(sensor, time):
                            # color = 'rgb(255, 95, 63)',
                            shape='vh',
                            width=3
-                        ),
-                        mode='lines')
-            ]
+    ),
+        mode='lines')
+    ]
 
     layout = go.Layout(autosize=True,
                        # height=1000,
@@ -176,39 +178,59 @@ def create_graph_iot(sensor, time):
 
 def create_map_oilgas():
     db = client.petroleum
-    df_wells = pd.DataFrame(list(db.doggr.find({}, {'latitude': 1, 'longitude': 1})))
+    df_wells = pd.DataFrame(
+        list(db.doggr.find({}, {'latitude': 1, 'longitude': 1})))
     df_prod = pd.DataFrame(list(db.prod.find({})))
     # df_inj = pd.DataFrame(list(db.inj.find({})))
-
-    cs = scl_oil
-    prop = 'oil'
-    cmin = df_prod[prop].quantile(0.01)
-    cmax = df_prod[prop].quantile(0.75)
 
     data = [go.Scattermapbox(lat=df_prod['latitude'],
                              lon=df_prod['longitude'],
                              mode='markers',
-                             name='oil',
+                             name='water',
                              marker=dict(size=10,
-                                color=df_prod[prop],
-                                colorbar=dict(
-                                    title='oil',
-                                    lenmode='fraction',
-                                    len=0.80,
-                                    ),
-                                colorscale=cs,
-                                cmin=cmin,
-                                cmax=cmax,
-                                )
-                            ),
-            # go.Scattermapbox(lat=df_inj['latitude'],
-            #                  lon=df_inj['longitude'],
-            #                  mode='markers',
-            #                  marker=dict(
-            #                      size=1,
-            #                      color='black',
-            #                      ),
-            #                  ),
+                                         color=df_prod['water'],
+                                         colorbar=dict(
+                                             title='water',
+                                             lenmode='fraction',
+                                             len=0.30,
+                                         ),
+                                         colorscale=scl_wtr,
+                                         cmin=df_prod['water'].quantile(0.01),
+                                         cmax=df_prod['water'].quantile(0.75),
+                                         )
+                             ),
+            go.Scattermapbox(lat=df_prod['latitude'],
+                             lon=df_prod['longitude'],
+                             mode='markers',
+                             name='oil',
+                             marker=dict(size=8,
+                                         color=df_prod['oil'],
+                                         colorbar=dict(
+                                             title='oil',
+                                             lenmode='fraction',
+                                             len=0.30,
+                                         ),
+                                         colorscale=scl_oil,
+                                         cmin=df_prod['oil'].quantile(0.01),
+                                         cmax=df_prod['oil'].quantile(0.75),
+                                         )
+                             ),
+            go.Scattermapbox(lat=df_prod['latitude'],
+                             lon=df_prod['longitude'],
+                             mode='markers',
+                             name='gas',
+                             marker=dict(size=6,
+                                         color=df_prod['gas'],
+                                         colorbar=dict(
+                                             title='gas',
+                                             lenmode='fraction',
+                                             len=0.30,
+                                         ),
+                                         colorscale=scl_gas,
+                                         cmin=df_prod['gas'].quantile(0.01),
+                                         cmax=df_prod['gas'].quantile(0.75),
+                                         )
+                             ),
             go.Scattermapbox(lat=df_wells['latitude'],
                              lon=df_wells['longitude'],
                              mode='markers',
@@ -217,8 +239,9 @@ def create_map_oilgas():
                                  size=4,
                                  color='black',
                                  ),
-                             ),
+                            ),
             ]
+            
     layout = go.Layout(autosize=True,
                        # height=1000,
                        #    showlegend=True,
@@ -450,15 +473,15 @@ def create_map_aprs(script, prop, time):
             'script': script,
             'from': 'KK6GPV',
             'latitude': {'$exists': True, '$ne': None},
-            'timestamp_':{'$gt':start,'$lte':now}
-            }).sort([('timestamp_', -1)])))
+            'timestamp_': {'$gt': start, '$lte': now}
+        }).sort([('timestamp_', -1)])))
     else:
         df = pd.DataFrame(list(db.raw.find({
             'script': script,
             # 'from': 'KK6GPV',
             'latitude': {'$exists': True, '$ne': None},
-            'timestamp_':{'$gt':start,'$lte':now}
-            }).sort([('timestamp_', -1)])))
+            'timestamp_': {'$gt': start, '$lte': now}
+        }).sort([('timestamp_', -1)])))
 
     if prop == 'none':
         data_map = [go.Scattermapbox(lat=df['latitude'],
@@ -612,7 +635,7 @@ def create_map_aprs(script, prop, time):
         r['altitude'] = row['altitude']
         r['course'] = row['course']
         rows.append(r)
-    #print(rows)
+    # print(rows)
 
     return graphJSON_map, graphJSON_speed, graphJSON_alt, graphJSON_course, rows
 
@@ -623,11 +646,11 @@ def create_wx_figs(time, sid):
     db = client.wx
 
     df_wx_raw = pd.DataFrame(list(db.raw.find({
-            'station_id': sid,
-            'observation_time_rfc822':{
-                '$gt':start,
-                '$lte':now
-                }}).sort([('observation_time_rfc822', -1)])))
+        'station_id': sid,
+        'observation_time_rfc822': {
+            '$gt': start,
+            '$lte': now
+        }}).sort([('observation_time_rfc822', -1)])))
     df_wx_raw.index = df_wx_raw['observation_time_rfc822']
     #df_wx_raw = df_wx_raw.tz_localize('UTC').tz_convert('US/Central')
 

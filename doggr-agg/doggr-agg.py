@@ -22,13 +22,17 @@ def agg():
             'api': {'$first': '$api'},
             'oil': {'$sum': '$prod.oil'},
             'water': {'$sum': '$prod.water'},
+            'gas': {'$sum': '$prod.gas'},
         }}
     ])))
 
-    df_prod_exists = pd.DataFrame(list(db.prod.find({})))
-    df_prod_add = df_prod[~df_prod['api'].isin(df_prod_exists['api'])]
+    try:
+        df_prod_exists = pd.DataFrame(list(db.prod.find({})))
+        df_prod = df_prod[~df_prod['api'].isin(df_prod_exists['api'])]
+    except:
+        pass
 
-    records = json.loads(df_prod_add.T.to_json()).values()
+    records = json.loads(df_prod.T.to_json()).values()
     for record in records:
         try:
             db.prod.insert_one(record)
@@ -47,11 +51,14 @@ def agg():
         }},
     ])))
 
-    df_inj_exists = pd.DataFrame(list(db.inj.find({})))
-    df_inj_add = df_inj[~df_inj['api'].isin(df_inj_exists['api'])]
+    try:
+        df_inj_exists = pd.DataFrame(list(db.inj.find({})))
+        df_inj = df_inj[~df_inj['api'].isin(df_inj_exists['api'])]
+    except:
+        pass
 
 
-    records = json.loads(df_inj_add.T.to_json()).values()
+    records = json.loads(df_inj.T.to_json()).values()
     for record in records:
         try:
             db.inj.insert_one(record)
