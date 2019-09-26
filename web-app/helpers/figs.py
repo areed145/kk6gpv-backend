@@ -187,7 +187,7 @@ def create_map_oilgas():
                              lon=df_prod['longitude'],
                              mode='markers',
                              name='water',
-                             marker=dict(size=10,
+                             marker=dict(size=13,
                                          color=df_prod['water'],
                                          colorbar=dict(
                                              title='water',
@@ -203,7 +203,7 @@ def create_map_oilgas():
                              lon=df_prod['longitude'],
                              mode='markers',
                              name='oil',
-                             marker=dict(size=8,
+                             marker=dict(size=10,
                                          color=df_prod['oil'],
                                          colorbar=dict(
                                              title='oil',
@@ -219,7 +219,7 @@ def create_map_oilgas():
                              lon=df_prod['longitude'],
                              mode='markers',
                              name='gas',
-                             marker=dict(size=6,
+                             marker=dict(size=7,
                                          color=df_prod['gas'],
                                          colorbar=dict(
                                              title='gas',
