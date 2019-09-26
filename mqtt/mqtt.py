@@ -12,6 +12,7 @@ import paho.mqtt.client as mqtt
 from datetime import datetime
 from pymongo import MongoClient
 import json
+from datetime import datetime
 
 
 def on_connect(client, userdata, flags, rc):
@@ -22,8 +23,10 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
     message = msg.payload.decode('utf-8')
     message = json.loads(message)
+    ins = message['event_data']['new_state']
+    ins['timestamp_'] = datetime.utcnow()
     try:
-        raw.insert_one(message['event_data']['new_state'])
+        raw.insert_one(ins)
         # print(message)
     except:
         pass

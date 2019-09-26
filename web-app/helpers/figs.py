@@ -151,9 +151,9 @@ def create_graph_iot(sensor, time):
     now = str(now)
     db = client.iot
     df = pd.DataFrame(
-        list(db.raw.find({'entity_id':sensor,'last_changed':{'$gt':start,'$lte':now}}).sort([('last_changed', -1)])))
+        list(db.raw.find({'entity_id':sensor,'timestamp_':{'$gt':start,'$lte':now}}).sort([('timestamp_', -1)])))
 
-    data = [go.Scatter(x=df['last_changed'],
+    data = [go.Scatter(x=df['timestamp_'],
                        y=df['state'],
                        name=df['entity_id'][0],
                        line=dict(
