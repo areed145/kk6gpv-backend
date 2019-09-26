@@ -449,14 +449,14 @@ def create_map_aprs(script, prop, time):
         df = pd.DataFrame(list(db.raw.find({
             'script': script,
             'from': 'KK6GPV',
-            # 'latitude': {'$exists': True, '$ne': None},
+            'latitude': {'$exists': True, '$ne': None},
             'timestamp_':{'$gt':start,'$lte':now}
             }).sort([('timestamp_', -1)])))
     else:
         df = pd.DataFrame(list(db.raw.find({
             'script': script,
             # 'from': 'KK6GPV',
-            # 'latitude': {'$exists': True, '$ne': None},
+            'latitude': {'$exists': True, '$ne': None},
             'timestamp_':{'$gt':start,'$lte':now}
             }).sort([('timestamp_', -1)])))
 
