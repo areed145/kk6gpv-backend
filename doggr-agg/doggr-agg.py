@@ -25,7 +25,10 @@ def agg():
         }}
     ])))
 
-    records = json.loads(df_prod.T.to_json()).values()
+    df_prod_exists = pd.DataFrame(list(db.prod.find({})))
+    df_prod_add = df_prod[~df_prod['api'].isin(df_prod_exists['api'])]
+
+    records = json.loads(df_prod_add.T.to_json()).values()
     for record in records:
         try:
             db.prod.insert_one(record)
@@ -44,7 +47,11 @@ def agg():
         }},
     ])))
 
-    records = json.loads(df_inj.T.to_json()).values()
+    df_inj_exists = pd.DataFrame(list(db.inj.find({})))
+    df_inj_add = df_inj[~df_inj['api'].isin(df_inj_exists['api'])]
+
+
+    records = json.loads(df_inj_add.T.to_json()).values()
     for record in records:
         try:
             db.inj.insert_one(record)
