@@ -10,15 +10,11 @@ app = Flask(__name__)
 
 sched = BackgroundScheduler(daemon=True)
 sched.add_job(flickr.get_gals, 'interval', hours=1)
-# sched.add_job(fetcher_awc.get_awc, 'interval',
-#               minutes=1, args=[0.02, 45, 6], max_instances=3)
-# sched.add_job(fetcher_awc.get_awc, 'interval', minutes=30, args=[1, 10, 18])
-# sched.add_job(fetcher_aprs.run)
-# sched.add_job(fetcher_awc.get_awc, args=[6, 10, 18])
 sched.start()
 
 sid = 'KTXHOUST1941'
 
+times = dict(m_5='5m', h_1='1h', h_6='6h', d_1='1d', d_2='2d', d_7='7d', d_30='30d')
 
 def myconverter(o):
     if isinstance(o, datetime.datetime):
@@ -41,28 +37,28 @@ def awc():
 
 @app.route('/wx')
 def wx():
-    time_wx = 't_100'
+    time_wx = 'd_1'
     fig_td, fig_pr, fig_pc, fig_wd, fig_su, fig_wr = figs.create_wx_figs(
         time_wx, sid)
-    return render_template('wx.html', fig_td=fig_td, fig_pr=fig_pr, fig_pc=fig_pc, fig_wd=fig_wd, fig_su=fig_su, fig_wr=fig_wr)
+    return render_template('wx.html', times=times, fig_td=fig_td, fig_pr=fig_pr, fig_pc=fig_pc, fig_wd=fig_wd, fig_su=fig_su, fig_wr=fig_wr)
 
 
 @app.route('/iot')
 def iot():
     sensor_iot = 'sensor.load_1m'
-    time_iot = 't_100'
+    time_iot = 'h_6'
     graph_iot = figs.create_graph_iot(sensor_iot, time_iot)
-    return render_template('iot.html', plot=graph_iot)
+    return render_template('iot.html', times=times, plot=graph_iot)
 
 
 @app.route('/aprs')
 def aprs():
-    type_aprs = 'prefix'
-    prop_aprs = 'none'
-    time_aprs = 't_100'
+    type_aprs = 'radius'
+    prop_aprs = 'speed'
+    time_aprs = 'h_1'
     map_aprs, plot_speed, plot_alt, plot_course, rows = figs.create_map_aprs(
         type_aprs, prop_aprs, time_aprs)
-    return render_template('aprs.html', map_aprs=map_aprs, plot_speed=plot_speed, plot_alt=plot_alt, plot_course=plot_course, rows=rows)
+    return render_template('aprs.html', times=times, map_aprs=map_aprs, plot_speed=plot_speed, plot_alt=plot_alt, plot_course=plot_course, rows=rows)
 
 
 @app.route('/aircraft')

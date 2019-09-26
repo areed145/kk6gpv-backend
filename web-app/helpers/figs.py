@@ -4,13 +4,11 @@ from pymongo import MongoClient
 import plotly
 import plotly.graph_objs as go
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 
 #client = MongoClient('mongodb+srv://web:web@cluster0-li5mj.gcp.mongodb.net')
+# client = MongoClient('mongodb://localhost:27017/', username='kk6gpv', password='kk6gpv', authSource='admin')
 client = MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
-# client = MongoClient('mongodb://localhost:27017/',
-#                      username='kk6gpv', password='kk6gpv', authSource='admin')
-
 
 mapbox_access_token = 'pk.eyJ1IjoiYXJlZWQxNDUiLCJhIjoiY2phdzNsN2ZoMGh0bjMybzF3cTkycWYyciJ9.4aS7z-guI2VDlP3duMg2FA'
 
@@ -65,6 +63,17 @@ cs_circle = [
     [1.000, '#f7856f'],
 ]
 
+def get_time_range(time):
+    unit = time[0]
+    val = int(time[2:])
+    now = datetime.utcnow()
+    if unit == 'm':
+        start = now - timedelta(minutes=val)
+    if unit == 'h':
+        start = now - timedelta(hours=val)
+    if unit == 'd':
+        start = now - timedelta(days=val)
+    return start, now
 
 def create_plot(feature):
     if feature == 'bar':
@@ -101,59 +110,28 @@ def create_plot(feature):
     return graphJSON
 
 
-def create_plot2(type, prop, time):
-    time = int(time[2:])
-    if type == 'prefix':
-        N = time
-        x = np.linspace(0, 1, N)
-        y = np.random.randn(N)
-        df = pd.DataFrame({'x': x, 'y': y})  # creating a sample dataframe
-        data = [
-            go.Bar(
-                x=df['x'],  # assign x as the dataframe column 'x'
-                y=df['y']
-            )
-        ]
-    else:
-        N = time
-        random_x = np.random.randn(N)
-        random_y = np.random.randn(N)
-
-        # Create a trace
-        data = [go.Scattergl(
-            x=random_x,
-            y=random_y,
-            mode='markers'
-        )]
-    layout = go.Layout(autosize=True,
-                       # height=1000,
-                       #    showlegend=True,
-                       hovermode='closest',
-                       uirevision=True,
-                       margin=dict(r=0, t=0, b=0, l=0, pad=0),
-                       )
-    graphJSON = json.dumps(dict(data=data, layout=layout),
-                           cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON
-
-
 def create_graph_iot(sensor, time):
-    time = int(time[2:])
+    start, now = get_time_range(time)
+    start = str(start)
+    now = str(now)
     db = client.iot
     df = pd.DataFrame(
-        list(db.raw.find({'entity_id': sensor}).sort([('_id', -1)]).limit(time)))
+        list(db.raw.find({'entity_id':sensor,'last_changed':{'$gt':start,'$lte':now}}).sort([('last_changed', -1)])))
 
     data = [go.Scatter(x=df['last_changed'],
                        y=df['state'],
                        name=df['entity_id'][0],
-                       line=dict(  # color = 'rgb(255, 95, 63)',
-        shape='vh',
-        width=3),
-        mode='lines')]
+                       line=dict(
+                           # color = 'rgb(255, 95, 63)',
+                           shape='vh',
+                           width=3
+                        ),
+                        mode='lines')
+            ]
 
     layout = go.Layout(autosize=True,
                        # height=1000,
-                       #    showlegend=True,
+                       # showlegend=True,
                        hovermode='closest',
                        uirevision=True,
                        margin=dict(r=50, t=30, b=30, l=60, pad=0),
@@ -405,16 +383,25 @@ def create_map_aprs(script, prop, time):
               'speed': [0, 100, 0.621371, 0, 'mph'],
               'course': [0, 359, 1, 0, 'degrees'], }
 
-    time = int(time[2:])
+    start, now = get_time_range(time)
+    # start = str(start)
+    # now = str(now)
     db = client.aprs
     if script == 'prefix':
-        df = pd.DataFrame(list(db.raw.find({'script': script, 'from': 'KK6GPV', 'latitude': {
-                          '$exists': True, '$ne': None}}).sort([('timestamp_', -1)]).limit(time)))
+        df = pd.DataFrame(list(db.raw.find({
+            'script': script,
+            'from': 'KK6GPV',
+            # 'latitude': {'$exists': True, '$ne': None},
+            'timestamp_':{'$gt':start,'$lte':now}
+            }).sort([('timestamp_', -1)])))
     else:
-        df = pd.DataFrame(list(db.raw.find({'script': script, 'latitude': {
-                          '$exists': True, '$ne': None}}).sort([('timestamp_', -1)]).limit(time)))
-    # df = df[['timestamp_', 'latitude', 'longitude',
-    #          'script', 'altitude', 'speed', 'course', 'raw']]
+        df = pd.DataFrame(list(db.raw.find({
+            'script': script,
+            # 'from': 'KK6GPV',
+            # 'latitude': {'$exists': True, '$ne': None},
+            'timestamp_':{'$gt':start,'$lte':now}
+            }).sort([('timestamp_', -1)])))
+
     if prop == 'none':
         data_map = [go.Scattermapbox(lat=df['latitude'],
                                      lon=df['longitude'],
@@ -573,12 +560,16 @@ def create_map_aprs(script, prop, time):
 
 
 def create_wx_figs(time, sid):
-    time = int(time[2:])
+    start, now = get_time_range(time)
 
     db = client.wx
 
-    df_wx_raw = pd.DataFrame(list(db.raw.find({'station_id': sid}).sort(
-        [('observation_time_rfc822', -1)]).limit(time)))
+    df_wx_raw = pd.DataFrame(list(db.raw.find({
+            'station_id': sid,
+            'observation_time_rfc822':{
+                '$gt':start,
+                '$lte':now
+                }}).sort([('observation_time_rfc822', -1)])))
     df_wx_raw.index = df_wx_raw['observation_time_rfc822']
     #df_wx_raw = df_wx_raw.tz_localize('UTC').tz_convert('US/Central')
 

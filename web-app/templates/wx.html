@@ -11,12 +11,9 @@
     <div class="col-md-4">
       <label>Time</label>
       <select class="form-control" id='time_wx'>
-        <option value="t_100">100</option>
-        <option value="t_500">500</option>
-        <option value="t_1000">1000</option>
-        <option value="t_5000">5000</option>
-        <option value="t_10000">10000</option>
-        <option value="t_50000">50000</option>
+        {%for time in times%}
+        <option value="{{time}}">{{times[time]}}</option>
+        {%endfor%}
       </select>
     </div>
   </div>
