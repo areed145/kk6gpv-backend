@@ -1043,7 +1043,7 @@ def create_map_oilgas2():
     folium_map = folium.Map(location=[df_wells['latitude'].mean(),
                                     df_wells['longitude'].mean()],
                           zoom_start=6,
-                          #tiles="cartodbpositron",
+                          tiles="stamenterrain",
                           #width='75%',
                           #height='75%'
                           )
