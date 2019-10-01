@@ -128,8 +128,8 @@ def oilgas():
 
 @app.route('/oilgas2')
 def oilgas2():
-    #map_oilgas2 = figs.create_map_oilgas2()
-    #map_oilgas2.save('templates/map.html')
+    # map_oilgas2 = figs.create_map_oilgas2()
+    # map_oilgas2.save('templates/map.html')
     return render_template('oilgas2.html')
 
 @app.route('/about')
