@@ -238,10 +238,10 @@ def create_map_oilgas():
                              marker=dict(
                                  size=4,
                                  color='black',
-                                 ),
-                            ),
-            ]
-            
+            ),
+    ),
+    ]
+
     layout = go.Layout(autosize=True,
                        # height=1000,
                        #    showlegend=True,
@@ -1012,3 +1012,37 @@ def create_wx_figs(time, sid):
                               cls=plotly.utils.PlotlyJSONEncoder)
 
     return graphJSON_td, graphJSON_pr, graphJSON_pc, graphJSON_wd, graphJSON_su, graphJSON_wr
+
+
+def create_map_oilgas2():
+    db = client.petroleum
+    df_wells = pd.DataFrame(
+        list(db.doggr.find({}, {'latitude': 1, 'longitude': 1})))
+
+    #df_wells = df_wells.sample(n=500)
+
+    import folium
+    from folium.plugins import FastMarkerCluster
+
+    folium_map = folium.Map(location=[df_wells['latitude'].mean(),
+                                    df_wells['longitude'].mean()],
+                          zoom_start=6,
+                          #tiles="cartodbpositron",
+                          #width='75%',
+                          #height='75%'
+                          )
+    callback = """\
+    function (row) {
+        var icon, marker;
+        icon = L.AwesomeMarkers.icon({
+            icon: "circle", markerColor: "black"});
+        marker = L.marker(new L.LatLng(row[0], row[1]));
+        marker.setIcon(icon);
+        return marker;
+    };
+    """
+    folium_map.add_child(FastMarkerCluster(df_wells[['latitude', 'longitude']].values.tolist(), 
+                                        callback=callback,
+                                        disableClusteringAtZoom=15,
+                                        ))
+    return folium_map

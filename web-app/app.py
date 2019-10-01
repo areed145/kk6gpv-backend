@@ -14,7 +14,9 @@ sched.start()
 
 sid = 'KTXHOUST1941'
 
-times = dict(m_5='5m', h_1='1h', h_6='6h', d_1='1d', d_2='2d', d_7='7d', d_30='30d')
+times = dict(m_5='5m', h_1='1h', h_6='6h', d_1='1d',
+             d_2='2d', d_7='7d', d_30='30d')
+
 
 def myconverter(o):
     if isinstance(o, datetime.datetime):
@@ -123,6 +125,12 @@ def oilgas():
     map_oilgas = figs.create_map_oilgas()
     return render_template('oilgas.html', plot=map_oilgas)
 
+
+@app.route('/oilgas2')
+def oilgas2():
+    #map_oilgas2 = figs.create_map_oilgas2()
+    #map_oilgas2.save('templates/map.html')
+    return render_template('oilgas2.html')
 
 @app.route('/about')
 def test():
