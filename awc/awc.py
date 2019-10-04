@@ -60,8 +60,7 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                     pass
             for key in keys_qc:
                 try:
-                    message['qc_' +
-                            key] = convert(ob.find('quality_control_flags').find(key).text)
+                    message['qc_' + key] = convert(ob.find('quality_control_flags').find(key).text)
                 except:
                     pass
             for idx, sc in enumerate(ob.findall('sky_condition')):
@@ -76,7 +75,8 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
             message['topic'] = 'wx/awc'
             message['ttl'] = datetime.utcnow()
             try:
-                awc.insert_one(message)
+                #awc.insert_one(message)
+                awc.replace_one({'station_id': message['station_id']}, message, upsert=True)
                 print(message)
             except:
                 print('duplicate post')
