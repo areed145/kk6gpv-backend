@@ -38,7 +38,7 @@ def awc():
 
 @app.route('/wx')
 def wx():
-    time_wx = 'm_5'
+    time_wx = 'd_1'
     fig_td, fig_pr, fig_pc, fig_wd, fig_su, fig_wr = figs.create_wx_figs(
         time_wx, sid)
     return render_template('wx.html', times=times, fig_td=fig_td, fig_pr=fig_pr, fig_pc=fig_pc, fig_wd=fig_wd, fig_su=fig_su, fig_wr=fig_wr)
