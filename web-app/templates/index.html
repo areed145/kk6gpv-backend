@@ -14,43 +14,81 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md">
-            <div align=center id="temp" val="{{wx['temp_f']}}">Temp</div>
-            <div align=center id="gauge_temp" width="100%"></div>
-        </div>
-        <div class="col-md">
-            <div align=center id="dewpt" val="{{wx['dewpoint_f']}}">Dewpoint</div>
-            <div align=center id="gauge_dewpt" width="100%"></div>
-        </div>
-        <div class="col-md">
-            <div align=center id="hum" val="{{wx['relative_humidity']}}">Humidity</div>
-            <div align=center id="gauge_hum" width="100%"></div>
-        </div>
-        <div class="col-md">
-            <div align=center id="pres" val="{{wx['pressure_in']}}">Pressure</div>
-            <div align=center id="gauge_pres" width="100%"></div>
+        <div class="col-md-12">
+            <div class="card-deck">
+                <div class="card">
+                    <br>
+                    <div align=center id="gauge_temp" width="100%"></div>
+                    <div class="card-body">
+                        <h5 class="card-title" align=center id="temp" val="{{wx['temp_f']}}">Temp</h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <br>
+                    <div align=center id="gauge_dewpt" width="100%"></div>
+                    <div class="card-body">
+                        <h5 class="card-title" align=center id="dewpt" val="{{wx['dewpoint_f']}}">Dewpoint</h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <br>
+                    <div align=center id="gauge_hum" width="100%"></div>
+                    <div class="card-body">
+                        <h5 class="card-title" align=center id="hum" val="{{wx['relative_humidity']}}">Humidity</h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <br>
+                    <div align=center id="gauge_pres" width="100%"></div>
+                    <div class="card-body">
+                        <h5 class="card-title" align=center id="pres" val="{{wx['pressure_in']}}">Pressure</h5>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md">
-            <div align=center id="winddeg" val="{{wx['wind_degrees']}}">Wind Degrees</div>
-            <div align=center id="gauge_winddeg" width="100%"></div>
-        </div>
-        <div class="col-md">
-            <div align=center id="wind" val1="{{wx['wind_mph']}}" val2="{{wx['wind_gust_mph']}}">Wind/Gust</div>
-            <div align=center id="gauge_windspd" width="100%"></div>
-        </div>
-        <div class="col-md">
-            <div align=center id="rain" val="{{wx['precip_today_in']}}">Daily Rain</div>
-            <div align=center id="gauge_rain" width="100%"></div>
-        </div>
-        <div class="col-md">
-            <div align=center id="solar" val="{{wx['solar_radiation']}}">Solar</div>
-            <div align=center id="gauge_solar" width="100%"></div>
-        </div>
-        <div class="col-md">
-            <div align=center id="uv" val="{{wx['UV']}}">UV</div>
-            <div align=center id="gauge_uv" width="100%"></div>
+        <div class="col-md-12">
+            <div class="card-deck mt-4">
+                <div class="card">
+                    <br>
+                    <div align=center id="gauge_winddeg" width="100%"></div>
+                    <div class="card-body">
+                        <h5 class="card-title" align=center id="winddeg" val="{{wx['wind_degrees']}}">Wind Degrees</h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <br>
+                    <div align=center id="gauge_windspd" width="100%"></div>
+                    <div class="card-body">
+                        <h5 class="card-title" align=center id="wind" val1="{{wx['wind_mph']}}"
+                            val2="{{wx['wind_gust_mph']}}">Wind/Gust</h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <br>
+                    <div align=center id="gauge_rain" width="100%"></div>
+                    <div class="card-body">
+                        <h5 class="card-title" align=center id="rain" val="{{wx['precip_today_in']}}">Daily Rain</h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <br>
+                    <div align=center id="gauge_solar" width="100%"></div>
+                    <div class="card-body">
+                        <h5 class="card-title" align=center id="solar" val="{{wx['solar_radiation']}}">Solar</h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <br>
+                    <div align=center id="gauge_uv" width="100%"></div>
+                    <div class="card-body">
+                        <h5 class="card-title" align=center id="uv" val="{{wx['UV']}}">UV</h5>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    {% endblock %}
+</div>
+
+{% endblock %}
