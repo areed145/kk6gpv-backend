@@ -1077,5 +1077,6 @@ def create_map_oilgas_folium():
     folium_map.add_child(FastMarkerCluster(df_wells[['latitude', 'longitude']].values.tolist(), 
                                         callback=callback,
                                         disableClusteringAtZoom=15,
+                                        maxClusterRadius=40,
                                         ))
     return folium_map
