@@ -645,6 +645,9 @@ def create_map_aprs(script, prop, time):
 
     return graphJSON_map, graphJSON_speed, graphJSON_alt, graphJSON_course, rows
 
+def get_wx_latest(sid):
+    db = client.wx
+    return list(db.raw.find({'station_id': sid}).sort([('observation_time_rfc822', -1)]).limit(1))[0]
 
 def create_wx_figs(time, sid):
     start, now = get_time_range(time)
@@ -750,6 +753,20 @@ def create_wx_figs(time, sid):
                    y=df_wx_raw['temp_f'],
                    name='Temperature (F)',
                    line=dict(color='rgb(255, 95, 63)', width=3, shape='spline', 
+                             smoothing=0.7),
+                   xaxis='x', yaxis='y',
+                   mode='lines'),
+        go.Scatter(x=df_wx_raw.index,
+                   y=df_wx_raw['heat_index_f'],
+                   name='Heat Index (F)',
+                   line=dict(color='#F42ED0', width=3, shape='spline', 
+                             smoothing=0.7),
+                   xaxis='x', yaxis='y',
+                   mode='lines'),
+        go.Scatter(x=df_wx_raw.index,
+                   y=df_wx_raw['windchill_f'],
+                   name='Windchill (F)',
+                   line=dict(color='#2EE8F4', width=3, shape='spline', 
                              smoothing=0.7),
                    xaxis='x', yaxis='y',
                    mode='lines'),

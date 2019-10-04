@@ -25,9 +25,8 @@ def myconverter(o):
 
 @app.route('/')
 def index():
-    feature = 'bar'
-    bar = figs.create_plot(feature)
-    return render_template('index.html', plot=bar)
+    wx = figs.get_wx_latest(sid)
+    return render_template('index.html', wx=wx)
 
 
 @app.route('/awc')

@@ -2,35 +2,55 @@
 
 {% block body %}
 <div class="container">
-    <div class="row">
-        <div class="col-md-3">
-            <label> Choose the plot type....</label>
-            <select class="form-control" id='first_cat'>
-                <option value="bar">Bar</option>
-                <option value="scatter">Scatter</option>
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="chart" id="bargraph">
-                <script>
-                    var graphs = {{ plot | safe}};
-                    Plotly.plot('bargraph', graphs, {});
-                </script>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="chart" id="bargraph2">
-                <script>
-                    var graphs2 = {{ plot | safe}};
-                    Plotly.plot('bargraph2', graphs2, {});
-                </script>
-            </div>
-        </div>
-    </div>
+    <h1>Coconut Barometer</h1>
 </div>
-<script src="{{ url_for('static', filename='js/index.js') }}"></script>
-{% endblock %}
+<div class="container" id="index">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-info">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                This site is currently under development. Stay tuned!
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <div align=center id="temp" val="{{wx['temp_f']}}">Temp</div>
+            <div align=center id="gauge_temp" width="100%"></div>
+        </div>
+        <div class="col-md">
+            <div align=center id="dewpt" val="{{wx['dewpoint_f']}}">Dewpoint</div>
+            <div align=center id="gauge_dewpt" width="100%"></div>
+        </div>
+        <div class="col-md">
+            <div align=center id="hum" val="{{wx['relative_humidity']}}">Humidity</div>
+            <div align=center id="gauge_hum" width="100%"></div>
+        </div>
+        <div class="col-md">
+            <div align=center id="pres" val="{{wx['pressure_in']}}">Pressure</div>
+            <div align=center id="gauge_pres" width="100%"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <div align=center id="winddeg" val="{{wx['wind_degrees']}}">Wind Degrees</div>
+            <div align=center id="gauge_winddeg" width="100%"></div>
+        </div>
+        <div class="col-md">
+            <div align=center id="wind" val1="{{wx['wind_mph']}}" val2="{{wx['wind_gust_mph']}}">Wind/Gust</div>
+            <div align=center id="gauge_windspd" width="100%"></div>
+        </div>
+        <div class="col-md">
+            <div align=center id="rain" val="{{wx['precip_today_in']}}">Daily Rain</div>
+            <div align=center id="gauge_rain" width="100%"></div>
+        </div>
+        <div class="col-md">
+            <div align=center id="solar" val="{{wx['solar_radiation']}}">Solar</div>
+            <div align=center id="gauge_solar" width="100%"></div>
+        </div>
+        <div class="col-md">
+            <div align=center id="uv" val="{{wx['UV']}}">UV</div>
+            <div align=center id="gauge_uv" width="100%"></div>
+        </div>
+    </div>
+    {% endblock %}
