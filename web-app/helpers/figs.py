@@ -1047,7 +1047,7 @@ def create_wx_figs(time, sid):
     return graphJSON_td, graphJSON_pr, graphJSON_pc, graphJSON_wd, graphJSON_su, graphJSON_wr
 
 
-def create_map_oilgas2():
+def create_map_oilgas_folium():
     db = client.petroleum
     df_wells = pd.DataFrame(
         list(db.doggr.find({}, {'latitude': 1, 'longitude': 1})))

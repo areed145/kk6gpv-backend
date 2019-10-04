@@ -124,12 +124,13 @@ def oilgas():
     map_oilgas = figs.create_map_oilgas()
     return render_template('oilgas.html', plot=map_oilgas)
 
+@app.route('/create_oilgas_folium')
+def create_oilgas_folium():
+    figs.create_map_oilgas_folium().save('templates/map.html')
 
-@app.route('/oilgas2')
-def oilgas2():
-    # map_oilgas2 = figs.create_map_oilgas2()
-    # map_oilgas2.save('templates/map.html')
-    return render_template('oilgas2.html')
+@app.route('/oilgas_folium')
+def oilgas_folium():
+    return render_template('oilgas_folium.html')
 
 @app.route('/about')
 def test():
