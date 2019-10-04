@@ -573,7 +573,6 @@ var layout_solar = {
 
 // UV
 var level = document.getElementById('uv');
-var level = 7;
 var gmin = 0;
 var gmax = 8;
 var leveldisp = level;
