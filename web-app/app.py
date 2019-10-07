@@ -49,7 +49,7 @@ def wx():
 @app.route('/iot')
 def iot():
     sensor_iot = 'sensor.load_1m'
-    time_iot = 'h_6'
+    time_iot = 'm_5'
     graph_iot = figs.create_graph_iot(sensor_iot, time_iot)
     return render_template('iot.html', times=times, plot=graph_iot)
 
@@ -58,7 +58,7 @@ def iot():
 def aprs():
     type_aprs = 'radius'
     prop_aprs = 'speed'
-    time_aprs = 'h_1'
+    time_aprs = 'm_5'
     map_aprs, plot_speed, plot_alt, plot_course, rows = figs.create_map_aprs(
         type_aprs, prop_aprs, time_aprs)
     return render_template('aprs.html', times=times, map_aprs=map_aprs, plot_speed=plot_speed, plot_alt=plot_alt, plot_course=plot_course, rows=rows)
