@@ -1,3 +1,4 @@
+import os
 import time
 import atexit
 import json
@@ -12,7 +13,8 @@ sched = BackgroundScheduler(daemon=True)
 sched.add_job(flickr.get_gals, 'interval', hours=1)
 sched.start()
 
-sid = 'KTXHOUST1941'
+#sid = 'KTXHOUST1941'
+sid = os.environ['SID']
 
 times = dict(m_5='5m', h_1='1h', h_6='6h', d_1='1d',
              d_2='2d', d_7='7d', d_30='30d')
