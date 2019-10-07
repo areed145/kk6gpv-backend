@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 #client = MongoClient('mongodb+srv://web:web@cluster0-li5mj.gcp.mongodb.net')
 #client = MongoClient('mongodb://localhost:27017/', username='kk6gpv', password='kk6gpv', authSource='admin')
 #client = MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
-client = MongoClient(os.environ['MONGODB_HOST'], username=os.environ['MONGODB_USERNAME'], password=os.environ['MONGODB_PW'], authSource=os.environ['MONGODB_AUTH'])
+client = MongoClient(os.environ['MONGODB_CLIENT'])
 
 #mapbox_access_token = 'pk.eyJ1IjoiYXJlZWQxNDUiLCJhIjoiY2phdzNsN2ZoMGh0bjMybzF3cTkycWYyciJ9.4aS7z-guI2VDlP3duMg2FA'
 mapbox_access_token = os.environ['MAPBOX_TOKEN']
