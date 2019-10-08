@@ -7,36 +7,26 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask, render_template, request, g
 from helpers import figs, flickr
 
-from flask_mongoengine import MongoEngine
-import mongoengine as me
+from pymongo import MongoClient
 from flask_track_usage import TrackUsage
-from flask_track_usage.storage.mongo import MongoEngineStorage
-from flask_track_usage.storage.output import OutputWriter
-from flask_track_usage.storage.printer import PrintWriter
-from flask_track_usage.summarization import sumUrl, sumRemote, sumUserAgent, sumLanguage, sumServer
+from flask_track_usage.storage.mongo import MongoPiggybackStorage
 
 app = Flask(__name__)
 
 sid = os.environ['SID']
 
+client = MongoClient(os.environ['MONGODB_CLIENT'])
+db=client.coconut_barometer
+stats=db.stats
+
 times = dict(m_5='5m', h_1='1h', h_6='6h', d_1='1d',
              d_2='2d', d_7='7d', d_30='30d')
 
-app.config['MONGODB_SETTINGS'] = {
-    'db': 'coconut_barometer_stats',
-    'host': os.environ['MONGODB_CLIENT']
-    }
 app.config['TRACK_USAGE_USE_FREEGEOIP'] = True
 app.config['TRACK_USAGE_INCLUDE_OR_EXCLUDE_VIEWS'] = 'include'
 app.config['TRACK_USAGE_COOKIE'] = True
 
-mongo_db =MongoEngine(app)
-
-t = TrackUsage(app, [
-    PrintWriter(),
-    OutputWriter(transform=lambda s: 'OUTPUT: ' + str(s)),
-    MongoEngineStorage(hooks=[sumUrl, sumRemote, sumUserAgent, sumLanguage, sumServer]),
-])
+t = TrackUsage(app, [MongoPiggybackStorage(stats)])
 
 sched = BackgroundScheduler(daemon=True)
 sched.add_job(flickr.get_gals, 'interval', hours=1)
