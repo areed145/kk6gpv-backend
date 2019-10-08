@@ -7,9 +7,8 @@
     <p>Click <a href="/">here</a> to go home.</p>
 </div>
 <div class="container" id="aprs">
-    <div class="row">
-        <div class="card">
-
+    <div class="card">
+        <div class="row">
             <div class="col-md-4">
                 <label>Type</label>
                 <select class="form-control" id='type_aprs'>
@@ -37,83 +36,93 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="chart" id="map_aprs">
-                <script>
-                    var graphs = {{ map_aprs | safe}};
-                    Plotly.plot('map_aprs', graphs.data, graphs.layout, { displayModeBar: false });
-                </script>
+    <div class="card">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="chart" id="map_aprs">
+                    <script>
+                        var graphs = {{ map_aprs | safe}};
+                        Plotly.plot('map_aprs', graphs.data, graphs.layout, { displayModeBar: false });
+                    </script>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="chart" id="plot_speed">
-                <script>
-                    var graphs = {{ plot_speed | safe}};
-                    Plotly.plot('plot_speed', graphs.data, graphs.layout, { displayModeBar: false });
-                </script>
+    <div class="card">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="chart" id="plot_speed">
+                    <script>
+                        var graphs = {{ plot_speed | safe}};
+                        Plotly.plot('plot_speed', graphs.data, graphs.layout, { displayModeBar: false });
+                    </script>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="chart" id="plot_alt">
-                <script>
-                    var graphs = {{ plot_alt | safe}};
-                    Plotly.plot('plot_alt', graphs.data, graphs.layout, { displayModeBar: false });
-                </script>
+    <div class="card">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="chart" id="plot_alt">
+                    <script>
+                        var graphs = {{ plot_alt | safe}};
+                        Plotly.plot('plot_alt', graphs.data, graphs.layout, { displayModeBar: false });
+                    </script>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="chart" id="plot_course">
-                <script>
-                    var graphs = {{ plot_course | safe}};
-                    Plotly.plot('plot_course', graphs.data, graphs.layout, { displayModeBar: false });
-                </script>
+    <div class="card">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="chart" id="plot_course">
+                    <script>
+                        var graphs = {{ plot_course | safe}};
+                        Plotly.plot('plot_course', graphs.data, graphs.layout, { displayModeBar: false });
+                    </script>
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="table-responsive-md">
-                <table class="table table-hover table-sm" id="packets">
-                    <thead>
-                        <tr>
-                            <th scope="col">Timestamp</th>
-                            <th scope="col">From</th>
-                            <th scope="col">To</th>
-                            <th scope="col">Latitude</th>
-                            <th scope="col">Longitude</th>
-                            <th scope="col">Speed</th>
-                            <th scope="col">Altitude</th>
-                            <th scope="col">Course</th>
-                            <th scope="col">Raw</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for row in rows %}
-                        <tr>
-                            <td>{{ row['timestamp_'] }}</td>
-                            <td>{{ row['from'] }}</td>
-                            <td>{{ row['to'] }}</td>
-                            <td>{{ row['latitude'] }}</td>
-                            <td>{{ row['longitude'] }}</td>
-                            <!-- <td>{{ row['speed'] }}</td>
+    <div class="card">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive-md">
+                    <table class="table table-hover table-sm" id="packets">
+                        <thead>
+                            <tr>
+                                <th scope="col">Timestamp</th>
+                                <th scope="col">From</th>
+                                <th scope="col">To</th>
+                                <th scope="col">Latitude</th>
+                                <th scope="col">Longitude</th>
+                                <th scope="col">Speed</th>
+                                <th scope="col">Altitude</th>
+                                <th scope="col">Course</th>
+                                <th scope="col">Raw</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in rows %}
+                            <tr>
+                                <td>{{ row['timestamp_'] }}</td>
+                                <td>{{ row['from'] }}</td>
+                                <td>{{ row['to'] }}</td>
+                                <td>{{ row['latitude'] }}</td>
+                                <td>{{ row['longitude'] }}</td>
+                                <!-- <td>{{ row['speed'] }}</td>
                             <td>{{ row['altitude'] }}</td>
                             <td>{{ row['course'] }}</td>
                             <td>{{ row['raw'] }}</td> -->
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+        <div id="log-event"></div>
+        <div id="log-layout"></div>
     </div>
-    <div id="log-event"></div>
-    <div id="log-layout"></div>
 </div>
 {% endblock %}
