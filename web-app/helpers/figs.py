@@ -639,7 +639,7 @@ def create_map_aprs(script, prop, time):
         r['speed'] = row['speed']
         r['altitude'] = row['altitude']
         r['course'] = row['course']
-        r['raw'] = row['raw']
+        # r['raw'] = row['raw']
         rows.append(r)
     # print(rows)
 
