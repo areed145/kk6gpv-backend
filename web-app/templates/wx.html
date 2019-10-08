@@ -3,67 +3,99 @@
 {% block body %}
 <div class="container" id="wx">
   <h1>Station Weather</h1>
-  <br>
-  <p>Click <a href="/">here</a> to go home.</p>
 </div>
 <div class="container">
   <div class="row">
-    <div class="col-md-4">
-      <label>Time</label>
-      <select class="form-control" id='time_wx'>
-        {%for time in times%}
-        <option value="{{time}}">{{times[time]}}</option>
-        {%endfor%}
-      </select>
+    <div class="col-md-12">
+      <div class="card-deck mt-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title" align=center>Time</h5>
+          </div>
+          <br>
+          <div class="col-md">
+            <select class="form-control" id='time_wx'>
+              {%for time in times%}
+              <option value="{{time}}">{{times[time]}}</option>
+              {%endfor%}
+            </select>
+          </div>
+          <br>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row">
     <div class="col-md-12">
-      <div class="chart" id="fig_td">
-        <script>
-          var graphs = {{ fig_td | safe}};
-          Plotly.plot('fig_td', graphs.data, graphs.layout, { displayModeBar: false });
-        </script>
+      <div class="card-deck mt-4">
+        <div class="card">
+          <div class="chart" id="fig_td">
+            <script>
+              var graphs = {{ fig_td | safe}};
+              Plotly.plot('fig_td', graphs.data, graphs.layout, { displayModeBar: false });
+            </script>
+          </div>
+        </div>
       </div>
     </div>
     <div class="col-md-12">
-      <div class="chart" id="fig_pr">
-        <script>
-          var graphs = {{ fig_pr | safe}};
-          Plotly.plot('fig_pr', graphs.data, graphs.layout, { displayModeBar: false });
-        </script>
+      <div class="card-deck mt-4">
+        <div class="card">
+          <div class="chart" id="fig_pr">
+            <script>
+              var graphs = {{ fig_pr | safe}};
+              Plotly.plot('fig_pr', graphs.data, graphs.layout, { displayModeBar: false });
+            </script>
+          </div>
+        </div>
       </div>
     </div>
     <div class="col-md-12">
-      <div class="chart" id="fig_pc">
-        <script>
-          var graphs = {{ fig_pc | safe}};
-          Plotly.plot('fig_pc', graphs.data, graphs.layout, { displayModeBar: false });
-        </script>
+      <div class="card-deck mt-4">
+        <div class="card">
+          <div class="chart" id="fig_pc">
+            <script>
+              var graphs = {{ fig_pc | safe}};
+              Plotly.plot('fig_pc', graphs.data, graphs.layout, { displayModeBar: false });
+            </script>
+          </div>
+        </div>
       </div>
     </div>
     <div class="col-md-12">
-      <div class="chart" id="fig_wd">
-        <script>
-          var graphs = {{ fig_wd | safe}};
-          Plotly.plot('fig_wd', graphs.data, graphs.layout, { displayModeBar: false });
-        </script>
+      <div class="card-deck mt-4">
+        <div class="card">
+          <div class="chart" id="fig_wd">
+            <script>
+              var graphs = {{ fig_wd | safe}};
+              Plotly.plot('fig_wd', graphs.data, graphs.layout, { displayModeBar: false });
+            </script>
+          </div>
+        </div>
       </div>
     </div>
     <div class="col-md-12">
-      <div class="chart" id="fig_su">
-        <script>
-          var graphs = {{ fig_su | safe}};
-          Plotly.plot('fig_su', graphs.data, graphs.layout, { displayModeBar: false });
-        </script>
+      <div class="card-deck mt-4">
+        <div class="card">
+          <div class="chart" id="fig_su">
+            <script>
+              var graphs = {{ fig_su | safe}};
+              Plotly.plot('fig_su', graphs.data, graphs.layout, { displayModeBar: false });
+            </script>
+          </div>
+        </div>
       </div>
     </div>
     <div class="col-md-6">
-      <div class="chart" id="fig_wr">
-        <script>
-          var graphs = {{ fig_wr | safe}};
-          Plotly.newPlot('fig_wr', graphs.data, graphs.layout, { displayModeBar: false });
-        </script>
+      <div class="card-deck mt-4">
+        <div class="card">
+          <div class="chart" id="fig_wr">
+            <script>
+              var graphs = {{ fig_wr | safe}};
+              Plotly.newPlot('fig_wr', graphs.data, graphs.layout, { displayModeBar: false });
+            </script>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -7,12 +7,8 @@ import plotly.graph_objs as go
 import json
 from datetime import datetime, timedelta
 
-#client = MongoClient('mongodb+srv://web:web@cluster0-li5mj.gcp.mongodb.net')
-#client = MongoClient('mongodb://localhost:27017/', username='kk6gpv', password='kk6gpv', authSource='admin')
-#client = MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
 client = MongoClient(os.environ['MONGODB_CLIENT'])
 
-#mapbox_access_token = 'pk.eyJ1IjoiYXJlZWQxNDUiLCJhIjoiY2phdzNsN2ZoMGh0bjMybzF3cTkycWYyciJ9.4aS7z-guI2VDlP3duMg2FA'
 mapbox_access_token = os.environ['MAPBOX_TOKEN']
 
 cs_normal = [
@@ -643,6 +639,7 @@ def create_map_aprs(script, prop, time):
         r['speed'] = row['speed']
         r['altitude'] = row['altitude']
         r['course'] = row['course']
+        r['raw'] = row['raw']
         rows.append(r)
     # print(rows)
 

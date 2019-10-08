@@ -13,7 +13,6 @@ sched = BackgroundScheduler(daemon=True)
 sched.add_job(flickr.get_gals, 'interval', hours=1)
 sched.start()
 
-#sid = 'KTXHOUST1941'
 sid = os.environ['SID']
 
 times = dict(m_5='5m', h_1='1h', h_6='6h', d_1='1d',
@@ -126,13 +125,16 @@ def oilgas():
     map_oilgas = figs.create_map_oilgas()
     return render_template('oilgas.html', plot=map_oilgas)
 
+
 @app.route('/create_oilgas_folium')
 def create_oilgas_folium():
     figs.create_map_oilgas_folium().save('templates/map.html')
 
+
 @app.route('/oilgas_folium')
 def oilgas_folium():
     return render_template('oilgas_folium.html')
+
 
 @app.route('/about')
 def test():

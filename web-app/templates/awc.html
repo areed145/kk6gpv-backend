@@ -3,41 +3,53 @@
 {% block body %}
 <div class="container">
     <h1>Aviation Weather</h1>
-    <br>
-    <p>Click <a href="/">here</a> to go home.</p>
 </div>
 <div class="container" id="awc">
     <div class="row">
-        <div class="col-md-4">
-            <label>Property</label>
-            <select class="form-control" id='prop_awc'>
-                <option value="flight_category">Flight Category</option>
-                <option value="temp_c">Temperature</option>
-                <option value="dewpoint_c">Dewpoint</option>
-                <option value="temp_dewpoint_spread">Temp-Dewpoint Spread</option>
-                <option value="altim_in_hg">Altimeter</option>
-                <option value="seal_level_pressure_mb">Seal-level Pressure</option>
-                <option value="wind_dir_degrees">Wind Direction</option>
-                <option value="wind_speed_kt">Wind Speed</option>
-                <option value="wind_gust_kt">Wind Gust</option>
-                <option value="visibility_statute_mi">Visibility</option>
-                <option value="vert_vis_ft">Vertical Visibility</option>
-                <option value="cloud_base_ft_agl_0">Cloud Base AGL</option>
-                <option value="sky_cover_0">Sky Cover</option>
-                <option value="precip_in">Precip</option>
-                <option value="three_hr_pressure_tendency_mb">Pressure Tendency</option>
-                <option value="elevation_m">Elevation</option>
-                <option value="age">Age</option>
-            </select>
+        <div class="col-md-12">
+            <div class="card-deck mt-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title" align=center>Property</h5>
+                    </div>
+                    <br>
+                    <div class="col-md">
+                        <select class="form-control" id='prop_awc'>
+                            <option value="flight_category">Flight Category</option>
+                            <option value="temp_c">Temperature</option>
+                            <option value="dewpoint_c">Dewpoint</option>
+                            <option value="temp_dewpoint_spread">Temp-Dewpoint Spread</option>
+                            <option value="altim_in_hg">Altimeter</option>
+                            <option value="seal_level_pressure_mb">Seal-level Pressure</option>
+                            <option value="wind_dir_degrees">Wind Direction</option>
+                            <option value="wind_speed_kt">Wind Speed</option>
+                            <option value="wind_gust_kt">Wind Gust</option>
+                            <option value="visibility_statute_mi">Visibility</option>
+                            <option value="vert_vis_ft">Vertical Visibility</option>
+                            <option value="cloud_base_ft_agl_0">Cloud Base AGL</option>
+                            <option value="sky_cover_0">Sky Cover</option>
+                            <option value="precip_in">Precip</option>
+                            <option value="three_hr_pressure_tendency_mb">Pressure Tendency</option>
+                            <option value="elevation_m">Elevation</option>
+                            <option value="age">Age</option>
+                        </select>
+                    </div>
+                    <br>
+                </div>
+            </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="chart" id="map_awc">
-                <script>
-                    var graphs = {{ plot | safe}};
-                    Plotly.plot('map_awc', graphs.data, graphs.layout, {displayModeBar: false});
-                </script>
+            <div class="card-deck mt-4">
+                <div class="card">
+                    <div class="chart" id="map_awc">
+                        <script>
+                            var graphs = {{ plot | safe}};
+                            Plotly.plot('map_awc', graphs.data, graphs.layout, { displayModeBar: false });
+                        </script>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

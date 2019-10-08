@@ -3,77 +3,94 @@
 {% block body %}
 <div class="container" id="iot">
   <h1>IoT</h1>
-  <br>
-  <p>Click <a href="/">here</a> to go home.</p>
 </div>
 <div class="container">
   <div class="row">
-    <div class="col-md-4">
-      <label>Sensor</label>
-      <select class="form-control" id='sensor_iot'>
-        <option value="sensor.load_1m">sensor.load_1m</option>
-        <option value="sensor.load_5m">sensor.load_5m</option>
-        <option value="sensor.load_15m">sensor.load_15m</option>
-        <option value="sensor.memory_free">sensor.memory_free</option>
-        <option value="sensor.cpu_speed">sensor.cpu_speed</option>
-        <option value="sensor.processor_use">sensor.processor_use</option>
-        <option disabled>──────────</option>
-        <option value="sensor.plug_01_current">sensor.plug_01_current</option>
-        <option value="sensor.plug_01_power">sensor.plug_01_power</option>
-        <option value="sensor.plug_01_total_daily_energy">sensor.plug_01_total_daily_energy</option>
-        <option value="sensor.plug_01_voltage">sensor.plug_01_voltage</option>
-        <option disabled>──────────</option>
-        <option value="sensor.plug_02_current">sensor.plug_02_current</option>
-        <option value="sensor.plug_02_power">sensor.plug_02_power</option>
-        <option value="sensor.plug_02_total_daily_energy">sensor.plug_02_total_daily_energy</option>
-        <option value="sensor.plug_02_voltage">sensor.plug_02_voltage</option>
-        <option disabled>──────────</option>
-        <option value="sensor.plug_03_current">sensor.plug_03_current</option>
-        <option value="sensor.plug_03_power">sensor.plug_03_power</option>
-        <option value="sensor.plug_03_total_daily_energy">sensor.plug_03_total_daily_energy</option>
-        <option value="sensor.plug_03_voltage">sensor.plug_03_voltage</option>
-        <option disabled>──────────</option>
-        <option value="sensor.floor2_temperature">sensor.floor2_temperature</option>
-        <option value="sensor.floor2_humidity">sensor.floor2_humidity</option>
-        <option disabled>──────────</option>
-        <option value="sensor.mobile_temperature">sensor.mobile_temperature</option>
-        <option value="sensor.mobile_humidity">sensor.mobile_humidity</option>
-        <option disabled>──────────</option>
-        <option value="weather.dark_sky_forecast">weather.dark_sky_forecast</option>
-        <option disabled>──────────</option>
-        <option value="sensor.dark_sky_apparent_temperature">sensor.dark_sky_apparent_temperature</option>
-        <option value="sensor.dark_sky_apparent_temperature_1h">sensor.dark_sky_apparent_temperature_1h</option>
-        <option value="sensor.dark_sky_apparent_temperature_6h">sensor.dark_sky_apparent_temperature_6h</option>
-        <option disabled>──────────</option>
-        <option value="sensor.dark_sky_cloud_coverage">sensor.dark_sky_cloud_coverage</option>
-        <option value="sensor.dark_sky_cloud_coverage_1h">sensor.dark_sky_cloud_coverage_1h</option>
-        <option value="sensor.dark_sky_cloud_coverage_6h">sensor.dark_sky_cloud_coverage_6h</option>
-        <option disabled>──────────</option>
-        <option value="sensor.dark_sky_dew_point">sensor.dark_sky_dew_point</option>
-        <option value="sensor.dark_sky_dew_point_1h">sensor.dark_sky_dew_point_1h</option>
-        <option value="sensor.dark_sky_dew_point_6h">sensor.dark_sky_dew_point_6h</option>
-        <option disabled>──────────</option>
-        <option value="sensor.dark_sky_humidity">sensor.dark_sky_humidity</option>
-        <option value="sensor.dark_sky_humidity_1h">sensor.dark_sky_humidity_1h</option>
-        <option value="sensor.dark_sky_humidity_6h">sensor.dark_sky_humidity_6h</option>
-      </select>
-    </div>
-    <div class="col-md-4">
-      <label>Time</label>
-      <select class="form-control" id='time_iot'>
-        {%for time in times%}
-        <option value="{{time}}">{{times[time]}}</option>
-        {%endfor%}
-      </select>
+    <div class="col-md-12">
+      <div class="card-deck mt-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title" align=center>Sensor</h5>
+          </div>
+          <br>
+          <div class="col-md">
+            <select class="form-control" id='sensor_iot'>
+              <option value="sensor.load_1m">sensor.load_1m</option>
+              <option value="sensor.load_5m">sensor.load_5m</option>
+              <option value="sensor.load_15m">sensor.load_15m</option>
+              <option value="sensor.memory_free">sensor.memory_free</option>
+              <option value="sensor.cpu_speed">sensor.cpu_speed</option>
+              <option value="sensor.processor_use">sensor.processor_use</option>
+              <option disabled>──────────</option>
+              <option value="sensor.plug_01_current">sensor.plug_01_current</option>
+              <option value="sensor.plug_01_power">sensor.plug_01_power</option>
+              <option value="sensor.plug_01_total_daily_energy">sensor.plug_01_total_daily_energy</option>
+              <option value="sensor.plug_01_voltage">sensor.plug_01_voltage</option>
+              <option disabled>──────────</option>
+              <option value="sensor.plug_02_current">sensor.plug_02_current</option>
+              <option value="sensor.plug_02_power">sensor.plug_02_power</option>
+              <option value="sensor.plug_02_total_daily_energy">sensor.plug_02_total_daily_energy</option>
+              <option value="sensor.plug_02_voltage">sensor.plug_02_voltage</option>
+              <option disabled>──────────</option>
+              <option value="sensor.plug_03_current">sensor.plug_03_current</option>
+              <option value="sensor.plug_03_power">sensor.plug_03_power</option>
+              <option value="sensor.plug_03_total_daily_energy">sensor.plug_03_total_daily_energy</option>
+              <option value="sensor.plug_03_voltage">sensor.plug_03_voltage</option>
+              <option disabled>──────────</option>
+              <option value="sensor.floor2_temperature">sensor.floor2_temperature</option>
+              <option value="sensor.floor2_humidity">sensor.floor2_humidity</option>
+              <option disabled>──────────</option>
+              <option value="sensor.mobile_temperature">sensor.mobile_temperature</option>
+              <option value="sensor.mobile_humidity">sensor.mobile_humidity</option>
+              <option disabled>──────────</option>
+              <option value="weather.dark_sky_forecast">weather.dark_sky_forecast</option>
+              <option disabled>──────────</option>
+              <option value="sensor.dark_sky_apparent_temperature">sensor.dark_sky_apparent_temperature</option>
+              <option value="sensor.dark_sky_apparent_temperature_1h">sensor.dark_sky_apparent_temperature_1h</option>
+              <option value="sensor.dark_sky_apparent_temperature_6h">sensor.dark_sky_apparent_temperature_6h</option>
+              <option disabled>──────────</option>
+              <option value="sensor.dark_sky_cloud_coverage">sensor.dark_sky_cloud_coverage</option>
+              <option value="sensor.dark_sky_cloud_coverage_1h">sensor.dark_sky_cloud_coverage_1h</option>
+              <option value="sensor.dark_sky_cloud_coverage_6h">sensor.dark_sky_cloud_coverage_6h</option>
+              <option disabled>──────────</option>
+              <option value="sensor.dark_sky_dew_point">sensor.dark_sky_dew_point</option>
+              <option value="sensor.dark_sky_dew_point_1h">sensor.dark_sky_dew_point_1h</option>
+              <option value="sensor.dark_sky_dew_point_6h">sensor.dark_sky_dew_point_6h</option>
+              <option disabled>──────────</option>
+              <option value="sensor.dark_sky_humidity">sensor.dark_sky_humidity</option>
+              <option value="sensor.dark_sky_humidity_1h">sensor.dark_sky_humidity_1h</option>
+              <option value="sensor.dark_sky_humidity_6h">sensor.dark_sky_humidity_6h</option>
+            </select>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title" align=center>Time</h5>
+          </div>
+          <br>
+          <div class="col-md">
+            <select class="form-control" id='time_iot'>
+              {%for time in times%}
+              <option value="{{time}}">{{times[time]}}</option>
+              {%endfor%}
+            </select>
+          </div>
+          <br>
+        </div>
+      </div>
     </div>
   </div>
   <div class="row">
     <div class="col-md-12">
-      <div class="chart" id="graph_iot">
-        <script>
-          var graphs = {{ plot | safe}};
-          Plotly.plot('graph_iot', graphs.data, graphs.layout, { displayModeBar: false });
-        </script>
+      <div class="card-deck mt-4">
+        <div class="card">
+          <div class="chart" id="graph_iot">
+            <script>
+              var graphs = {{ plot | safe}};
+              Plotly.plot('graph_iot', graphs.data, graphs.layout, { displayModeBar: false });
+            </script>
+          </div>
+        </div>
       </div>
     </div>
   </div>
