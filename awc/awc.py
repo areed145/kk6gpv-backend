@@ -42,7 +42,6 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
     url += '&maxLat='+str(min(90, lat_min+inc+1))
     url += '&hoursBeforeNow='+str(timeback)
 
-    #client=MongoClient('mongodb+srv://kk6gpv:ObqL7MKu4IrEvgyE@cluster0-li5mj.gcp.mongodb.net/test?retryWrites=true', maxPoolSize=max_pool)
     client = MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
     db = client.wx
     awc = db.awc
