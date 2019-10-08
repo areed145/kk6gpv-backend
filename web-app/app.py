@@ -32,8 +32,6 @@ app.config['TRACK_USAGE_COOKIE'] = True
 
 mongo_db =MongoEngine(app)
 
-print(mongo_db)
-
 t = TrackUsage(app, [
     PrintWriter(),
     OutputWriter(transform=lambda s: 'OUTPUT: ' + str(s)),
