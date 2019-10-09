@@ -43,6 +43,7 @@ def get_gals():
     g = open('static/gals', 'wb')
     pickle.dump(gals, g)
     print('galleries updated')
+    return gals
 
 
 def load_gals():
@@ -56,9 +57,9 @@ def get_gal_rows(width):
     gals = pickle.load(g)
     rows = []
     frames = []
-    idx = 0
+    idx = 1
     for gal in gals:
-        if idx < width:
+        if (idx/width) != (idx//width):
             frames.append(
                 {'caption': gals[gal]['title'] + ' - ' + str(gals[gal]['count_photos']),
                  'thumb': gals[gal]['primary'],
@@ -66,9 +67,15 @@ def get_gal_rows(width):
             )
             idx += 1
         else:
+            frames.append(
+                {'caption': gals[gal]['title'] + ' - ' + str(gals[gal]['count_photos']),
+                 'thumb': gals[gal]['primary'],
+                 'kk6gpv_link': gals[gal]['kk6gpv_link']},
+            )
             rows.append(frames)
             frames = []
-            idx = 0
+            idx = 1
+    rows.append(frames)
     return rows
 
 
@@ -77,16 +84,21 @@ def get_photo_rows(id, width):
     gals = pickle.load(g)
     rows = []
     frames = []
-    idx = 0
+    idx = 1
     for ph in gals[id]['photos']:
-        if idx < width:
+        if (idx/width) != (idx//width):
             frames.append(
                 {'thumb': gals[id]['photos'][ph]['thumb'],
                  'kk6gpv_link': '/galleries/'+id+'/'+ph},
             )
             idx += 1
         else:
+            frames.append(
+                {'thumb': gals[id]['photos'][ph]['thumb'],
+                 'kk6gpv_link': '/galleries/'+id+'/'+ph},
+            )
             rows.append(frames)
             frames = []
-            idx = 0
+            idx = 1
+    rows.append(frames)
     return rows, gals
