@@ -49,7 +49,7 @@ def get_range(message, rad, awc, prop):
     #df['dPe'] = df['r2'] - (val * elev)
     if len(df) >= 3:
         df = df[(df[prop] < df[prop].quantile(0.99)) & (df[prop] > df[prop].quantile(0.01))]
-    return df[prop].max() - df[prop].min()
+    return df[prop].std()
 
 
 def get_obs(lat_min, lon_min, inc, timeback, max_pool):
