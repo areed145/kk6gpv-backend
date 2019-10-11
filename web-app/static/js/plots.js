@@ -104,10 +104,10 @@ if ($('#aprs').length > 0) {
     var time_aprs = document.getElementById('time_aprs').value;
     var time_int = 15;
     if (time_aprs == 'm_5') {time_int = 1;}
-    if (time_aprs == 'h_1') {time_int = 2;}
-    if (time_aprs == 'h_6') {time_int = 10;}
-    if (time_aprs == 'd_1') {time_int = 20;}
-    if (time_aprs == 'd_2') {time_int = 30;}
+    if (time_aprs == 'h_1') {time_int = 20;}
+    if (time_aprs == 'h_6') {time_int = 60;}
+    if (time_aprs == 'd_1') {time_int = 60;}
+    if (time_aprs == 'd_2') {time_int = 60;}
     if (time_aprs == 'd_7') {time_int = 60;}
     if (time_aprs == 'd_30') {time_int = 60;}
 
