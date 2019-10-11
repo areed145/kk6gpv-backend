@@ -43,7 +43,8 @@ def get_range(lat, lon, elev, rad, awc, prop):
     df = df[df['dist'] <= rad]
     df['elev_delta'] = df['elevation'] - elev
     df['dTdh'] = df[prop] / df['elev_delta']
-    df = df[(df['dTdh'] < df['dTdh'].quantile(0.99)) & (df['dTdh'] > df['dTdh'].quantile(0.01))]
+    if len(df) >= 3:
+        df = df[(df['dTdh'] < df['dTdh'].quantile(0.99)) & (df['dTdh'] > df['dTdh'].quantile(0.01))]
     return df['dTdh'].max() - df['dTdh'].min()
 
 
