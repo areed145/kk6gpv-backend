@@ -12,6 +12,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from pymongo import MongoClient
 import pandas as pd
+import numpy as np
 import time
 #from multiprocessing import Pool
 
@@ -32,6 +33,15 @@ def convert(val):
     if val == ' ':
         val = None
     return val
+
+
+def get_range(lat, lon, rad, awc, prop):
+    r = 2
+    df = pd.DataFrame(list(awc.find({'latitude': {'$gt': lat-r}, 'latitude': {
+                      '$lt': lat+r}, 'longitude': {'$gt': lon-r}, 'longitude': {'$lt': lon+r}})))
+    df['dist'] = np.arccos(np.sin(lat*np.pi/180) * np.sin(df['latitude']*np.pi/180) + np.cos(lat*np.pi/180) * np.cos(df['latitude']*np.pi/180) * np.cos((df['longitude']*np.pi/180) - (lon*np.pi/180))) * 6371 
+    df = df[df['dist'] <= rad]
+    return df[prop].max() - df[prop].min()
 
 
 def get_obs(lat_min, lon_min, inc, timeback, max_pool):
@@ -59,7 +69,8 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                     pass
             for key in keys_qc:
                 try:
-                    message['qc_' + key] = convert(ob.find('quality_control_flags').find(key).text)
+                    message['qc_' +
+                            key] = convert(ob.find('quality_control_flags').find(key).text)
                 except:
                     pass
             for idx, sc in enumerate(ob.findall('sky_condition')):
@@ -73,9 +84,14 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
             message['timestamp'] = datetime.utcnow()
             message['topic'] = 'wx/awc'
             message['ttl'] = datetime.utcnow()
+            message['temp_c_range'] = get_range(
+                message['latitude'], message['longitude'], 150, awc, 'temp_c')
+            message['altim_in_hg_range'] = get_range(
+                message['latitude'], message['longitude'], 150, awc, 'altim_in_hg')
             try:
-                #awc.insert_one(message)
-                awc.replace_one({'station_id': message['station_id']}, message, upsert=True)
+                # awc.insert_one(message)
+                awc.replace_one(
+                    {'station_id': message['station_id']}, message, upsert=True)
                 print(message)
             except:
                 print('duplicate post')
