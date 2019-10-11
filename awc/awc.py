@@ -41,7 +41,7 @@ def get_range(lat, lon, elev, rad, awc, prop):
                       '$lt': lat+r}, 'longitude': {'$gt': lon-r}, 'longitude': {'$lt': lon+r}})))
     df['dist'] = np.arccos(np.sin(lat*np.pi/180) * np.sin(df['latitude']*np.pi/180) + np.cos(lat*np.pi/180) * np.cos(df['latitude']*np.pi/180) * np.cos((df['longitude']*np.pi/180) - (lon*np.pi/180))) * 6371 
     df = df[df['dist'] <= rad]
-    df['elev_delta'] = df['elevation'] - elev
+    df['elev_delta'] = df['elevation_m'] - elev
     df['dTdh'] = df[prop] / df['elev_delta']
     if len(df) >= 3:
         df = df[(df['dTdh'] < df['dTdh'].quantile(0.99)) & (df['dTdh'] > df['dTdh'].quantile(0.01))]
@@ -89,9 +89,9 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
             message['topic'] = 'wx/awc'
             message['ttl'] = datetime.utcnow()
             message['temp_c_range'] = get_range(
-                message['latitude'], message['longitude'], message['elevation'], 150, awc, 'temp_c')
+                message['latitude'], message['longitude'], message['elevation_m'], 150, awc, 'temp_c')
             message['altim_in_hg_range'] = get_range(
-                message['latitude'], message['longitude'], message['elevation'], 250, awc, 'altim_in_hg')
+                message['latitude'], message['longitude'], message['elevation_m'], 250, awc, 'altim_in_hg')
             try:
                 # awc.insert_one(message)
                 awc.replace_one(
