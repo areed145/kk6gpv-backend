@@ -39,17 +39,17 @@ def get_range(message, rad, awc, prop):
     r = 2
     lat = message['latitude']
     lon = message['longitude']
-    elev = message['elevation_m']
-    val = message[prop]
+    #elev = message['elevation_m']
+    #val = message[prop]
     df = pd.DataFrame(list(awc.find({'latitude': {'$gt': lat-r}, 'latitude': {
                       '$lt': lat+r}, 'longitude': {'$gt': lon-r}, 'longitude': {'$lt': lon+r}})))
     df['dist'] = np.arccos(np.sin(lat*np.pi/180) * np.sin(df['latitude']*np.pi/180) + np.cos(lat*np.pi/180) * np.cos(df['latitude']*np.pi/180) * np.cos((df['longitude']*np.pi/180) - (lon*np.pi/180))) * 6371 
     df = df[df['dist'] <= rad]
-    df['r2'] = df[prop] * df['elevation_m']
-    df['dPe'] = df['r2'] - (val * elev)
+    #df['r2'] = df[prop] * df['elevation_m']
+    #df['dPe'] = df['r2'] - (val * elev)
     if len(df) >= 3:
-        df = df[(df['dPe'] < df['dPe'].quantile(0.99)) & (df['dPe'] > df['dPe'].quantile(0.01))]
-    return df['dPe'].max() - df['dPe'].min()
+        df = df[(df[prop] < df[prop].quantile(0.99)) & (df[prop] > df[prop].quantile(0.01))]
+    return df[prop].max() - df[prop].min()
 
 
 def get_obs(lat_min, lon_min, inc, timeback, max_pool):
