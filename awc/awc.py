@@ -45,9 +45,8 @@ def get_range(message, rad, awc, prop):
                       '$lt': lat+r}, 'longitude': {'$gt': lon-r}, 'longitude': {'$lt': lon+r}})))
     df['dist'] = np.arccos(np.sin(lat*np.pi/180) * np.sin(df['latitude']*np.pi/180) + np.cos(lat*np.pi/180) * np.cos(df['latitude']*np.pi/180) * np.cos((df['longitude']*np.pi/180) - (lon*np.pi/180))) * 6371 
     df = df[df['dist'] <= rad]
-    df['r1'] = val / elev
-    df['r2'] = df[prop] / df['elevation_m']
-    df['dPe'] = df['r2'] - df['r1']
+    df['r2'] = df[prop] * df['elevation_m']
+    df['dPe'] = df['r2'] - (val * elev)
     if len(df) >= 3:
         df = df[(df['dPe'] < df['dPe'].quantile(0.99)) & (df['dPe'] > df['dPe'].quantile(0.01))]
     return df['dPe'].max() - df['dPe'].min()
