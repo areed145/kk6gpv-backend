@@ -115,7 +115,7 @@ if __name__ == '__main__':
             for lat_min in range(-90, 90, inc):
                 for lon_min in range(-180, 180, inc):
                     #pl.apply_async(get_obs, args=(lat_min, lon_min, inc, 1, 2))
-                    get_obs(lat_min, lon_min, inc, 1, 2)
+                    get_obs(lat_min, lon_min, inc, 2, 2)
             # pl.close()
             # pl.join()
             last_hour = datetime.now().hour
