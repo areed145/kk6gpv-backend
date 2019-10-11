@@ -151,6 +151,9 @@ def create_graph_iot(sensor, time):
     db = client.iot
     df = pd.DataFrame(
         list(db.raw.find({'entity_id': sensor, 'timestamp_': {'$gt': start, '$lte': now}}).sort([('timestamp_', -1)])))
+    if len(df) == 0:
+        df = pd.DataFrame(list(db.raw.find({'entity_id': sensor}).limit(2).sort([('timestamp_', -1)])))
+        
 
     data = [go.Scatter(x=df['timestamp_'],
                        y=df['state'],
@@ -167,6 +170,7 @@ def create_graph_iot(sensor, time):
     layout = go.Layout(autosize=True,
                        # height=1000,
                        # showlegend=True,
+                       xaxis=dict(range=[start, now]),
                        hovermode='closest',
                        uirevision=True,
                        margin=dict(r=50, t=30, b=30, l=60, pad=0),
@@ -556,7 +560,7 @@ def create_map_aprs(script, prop, time):
                                         titlefont=dict(
                                             color='rgb(255, 95, 63)')
                                         ),
-                             xaxis=dict(type='date', fixedrange=False),
+                             xaxis=dict(type='date', fixedrange=False, range=[start, now]),
                              margin=dict(r=50, t=30, b=30, l=60, pad=0),
                              showlegend=False,
                              )
@@ -580,7 +584,7 @@ def create_map_aprs(script, prop, time):
                                       fixedrange=True,
                                       titlefont=dict(color='rgb(255, 95, 63)')
                                       ),
-                           xaxis=dict(type='date', fixedrange=False),
+                           xaxis=dict(type='date', fixedrange=False, range=[start, now]),
                            margin=dict(r=50, t=30, b=30, l=60, pad=0),
                            showlegend=False,
                            )
@@ -605,7 +609,7 @@ def create_map_aprs(script, prop, time):
                                          titlefont=dict(
                                              color='rgb(255, 95, 63)')
                                          ),
-                              xaxis=dict(type='date', fixedrange=False),
+                              xaxis=dict(type='date', fixedrange=False, range=[start, now]),
                               margin=dict(r=50, t=30, b=30, l=60, pad=0),
                               showlegend=False,
                               )
