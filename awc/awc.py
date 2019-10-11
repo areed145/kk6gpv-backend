@@ -35,13 +35,16 @@ def convert(val):
     return val
 
 
-def get_range(lat, lon, rad, awc, prop):
+def get_range(lat, lon, elev, rad, awc, prop):
     r = 2
     df = pd.DataFrame(list(awc.find({'latitude': {'$gt': lat-r}, 'latitude': {
                       '$lt': lat+r}, 'longitude': {'$gt': lon-r}, 'longitude': {'$lt': lon+r}})))
     df['dist'] = np.arccos(np.sin(lat*np.pi/180) * np.sin(df['latitude']*np.pi/180) + np.cos(lat*np.pi/180) * np.cos(df['latitude']*np.pi/180) * np.cos((df['longitude']*np.pi/180) - (lon*np.pi/180))) * 6371 
     df = df[df['dist'] <= rad]
-    return df[prop].max() - df[prop].min()
+    df['elev_delta'] = df['elevation'] - elev
+    df['dTdh'] = df[prop] / df['elev_delta']
+    df = df[(df['dTdh'] < df['dTdh'].quantile(0.99)) & (df['dTdh'] > df['dTdh'].quantile(0.01))]
+    return df['dTdh'].max() - df['dTdh'].min()
 
 
 def get_obs(lat_min, lon_min, inc, timeback, max_pool):
@@ -85,9 +88,9 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
             message['topic'] = 'wx/awc'
             message['ttl'] = datetime.utcnow()
             message['temp_c_range'] = get_range(
-                message['latitude'], message['longitude'], 150, awc, 'temp_c')
+                message['latitude'], message['longitude'], message['elevation'], 150, awc, 'temp_c')
             message['altim_in_hg_range'] = get_range(
-                message['latitude'], message['longitude'], 150, awc, 'altim_in_hg')
+                message['latitude'], message['longitude'], message['elevation'], 250, awc, 'altim_in_hg')
             try:
                 # awc.insert_one(message)
                 awc.replace_one(
