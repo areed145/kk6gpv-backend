@@ -183,56 +183,54 @@ def create_graph_iot(sensor, time):
 def create_map_oilgas():
     db = client.petroleum
     df_wells = pd.DataFrame(
-        list(db.doggr.find({}, {'latitude': 1, 'longitude': 1})))
-    df_prod = pd.DataFrame(list(db.prod.find({})))
-    # df_inj = pd.DataFrame(list(db.inj.find({})))
+        list(db.doggr.find({}, {'latitude': 1, 'longitude': 1, 'oil_cum' : 1, 'water_cum' : 1, 'gas_cum' : 1, 'wtrstm_cum' : 1})))
 
-    data = [go.Scattermapbox(lat=df_prod['latitude'],
-                             lon=df_prod['longitude'],
+    data = [go.Scattermapbox(lat=df_wells['latitude'],
+                             lon=df_wells['longitude'],
                              mode='markers',
                              name='water',
                              marker=dict(size=13,
-                                         color=df_prod['water'],
+                                         color=df_wells['water_cum'],
                                          colorbar=dict(
                                              title='water',
                                              lenmode='fraction',
                                              len=0.30,
                                          ),
                                          colorscale=scl_wtr,
-                                         cmin=df_prod['water'].quantile(0.01),
-                                         cmax=df_prod['water'].quantile(0.75),
+                                         cmin=df_wells['water_cum'].quantile(0.01),
+                                         cmax=df_wells['water_cum'].quantile(0.75),
                                          )
                              ),
-            go.Scattermapbox(lat=df_prod['latitude'],
-                             lon=df_prod['longitude'],
+            go.Scattermapbox(lat=df_wells['latitude'],
+                             lon=df_wells['longitude'],
                              mode='markers',
                              name='oil',
                              marker=dict(size=10,
-                                         color=df_prod['oil'],
+                                         color=df_wells['oil_cum'],
                                          colorbar=dict(
                                              title='oil',
                                              lenmode='fraction',
                                              len=0.30,
                                          ),
                                          colorscale=scl_oil,
-                                         cmin=df_prod['oil'].quantile(0.01),
-                                         cmax=df_prod['oil'].quantile(0.75),
+                                         cmin=df_wells['oil_cum'].quantile(0.01),
+                                         cmax=df_wells['oil_cum'].quantile(0.75),
                                          )
                              ),
-            go.Scattermapbox(lat=df_prod['latitude'],
-                             lon=df_prod['longitude'],
+            go.Scattermapbox(lat=df_wells['latitude'],
+                             lon=df_wells['longitude'],
                              mode='markers',
                              name='gas',
                              marker=dict(size=7,
-                                         color=df_prod['gas'],
+                                         color=df_wells['gas_cum'],
                                          colorbar=dict(
                                              title='gas',
                                              lenmode='fraction',
                                              len=0.30,
                                          ),
                                          colorscale=scl_gas,
-                                         cmin=df_prod['gas'].quantile(0.01),
-                                         cmax=df_prod['gas'].quantile(0.75),
+                                         cmin=df_wells['gas_cum'].quantile(0.01),
+                                         cmax=df_wells['gas_cum'].quantile(0.75),
                                          )
                              ),
             go.Scattermapbox(lat=df_wells['latitude'],
