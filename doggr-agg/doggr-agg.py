@@ -6,8 +6,9 @@ import time
 import json
 import os
 
-client = MongoClient(os.environ['MONGODB_CLIENT'])    
+client = MongoClient(os.environ['MONGODB_CLIENT'])
 db = client.petroleum
+
 
 def agg():
     df_prod = pd.DataFrame(list(db.doggr.aggregate([
@@ -25,21 +26,6 @@ def agg():
         }}
     ])))
 
-    try:
-        df_prod_exists = pd.DataFrame(list(db.prod.find({})))
-        df_prod = df_prod[~df_prod['api'].isin(df_prod_exists['api'])]
-    except:
-        pass
-
-    records = json.loads(df_prod.T.to_json()).values()
-    for record in records:
-        try:
-            db.prod.insert_one(record)
-            print(record)
-        except:
-            print('dupe')
-            pass
-
     df_inj = pd.DataFrame(list(db.doggr.aggregate([
         {'$unwind': '$inj'},
         {'$match': {'inj.wtrstm': {'$gt': 0}}},
@@ -50,58 +36,35 @@ def agg():
         }},
     ])))
 
-    try:
-        df_inj_exists = pd.DataFrame(list(db.inj.find({})))
-        df_inj = df_inj[~df_inj['api'].isin(df_inj_exists['api'])]
-    except:
-        pass
-
-
-    records = json.loads(df_inj.T.to_json()).values()
-    for record in records:
+    apis = set(list(df_prod['api'])+list(df_inj['api']))
+    for api in apis:
+        cums = {}
         try:
-            db.inj.insert_one(record)
-            print(record)
+            row_prod = df_prod[df_prod['api'] == api]
+            for col in ['oil', 'water', 'gas']:
+                try:
+                    cums[col+'_cum'] = row_prod[col].values[0]
+                except:
+                    pass
         except:
-            print('dupe')
+            pass
+        try:
+            row_inj = df_inj[df_inj['api'] == api]
+            for col in ['wtrstm']:
+                try:
+                    cums[col+'_cum'] = row_inj[col].values[0]
+                except:
+                    pass
+        except:
             pass
 
-# db.collection.aggregate([
-# {$unwind:"$Entities"},
-# {$group:{"_id":"$_id",
-#          "Date":{$first:"$Date"},
-#          "Topics":{$first:"$Topics"},
-#          "EntitiesSum":{$sum:"$Entities.Sentiment.Value"}}},
-# {$unwind:"$Topics"},
-# {$group:{"_id":"$_id",
-#          "Date":{$first:"$Date"},
-#          "EntitiesSum":{$first:"$EntitiesSum"},
-#          "TopicsSum":{$sum:"$Topics.Sentiment.Value"}}},
-# {$project:{"_id":0,"Date":1,"EntitiesSum":1,"TopicsSum":1,
-#            "indSum":{$add:["$EntitiesSum","$TopicsSum"]}}},
-# {$group:{"_id":"$Date",
-#          "EntitiesSentimentSum":{$sum:"$EntitiesSum"},
-#          "TopicsSentimentSum":{$sum:"$TopicsSum"},
-#          "netSentimentSum":{$sum:"$indSum"}}}
-# ])
+        try:
+            db.doggr.update_one({'api': api}, {'$set': cums})
+            print(api)
+        except:
+            print('failed')
+            pass
 
-# df = pd.DataFrame(list(db.doggr.aggregate([
-#     {'$unwind': '$prod'},
-#     {'$group': {'_id': '$_id',
-#                 'api': {'$first': '$api'},
-#                 'inj': {'$first': '$inj'},
-#                 'oil': {'$sum': '$prod.oil'},
-#                 'water': {'$sum': '$prod.water'}}},
-#     {'$unwind': '$inj'},
-#     {'$group': {'_id': '$_id',
-#                 'api': {'$first': '$api'},
-#                 'oil': {'$first': '$oil'},
-#                 'water': {'$first': '$water'},
-#                 'wtrstm': {'$sum': '$inj.wtrstm'}}},
-#     {'$project': {'_id': 1, 'api': 1, 'oil': 1, 'water': 1, 'wtrstm': 1}},
-# ], allowDiskUse=True)))
-
-# print(df)
 
 if __name__ == '__main__':
     last_hour = datetime.now().hour - 1
