@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from datetime import datetime
 import time
 import json
+import os
 
 client = MongoClient(os.environ['MONGODB_CLIENT'])    
 db = client.petroleum
