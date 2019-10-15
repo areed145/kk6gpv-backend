@@ -104,10 +104,9 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
             message['altim_in_hg_var'] = get_range(
                 message, 250, awc, 'altim_in_hg')
             prev = get_prev(message, awc)
-            for col in ['temp_c','dewpoint_c','altim_in_hg','wind_speed_kt','wind_gust_kt','cloud_base_ft_agl_0']:
+            for col in ['temp_c', 'dewpoint_c', 'altim_in_hg', 'wind_speed_kt', 'wind_gust_kt', 'cloud_base_ft_agl_0']:
                 try:
                     message[col+'_delta'] = message[col] - prev[col][0]
-                    print(message[col+'_delta'])
                 except:
                     pass
             try:
