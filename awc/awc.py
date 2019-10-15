@@ -43,13 +43,20 @@ def get_range(message, rad, awc, prop):
     #val = message[prop]
     df = pd.DataFrame(list(awc.find({'latitude': {'$gt': lat-r}, 'latitude': {
                       '$lt': lat+r}, 'longitude': {'$gt': lon-r}, 'longitude': {'$lt': lon+r}})))
-    df['dist'] = np.arccos(np.sin(lat*np.pi/180) * np.sin(df['latitude']*np.pi/180) + np.cos(lat*np.pi/180) * np.cos(df['latitude']*np.pi/180) * np.cos((df['longitude']*np.pi/180) - (lon*np.pi/180))) * 6371 
+    df['dist'] = np.arccos(np.sin(lat*np.pi/180) * np.sin(df['latitude']*np.pi/180) + np.cos(lat*np.pi/180)
+                           * np.cos(df['latitude']*np.pi/180) * np.cos((df['longitude']*np.pi/180) - (lon*np.pi/180))) * 6371
     df = df[df['dist'] <= rad]
     #df['r2'] = df[prop] * df['elevation_m']
     #df['dPe'] = df['r2'] - (val * elev)
     if len(df) >= 3:
-        df = df[(df[prop] < df[prop].quantile(0.99)) & (df[prop] > df[prop].quantile(0.01))]
+        df = df[(df[prop] < df[prop].quantile(0.99)) &
+                (df[prop] > df[prop].quantile(0.01))]
     return df[prop].std()
+
+
+def get_prev(message, awc):
+    df = pd.DataFrame(list(awc.find({'station_id': message['station_id']})))
+    return df
 
 
 def get_obs(lat_min, lon_min, inc, timeback, max_pool):
@@ -92,8 +99,19 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
             message['timestamp'] = datetime.utcnow()
             message['topic'] = 'wx/awc'
             message['ttl'] = datetime.utcnow()
-            message['temp_c_range'] = get_range(message, 150, awc, 'temp_c')
-            message['altim_in_hg_range'] = get_range(message, 250, awc, 'altim_in_hg')
+            message['temp_c_var'] = get_range(message, 150, awc, 'temp_c')
+            message['altim_in_hg_var'] = get_range(
+                message, 250, awc, 'altim_in_hg')
+            prev = get_prev(message, awc)
+            try:
+                message['temp_c_delta'] = message['temp_c'] - prev['temp_c']
+                message['dewpoint_c_delta'] = message['dewpoint_c'] - prev['dewpoint_c']
+                message['altim_in_hg_delta'] = message['altim_in_hg'] - prev['altim_in_hg']
+                message['wind_speed_kt_delta'] = message['wind_speed_kt'] - prev['wind_speed_kt']
+                message['wind_gust_kt_delta'] = message['wind_gust_kt'] - prev['wind_gust_kt']
+                message['cloud_base_ft_agl_0_delta'] = message['cloud_base_ft_agl_0'] - prev['cloud_base_ft_agl_0']
+            except:
+                pass
             try:
                 # awc.insert_one(message)
                 awc.replace_one(
