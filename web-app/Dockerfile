@@ -12,7 +12,6 @@ RUN pip install --upgrade pip && \
 
 EXPOSE 80
 
-ENV NAME World
 ENV MONGODB_CLIENT 'mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db'
 ENV MAPBOX_TOKEN 'pk.eyJ1IjoiYXJlZWQxNDUiLCJhIjoiY2phdzNsN2ZoMGh0bjMybzF3cTkycWYyciJ9.4aS7z-guI2VDlP3duMg2FA'
 ENV SID 'KTXHOUST1941'
