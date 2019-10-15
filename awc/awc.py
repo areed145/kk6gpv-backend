@@ -14,6 +14,7 @@ from pymongo import MongoClient
 import pandas as pd
 import numpy as np
 import time
+import os
 #from multiprocessing import Pool
 
 keys_main = ('station_id', 'raw_text', 'observation_time',
@@ -67,7 +68,7 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
     url += '&maxLat='+str(min(90, lat_min+inc+1))
     url += '&hoursBeforeNow='+str(timeback)
 
-    client = MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
+    client = MongoClient(os.environ['MONGODB_CLIENT'])
     db = client.wx
     awc = db.awc
 
@@ -103,15 +104,11 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
             message['altim_in_hg_var'] = get_range(
                 message, 250, awc, 'altim_in_hg')
             prev = get_prev(message, awc)
-            try:
-                message['temp_c_delta'] = message['temp_c'] - prev['temp_c']
-                message['dewpoint_c_delta'] = message['dewpoint_c'] - prev['dewpoint_c']
-                message['altim_in_hg_delta'] = message['altim_in_hg'] - prev['altim_in_hg']
-                message['wind_speed_kt_delta'] = message['wind_speed_kt'] - prev['wind_speed_kt']
-                message['wind_gust_kt_delta'] = message['wind_gust_kt'] - prev['wind_gust_kt']
-                message['cloud_base_ft_agl_0_delta'] = message['cloud_base_ft_agl_0'] - prev['cloud_base_ft_agl_0']
-            except:
-                pass
+            for col in ['temp_c','dewpoint_c','altim_in_hg','wind_speed_kt','wind_gust_kt','cloud_base_ft_agl_0']:
+                try:
+                    message[col+'_delta'] = message[col] - prev[col]
+                except:
+                    pass
             try:
                 # awc.insert_one(message)
                 awc.replace_one(
