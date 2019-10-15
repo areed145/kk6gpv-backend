@@ -10,6 +10,7 @@ import dns
 import aprslib
 from datetime import datetime
 from pymongo import MongoClient
+import os
 
 def unpack_dict(d):
     try:
@@ -34,7 +35,7 @@ if __name__ == '__main__':
     while True:
         try:
             # MongoDB client
-            client=MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
+            client = MongoClient(os.environ['MONGODB_CLIENT'])
             db=client.aprs
             raw=db.raw
 

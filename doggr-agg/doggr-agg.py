@@ -5,9 +5,7 @@ from datetime import datetime
 import time
 import json
 
-#client = MongoClient('mongodb://localhost:27017/', username='kk6gpv', password='kk6gpv', authSource='admin')
-client = MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
-    
+client = MongoClient(os.environ['MONGODB_CLIENT'])    
 db = client.petroleum
 
 def agg():

@@ -12,6 +12,6 @@ RUN pip install --upgrade pip && \
 
 # EXPOSE 80
 
-ENV NAME World
+ENV MONGODB_CLIENT 'mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db'
 
 CMD ["python", "aprs-radius.py"]

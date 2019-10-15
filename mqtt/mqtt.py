@@ -13,6 +13,7 @@ from datetime import datetime
 from pymongo import MongoClient
 import json
 from datetime import datetime
+import os
 
 
 def on_connect(client, userdata, flags, rc):
@@ -34,7 +35,7 @@ def on_message(client, userdata, msg):
 
 
 # MongoDB client
-client = MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
+client = MongoClient(os.environ['MONGODB_CLIENT'])
 db = client.iot
 raw = db.raw
 

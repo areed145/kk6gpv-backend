@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 from pymongo import MongoClient
 import pandas as pd
 import time
+import os
 
 keys_main = ('station_id', 'station_type', 'observation_time_rfc822',
         'temp_f', 'relative_humidity',
@@ -74,15 +75,11 @@ def get_history(sid, m, d, y):
 
 if __name__ == '__main__':
     # MongoDB client
-    client=MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
+    client = MongoClient(os.environ['MONGODB_CLIENT'])
     db=client.wx
     raw=db.raw
 
-    #sid = 'KTXHOUST1886'
-    #sid = 'KTXHOUST686'
-    #sid = 'KTXHOUST1930'
-    #sid = 'KTXHOUST2624'
-    sid = 'KTXHOUST1941'
+    sid = os.environ['SID']
     last_hour = datetime.now().hour - 1
     last_minute = datetime.now().minute - 1
     while True:
