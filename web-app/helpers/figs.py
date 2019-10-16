@@ -229,7 +229,7 @@ def create_map_oilgas():
                              marker=dict(size=7,
                                          color=df_wtrstm['wtrstm_cum'].values,
                                          colorbar=dict(
-                                             title='gas',
+                                             title='steam',
                                              lenmode='fraction',
                                              len=0.30,
                                          ),
