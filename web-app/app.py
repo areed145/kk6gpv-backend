@@ -10,14 +10,18 @@ from helpers import figs, flickr
 from pymongo import MongoClient
 from flask_track_usage import TrackUsage
 from flask_track_usage.storage.mongo import MongoPiggybackStorage
+from flask_caching import Cache
+
+import json
 
 app = Flask(__name__)
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 sid = os.environ['SID']
 
 client = MongoClient(os.environ['MONGODB_CLIENT'])
-db=client.coconut_barometer
-stats=db.stats
+db = client.coconut_barometer
+stats = db.stats
 
 times = dict(m_5='5m', h_1='1h', h_6='6h', d_1='1d',
              d_2='2d', d_7='7d', d_30='30d')
@@ -38,6 +42,7 @@ def myconverter(o):
         return o.__str__()
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/')
 def index():
@@ -46,6 +51,7 @@ def index():
     return render_template('index.html', wx=wx)
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/awc')
 def awc():
@@ -55,6 +61,7 @@ def awc():
     return render_template('awc.html', plot=map_awc)
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/wx')
 def wx():
@@ -65,6 +72,7 @@ def wx():
     return render_template('wx.html', times=times, fig_td=fig_td, fig_pr=fig_pr, fig_pc=fig_pc, fig_wd=fig_wd, fig_su=fig_su, fig_wr=fig_wr)
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/iot')
 def iot():
@@ -75,6 +83,7 @@ def iot():
     return render_template('iot.html', times=times, plot=graph_iot)
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/aprs')
 def aprs():
@@ -87,6 +96,7 @@ def aprs():
     return render_template('aprs.html', times=times, map_aprs=map_aprs, plot_speed=plot_speed, plot_alt=plot_alt, plot_course=plot_course, rows=rows)
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/aircraft')
 def aircraft():
@@ -94,6 +104,7 @@ def aircraft():
     return render_template('aircraft.html')
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/paragliding')
 def paragliding():
@@ -101,6 +112,7 @@ def paragliding():
     return render_template('paragliding.html')
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/soaring')
 def soaring():
@@ -108,6 +120,7 @@ def soaring():
     return render_template('soaring.html')
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/n5777v')
 def n5777v():
@@ -115,6 +128,7 @@ def n5777v():
     return render_template('n5777v.html')
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/galleries')
 def galleries():
@@ -123,6 +137,7 @@ def galleries():
     return render_template('galleries.html', rows=rows, title='Galleries')
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/galleries/<id>')
 def gallery(id):
@@ -132,6 +147,7 @@ def gallery(id):
     return render_template('galleries.html', rows=rows, title=gals[id]['title'])
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/galleries/<id>/<ph>')
 def image(id, ph):
@@ -146,6 +162,7 @@ def image(id, ph):
     return render_template('image.html', image=image, title='photo')
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/travel')
 def travel():
@@ -153,6 +170,7 @@ def travel():
     return render_template('travel.html')
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/scuba')
 def scuba():
@@ -160,6 +178,7 @@ def scuba():
     return render_template('scuba.html')
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/fishing')
 def fishing():
@@ -167,14 +186,17 @@ def fishing():
     return render_template('fishing.html')
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/oilgas')
 def oilgas():
     g.track_var['page'] = 'oilgas'
-    map_oilgas = figs.create_map_oilgas()
+    with open('static/oilgas.json') as json_file:
+        map_oilgas = json.load(json_file)
     return render_template('oilgas.html', plot=map_oilgas)
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/oilgas_folium')
 def oilgas_folium():
@@ -182,6 +204,7 @@ def oilgas_folium():
     return render_template('oilgas_folium.html')
 
 
+@cache.cached(timeout=60)
 @t.include
 @app.route('/about')
 def about():
@@ -233,6 +256,13 @@ def graph_iot_change():
     time_iot = request.args['time_iot']
     graphJSON = figs.create_graph_iot(sensor_iot, time_iot)
     return graphJSON
+
+
+@app.route('/create_oilgas')
+def create_oilgas():
+    map_oilgas = figs.create_map_oilgas()
+    with open('static/oilgas.json', 'w') as outfile:
+        json.dump(map_oilgas, outfile)
 
 
 @app.route('/create_oilgas_folium')

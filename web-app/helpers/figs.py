@@ -179,7 +179,6 @@ def create_graph_iot(sensor, time):
                            cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
-
 def create_map_oilgas():
     db = client.petroleum
     df_wells = pd.DataFrame(
@@ -225,7 +224,7 @@ def create_map_oilgas():
             go.Scattermapbox(lat=df_wtrstm['latitude'].values,
                              lon=df_wtrstm['longitude'].values,
                              mode='markers',
-                             name='gas',
+                             name='steam',
                              marker=dict(size=7,
                                          color=df_wtrstm['wtrstm_cum'].values,
                                          colorbar=dict(
