@@ -7,7 +7,7 @@ import plotly.graph_objs as go
 import json
 from datetime import datetime, timedelta
 
-client = MongoClient(os.environ['MONGODB_CLIENT'])
+client = MongoClient(os.environ['MONGODB_CLIENT'],maxPoolSize=10000)
 
 mapbox_access_token = os.environ['MAPBOX_TOKEN']
 
@@ -184,57 +184,78 @@ def create_map_oilgas():
     db = client.petroleum
     df_wells = pd.DataFrame(
         list(db.doggr.find({}, {'latitude': 1, 'longitude': 1, 'oil_cum' : 1, 'water_cum' : 1, 'gas_cum' : 1, 'wtrstm_cum' : 1})))
+    
+    df_oil = df_wells[df_wells['oil_cum'] > 0]
+    df_water = df_wells[df_wells['water_cum'] > 0]
+    df_gas = df_wells[df_wells['gas_cum'] > 0]
+    df_wtrstm = df_wells[df_wells['wtrstm_cum'] > 0]
 
-    data = [go.Scattermapbox(lat=df_wells['latitude'],
-                             lon=df_wells['longitude'],
+    data = [go.Scattermapbox(lat=df_water['latitude'].values,
+                             lon=df_water['longitude'].values,
                              mode='markers',
                              name='water',
                              marker=dict(size=13,
-                                         color=df_wells['water_cum'],
+                                         color=df_water['water_cum'].values,
                                          colorbar=dict(
                                              title='water',
                                              lenmode='fraction',
                                              len=0.30,
                                          ),
                                          colorscale=scl_wtr,
-                                         cmin=df_wells['water_cum'].quantile(0.01),
-                                         cmax=df_wells['water_cum'].quantile(0.75),
+                                         cmin=df_water['water_cum'].quantile(0.01),
+                                         cmax=df_water['water_cum'].quantile(0.75),
                                          )
                              ),
-            go.Scattermapbox(lat=df_wells['latitude'],
-                             lon=df_wells['longitude'],
+            go.Scattermapbox(lat=df_oil['latitude'].values,
+                             lon=df_oil['longitude'].values,
                              mode='markers',
                              name='oil',
                              marker=dict(size=10,
-                                         color=df_wells['oil_cum'],
+                                         color=df_oil['oil_cum'].values,
                                          colorbar=dict(
                                              title='oil',
                                              lenmode='fraction',
                                              len=0.30,
                                          ),
                                          colorscale=scl_oil,
-                                         cmin=df_wells['oil_cum'].quantile(0.01),
-                                         cmax=df_wells['oil_cum'].quantile(0.75),
+                                         cmin=df_oil['oil_cum'].quantile(0.01),
+                                         cmax=df_oil['oil_cum'].quantile(0.75),
                                          )
                              ),
-            go.Scattermapbox(lat=df_wells['latitude'],
-                             lon=df_wells['longitude'],
+            go.Scattermapbox(lat=df_wtrstm['latitude'].values,
+                             lon=df_wtrstm['longitude'].values,
                              mode='markers',
                              name='gas',
                              marker=dict(size=7,
-                                         color=df_wells['gas_cum'],
+                                         color=df_wtrstm['wtrstm_cum'].values,
+                                         colorbar=dict(
+                                             title='gas',
+                                             lenmode='fraction',
+                                             len=0.30,
+                                         ),
+                                         colorscale=scl_cyc,
+                                         cmin=df_wtrstm['wtrstm_cum'].quantile(0.01),
+                                         cmax=df_wtrstm['wtrstm_cum'].quantile(0.75),
+                                         )
+                             ),
+            go.Scattermapbox(lat=df_gas['latitude'].values,
+                             lon=df_gas['longitude'].values,
+                             mode='markers',
+                             name='gas',
+                             marker=dict(size=7,
+                                         color=df_gas['gas_cum'].values,
                                          colorbar=dict(
                                              title='gas',
                                              lenmode='fraction',
                                              len=0.30,
                                          ),
                                          colorscale=scl_gas,
-                                         cmin=df_wells['gas_cum'].quantile(0.01),
-                                         cmax=df_wells['gas_cum'].quantile(0.75),
+                                         cmin=df_gas['gas_cum'].quantile(0.01),
+                                         cmax=df_gas['gas_cum'].quantile(0.75),
                                          )
                              ),
-            go.Scattermapbox(lat=df_wells['latitude'],
-                             lon=df_wells['longitude'],
+            go.Scattermapbox(lat=df_wells['latitude'].values,
+                             lon=df_wells['longitude'].values,
                              mode='markers',
                              name='wells',
                              marker=dict(
