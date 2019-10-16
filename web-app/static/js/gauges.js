@@ -445,7 +445,7 @@ if ($('#gauges').length > 0) {
     // RAIN
     var level = document.getElementById('rain').attributes.val.value;
     var gmin = 0;
-    var gmax = 0.2;
+    var gmax = 1.0;
     var leveldisp = level;
     if (level > gmax) { level = gmax };
     if (level < gmin) { level = gmin };
