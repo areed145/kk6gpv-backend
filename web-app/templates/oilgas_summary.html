@@ -13,6 +13,10 @@
                         <table class="table table-hover table-sm" id="table_paged">
                             <thead>
                                 <tr>
+                                    <th scope="col">Field</th>
+                                    <th scope="col">Lease</th>
+                                    <th scope="col">Well</th>
+                                    <th scope="col">Operator</th>
                                     <th scope="col">API</th>
                                     <th scope="col">Oil</th>
                                     <th scope="col">Water</th>
@@ -23,6 +27,10 @@
                             <tbody>
                                 {% for row in rows %}
                                 <tr>
+                                    <td>{{ row['field'] }}</td>
+                                    <td>{{ row['lease'] }}</td>
+                                    <td>{{ row['well'] }}</td>
+                                    <td>{{ row['operator'] }}</td>
                                     <td><a href="./details/{{ row['api'] }}">{{ row['api'] }}</a></td>
                                     <td>{{ row['oil_cum'] }}</td>
                                     <td>{{ row['water_cum'] }}</td>

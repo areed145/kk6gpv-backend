@@ -210,6 +210,10 @@ def oilgas_summary():
     rows = []
     for _, row in df.iterrows():
         r = {}
+        r['field'] = row['field']
+        r['lease'] = row['lease']
+        r['well'] = row['well']
+        r['operator'] = row['operator']
         r['api'] = row['api']
         r['oil_cum'] = row['oil_cum']
         r['water_cum'] = row['water_cum']

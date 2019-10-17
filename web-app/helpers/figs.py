@@ -285,7 +285,11 @@ def get_graph_oilgas(api):
 def create_map_oilgas():
     db = client.petroleum
     df_wells = pd.DataFrame(
-        list(db.doggr.find({}, {'api': 1, 'latitude': 1, 'longitude': 1, 'oil_cum' : 1, 'water_cum' : 1, 'gas_cum' : 1, 'wtrstm_cum' : 1})))
+        list(db.doggr.find({}, {'field': 1, 'lease': 1, 'well': 1, 'operator': 1, 'api': 1, 'latitude': 1, 'longitude': 1, 'oil_cum' : 1, 'water_cum' : 1, 'gas_cum' : 1, 'wtrstm_cum' : 1})))
+    
+    df_wells.fillna(0, inplace=True)
+    for col in ['oil_cum', 'water_cum', 'gas_cum', 'wtrstm_cum']:
+        df_wells[col] = df_wells[col].astype(int)
     
     df_oil = df_wells[df_wells['oil_cum'] > 0]
     df_water = df_wells[df_wells['water_cum'] > 0]
@@ -389,7 +393,7 @@ def create_map_oilgas():
     graphJSON = json.dumps(dict(data=data, layout=layout),
                            cls=plotly.utils.PlotlyJSONEncoder)
 
-    df_wells = df_wells[['api', 'oil_cum', 'water_cum', 'gas_cum', 'wtrstm_cum']]
+    df_wells = df_wells[['field', 'lease', 'well', 'operator', 'api', 'oil_cum', 'water_cum', 'gas_cum', 'wtrstm_cum']]
 
     return graphJSON, df_wells
 
