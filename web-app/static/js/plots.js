@@ -130,7 +130,7 @@ if ($('#aprs').length > 0) {
             // content += '<td>' + rows[i].raw + '</td>';
             content += '</tr>';
         }
-        $('#packets tbody').html(content);
+        $('#table_paged tbody').html(content);
     }
 
     $('#type_aprs').on('change', function () {
