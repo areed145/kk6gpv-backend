@@ -183,7 +183,7 @@ def get_graph_oilgas(api):
 
     db = client.petroleum
 
-    df = pd.DataFrame(columns=['date','oil','water','gas','wtrstm'])
+    df = pd.DataFrame()
 
     try:
         df_prod = pd.DataFrame(list(db.doggr.aggregate([
@@ -212,7 +212,7 @@ def get_graph_oilgas(api):
         ])))
         df_inj = pd.DataFrame(list(df_inj['inj']))
         try:
-            df = df.merge(df_inj, how='outer')
+            df = pd.merge(df, df_inj, how='outer', on='date')
         except:
             df = df.append(df_inj)
     except:
@@ -220,6 +220,12 @@ def get_graph_oilgas(api):
 
     df.fillna(0, inplace=True)
     df.sort_values(by='date', inplace=True)
+
+    for col in ['date','oil','water','gas','wtrstm']:
+        if col not in df:
+            df[col] = 0
+        if col not in ['date']:
+            df[col] = df[col]/30.45
 
     data = [go.Scatter(x=df['date'],
                        y=df['oil'],
