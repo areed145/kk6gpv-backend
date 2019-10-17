@@ -13,15 +13,20 @@
     <link rel="icon" href="{{ url_for('static', filename='favicons/favicon-32x32.png') }}" sizes="32x32">
     <link rel="icon" href="{{ url_for('static', filename='favicons/favicon-96x96.png') }}" sizes="96x96">
     <link rel="icon" href="{{ url_for('static', filename='favicons/apple-icon-144x144.png') }}" sizes="144x144">
-    
+
     <!-- Android -->
-    <link rel="shortcut icon" sizes="192x192" href="{{ url_for('static', filename='favicons/android-icon-192x192.png') }}">
+    <link rel="shortcut icon" sizes="192x192"
+        href="{{ url_for('static', filename='favicons/android-icon-192x192.png') }}">
 
     <!-- iOS -->
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicons/apple-icon-120x120.png') }}" sizes="120x120">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicons/apple-icon-152x152.png') }}" sizes="152x152">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicons/apple-icon-180x180.png') }}" sizes="180x180">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicons/apple-icon-144x144.png') }}" sizes="144x144">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicons/apple-icon-120x120.png') }}"
+        sizes="120x120">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicons/apple-icon-152x152.png') }}"
+        sizes="152x152">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicons/apple-icon-180x180.png') }}"
+        sizes="180x180">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicons/apple-icon-144x144.png') }}"
+        sizes="144x144">
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='favicons/apple-icon.png') }}">
 
     <!-- Windows 8 IE 10-->
@@ -31,6 +36,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- <link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/darkly/bootstrap.min.css" rel="stylesheet" integrity="sha384-w+8Gqjk9Cuo6XH9HKHG5t5I1VR4YBNdPt/29vwgfZR485eoEJZ8rJRbm3TR32P6k" crossorigin="anonymous"> -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/footer.css') }}">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -94,8 +100,15 @@
                         <a class="dropdown-item" href="/fishing">Fishing</a>
                     </div>
                 </li>
-                <li class="nav-item"></li>
-                <a class="nav-link" href="/oilgas">Oil & Gas</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Oil & Gas
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/oilgas/summary">Summary</a>
+                        <a class="dropdown-item" href="/oilgas/map">Map</a>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/about">About</a>

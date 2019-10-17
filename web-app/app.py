@@ -13,6 +13,8 @@ from flask_track_usage.storage.mongo import MongoPiggybackStorage
 from flask_caching import Cache
 
 import json
+import feather
+import pandas as pd
 
 app = Flask(__name__)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
@@ -188,19 +190,50 @@ def fishing():
 
 @cache.cached(timeout=60)
 @t.include
-@app.route('/oilgas')
-def oilgas():
-    g.track_var['page'] = 'oilgas'
+@app.route('/oilgas/map')
+def oilgas_map():
+    g.track_var['page'] = 'oilgas/map'
     with open('static/oilgas.json') as json_file:
         map_oilgas = json.load(json_file)
-    return render_template('oilgas.html', plot=map_oilgas)
+    return render_template('oilgas_map.html', plot=map_oilgas)
 
 
 @cache.cached(timeout=60)
 @t.include
-@app.route('/oilgas_folium')
+@app.route('/oilgas/summary')
+def oilgas_summary():
+    g.track_var['page'] = 'oilgas/summary'
+    df = pd.read_feather('static/oilgas_sum.feather')
+    df = df.dropna(axis=0)
+    df.sort_values(by='oil_cum', inplace=True, ascending=False)
+    df = df[:1000]
+    rows = []
+    for _, row in df.iterrows():
+        r = {}
+        r['api'] = row['api']
+        r['oil_cum'] = row['oil_cum']
+        r['water_cum'] = row['water_cum']
+        r['gas_cum'] = row['gas_cum']
+        r['wtrstm_cum'] = row['wtrstm_cum']
+        rows.append(r)
+    return render_template('oilgas_summary.html', rows=rows)
+
+
+@cache.cached(timeout=60)
+@t.include
+@app.route('/oilgas/details/<api>')
+def oilgas_detail(api):
+    g.track_var['page'] = 'oilgas/details'
+    g.track_var['api'] = str(api)
+    graph_oilgas = figs.get_graph_oilgas(str(api))
+    return render_template('oilgas_details.html', plot=graph_oilgas, api=str(api))
+
+
+@cache.cached(timeout=60)
+@t.include
+@app.route('/oilgas/folium')
 def oilgas_folium():
-    g.track_var['page'] = 'oilgas_folium'
+    g.track_var['page'] = 'oilgas/folium'
     return render_template('oilgas_folium.html')
 
 
@@ -260,9 +293,10 @@ def graph_iot_change():
 
 @app.route('/create_oilgas')
 def create_oilgas():
-    map_oilgas = figs.create_map_oilgas()
+    map_oilgas, sum_oilgas = figs.create_map_oilgas()
     with open('static/oilgas.json', 'w') as outfile:
         json.dump(map_oilgas, outfile)
+    sum_oilgas.to_feather('static/oilgas_sum.feather')
 
 
 @app.route('/create_oilgas_folium')

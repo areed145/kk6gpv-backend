@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="container" id="oilgas_detail">
+  <h1>Oil & Gas</h1>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card-deck mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title" align=center>Production Detail: {{ api }}</h5>
+            </div>
+            <br>
+          <div class="chart" id="graph_oilgas">
+            <script>
+              var graphs = {{ plot | safe}};
+              Plotly.plot('graph_oilgas', graphs.data, graphs.layout, { displayModeBar: false });
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

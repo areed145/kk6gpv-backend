@@ -179,10 +179,107 @@ def create_graph_iot(sensor, time):
                            cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
+def get_graph_oilgas(api):
+
+    db = client.petroleum
+
+    df = pd.DataFrame(columns=['date','oil','water','gas','wtrstm'])
+
+    try:
+        df_prod = pd.DataFrame(list(db.doggr.aggregate([
+            {'$unwind': '$prod'},
+            {'$match': {'api': api}},
+            {'$project': {
+                'prod.date': 1,
+                'prod.oil': 1,
+                'prod.water': 1,
+                'prod.gas': 1,
+            }}
+        ])))
+        df_prod = pd.DataFrame(list(df_prod['prod']))
+        df = df.append(df_prod)
+    except:
+        pass
+
+    try:
+        df_inj = pd.DataFrame(list(db.doggr.aggregate([
+            {'$unwind': '$inj'},
+            {'$match': {'api': api}},
+            {'$project': {
+                'inj.date': 1,
+                'inj.wtrstm': 1,
+            }}
+        ])))
+        df_inj = pd.DataFrame(list(df_inj['inj']))
+        try:
+            df = df.merge(df_inj, how='outer')
+        except:
+            df = df.append(df_inj)
+    except:
+        pass
+
+    df.fillna(0, inplace=True)
+    df.sort_values(by='date', inplace=True)
+
+    data = [go.Scatter(x=df['date'],
+                       y=df['oil'],
+                       name='oil',
+                       line=dict(
+                           color = '#50bf37',
+                           shape='spline',
+                           smoothing=0.3,
+                           width=3
+    ),  
+        mode='lines'),
+        go.Scatter(x=df['date'],
+                       y=df['water'],
+                       name='water',
+                       line=dict(
+                           color = '#4286f4',
+                           shape='spline',
+                           smoothing=0.3,
+                           width=3
+    ),
+        mode='lines'),
+        go.Scatter(x=df['date'],
+                       y=df['gas'],
+                       name='gas',
+                       line=dict(
+                           color = '#ef2626',
+                           shape='spline',
+                           smoothing=0.3,
+                           width=3
+    ),
+        mode='lines'),
+        go.Scatter(x=df['date'],
+                       y=df['wtrstm'],
+                       name='wtrstm',
+                       line=dict(
+                           color = '#fcd555',
+                           shape='spline',
+                           smoothing=0.3,
+                           width=3
+    ),
+        mode='lines'),
+    ]
+
+    layout = go.Layout(autosize=True,
+                       # height=1000,
+                       # showlegend=True,
+                    #    xaxis=dict(range=[start, now]),
+                       hovermode='closest',
+                       yaxis=dict(type='log'),
+                       uirevision=True,
+                       margin=dict(r=50, t=30, b=30, l=60, pad=0),
+                       )
+    graphJSON = json.dumps(dict(data=data, layout=layout),
+                           cls=plotly.utils.PlotlyJSONEncoder)
+    return graphJSON
+
 def create_map_oilgas():
     db = client.petroleum
     df_wells = pd.DataFrame(
-        list(db.doggr.find({}, {'latitude': 1, 'longitude': 1, 'oil_cum' : 1, 'water_cum' : 1, 'gas_cum' : 1, 'wtrstm_cum' : 1})))
+        list(db.doggr.find({}, {'api': 1, 'latitude': 1, 'longitude': 1, 'oil_cum' : 1, 'water_cum' : 1, 'gas_cum' : 1, 'wtrstm_cum' : 1})))
     
     df_oil = df_wells[df_wells['oil_cum'] > 0]
     df_water = df_wells[df_wells['water_cum'] > 0]
@@ -280,7 +377,10 @@ def create_map_oilgas():
                        )
     graphJSON = json.dumps(dict(data=data, layout=layout),
                            cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON
+
+    df_wells = df_wells[['api', 'oil_cum', 'water_cum', 'gas_cum', 'wtrstm_cum']]
+
+    return graphJSON, df_wells
 
 
 def create_map_awc(prop):
