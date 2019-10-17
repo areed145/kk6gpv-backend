@@ -1,14 +1,6 @@
-if ($('#table_paged').length > 0) {
-    $(document).ready(function() {
-        $('#example').DataTable();
-    } );
-    // $(document).ready(function () {
-    //     $('#table_paged').DataTable({
-    //         "pagingType": "simple" // "simple" option for 'Previous' and 'Next' buttons only
-    //     });
-    //     $('.dataTables_length').addClass('bs-select');
-    // });
-}
+$(document).ready(function() {
+    $('#table_paged').DataTable();
+} );
 
 if ($('#wx').length > 0) {
 

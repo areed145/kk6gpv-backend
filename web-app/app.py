@@ -206,7 +206,7 @@ def oilgas_summary():
     df = pd.read_feather('static/oilgas_sum.feather')
     df = df.dropna(axis=0)
     df.sort_values(by='oil_cum', inplace=True, ascending=False)
-    df = df[:1000]
+    df = df[:10000]
     rows = []
     for _, row in df.iterrows():
         r = {}
