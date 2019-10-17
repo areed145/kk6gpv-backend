@@ -6,7 +6,7 @@ if ($('#wx').length > 0) {
 
     $('#time_wx').on('change', function () {
         $.ajax({
-            url: "/graph_wx",
+            url: "/wx/graph",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
@@ -26,7 +26,7 @@ if ($('#wx').length > 0) {
 
     setInterval(function () {
         $.ajax({
-            url: "/graph_wx",
+            url: "/wx/graph",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
@@ -50,7 +50,7 @@ if ($('#iot').length > 0) {
 
     $('#sensor_iot').on('change', function () {
         $.ajax({
-            url: "/graph_iot",
+            url: "/iot/graph",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
@@ -68,7 +68,7 @@ if ($('#iot').length > 0) {
 
     $('#time_iot').on('change', function () {
         $.ajax({
-            url: "/graph_iot",
+            url: "/iot/graph",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
@@ -86,7 +86,7 @@ if ($('#iot').length > 0) {
 
     setInterval(function () {
         $.ajax({
-            url: "/graph_iot",
+            url: "/iot/graph",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
@@ -135,7 +135,7 @@ if ($('#aprs').length > 0) {
 
     $('#type_aprs').on('change', function () {
         $.ajax({
-            url: "/map_aprs",
+            url: "/aprs/map",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
@@ -158,7 +158,7 @@ if ($('#aprs').length > 0) {
 
     $('#prop_aprs').on('change', function () {
         $.ajax({
-            url: "/map_aprs",
+            url: "/aprs/map",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
@@ -180,7 +180,7 @@ if ($('#aprs').length > 0) {
 
     $('#time_aprs').on('change', function () {
         $.ajax({
-            url: "/map_aprs",
+            url: "/aprs/map",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
@@ -204,7 +204,7 @@ if ($('#aprs').length > 0) {
 
     setInterval(function () {
         $.ajax({
-            url: "/map_aprs",
+            url: "/aprs/map",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
@@ -232,7 +232,7 @@ if ($('#awc').length > 0) {
 
     $('#prop_awc').on('change', function () {
         $.ajax({
-            url: "/map_awc",
+            url: "/awc/map",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
@@ -251,7 +251,7 @@ if ($('#awc').length > 0) {
 
     setInterval(function () {
         $.ajax({
-            url: "/map_awc",
+            url: "/awc/map",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {

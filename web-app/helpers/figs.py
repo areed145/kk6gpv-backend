@@ -290,6 +290,7 @@ def create_map_oilgas():
                              lon=df_water['longitude'].values,
                              mode='markers',
                              name='water',
+                             text=df_water['water_cum'].values,
                              marker=dict(size=13,
                                          color=df_water['water_cum'].values,
                                          colorbar=dict(
@@ -306,6 +307,7 @@ def create_map_oilgas():
                              lon=df_oil['longitude'].values,
                              mode='markers',
                              name='oil',
+                             text=df_oil['oil_cum'].values,
                              marker=dict(size=10,
                                          color=df_oil['oil_cum'].values,
                                          colorbar=dict(
@@ -322,6 +324,7 @@ def create_map_oilgas():
                              lon=df_wtrstm['longitude'].values,
                              mode='markers',
                              name='steam',
+                             text=df_wtrstm['wtrstm_cum'].values,
                              marker=dict(size=7,
                                          color=df_wtrstm['wtrstm_cum'].values,
                                          colorbar=dict(
@@ -338,6 +341,7 @@ def create_map_oilgas():
                              lon=df_gas['longitude'].values,
                              mode='markers',
                              name='gas',
+                             text=df_gas['gas_cum'].values,
                              marker=dict(size=7,
                                          color=df_gas['gas_cum'].values,
                                          colorbar=dict(
@@ -353,6 +357,7 @@ def create_map_oilgas():
             go.Scattermapbox(lat=df_wells['latitude'].values,
                              lon=df_wells['longitude'].values,
                              mode='markers',
+                             text=df_wells['api'].values,
                              name='wells',
                              marker=dict(
                                  size=4,

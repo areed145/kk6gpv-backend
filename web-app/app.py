@@ -245,14 +245,14 @@ def about():
     return render_template('about.html')
 
 
-@app.route('/map_awc', methods=['GET', 'POST'])
+@app.route('/awc/map', methods=['GET', 'POST'])
 def map_awc_change():
     prop_awc = request.args['prop_awc']
     graphJSON = figs.create_map_awc(prop_awc)
     return graphJSON
 
 
-@app.route('/map_aprs', methods=['GET', 'POST'])
+@app.route('/aprs/map', methods=['GET', 'POST'])
 def map_aprs_change():
     type_aprs = request.args['type_aprs']
     prop_aprs = request.args['prop_aprs']
@@ -268,7 +268,7 @@ def map_aprs_change():
     return json.dumps(data, default=myconverter)
 
 
-@app.route('/graph_wx', methods=['GET', 'POST'])
+@app.route('/wx/graph', methods=['GET', 'POST'])
 def graph_wx_change():
     time_wx = request.args['time_wx']
     fig_td, fig_pr, fig_pc, fig_wd, fig_su, fig_wr = figs.create_wx_figs(
@@ -283,7 +283,7 @@ def graph_wx_change():
     return json.dumps(data, default=myconverter)
 
 
-@app.route('/graph_iot', methods=['GET', 'POST'])
+@app.route('/iot/graph', methods=['GET', 'POST'])
 def graph_iot_change():
     sensor_iot = request.args['sensor_iot']
     time_iot = request.args['time_iot']
@@ -291,7 +291,7 @@ def graph_iot_change():
     return graphJSON
 
 
-@app.route('/create_oilgas')
+@app.route('/oilgas/map/create')
 def create_oilgas():
     map_oilgas, sum_oilgas = figs.create_map_oilgas()
     with open('static/oilgas.json', 'w') as outfile:
@@ -299,7 +299,7 @@ def create_oilgas():
     sum_oilgas.to_feather('static/oilgas_sum.feather')
 
 
-@app.route('/create_oilgas_folium')
+@app.route('/oilgas/folium/create')
 def create_oilgas_folium():
     figs.create_map_oilgas_folium().save('templates/map.html')
 
