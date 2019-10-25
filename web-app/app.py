@@ -79,13 +79,13 @@ def wx():
 @app.route('/iot')
 def iot():
     g.track_var['page'] = 'iot'
-    sensor_iot = 'sensor.load_1m'
+    sensor_iot = ['sensor.load_1m']
     time_iot = 'm_5'
     graph_iot = figs.create_graph_iot(sensor_iot, time_iot)
     return render_template('iot.html', times=times, plot=graph_iot)
 
 
-@cache.cached(timeout=60)
+@cache.cached(timeout=6)
 @t.include
 @app.route('/aprs')
 def aprs():
@@ -289,7 +289,7 @@ def graph_wx_change():
 
 @app.route('/iot/graph', methods=['GET', 'POST'])
 def graph_iot_change():
-    sensor_iot = request.args['sensor_iot']
+    sensor_iot = request.args.getlist("sensor_iot[]")
     time_iot = request.args['time_iot']
     graphJSON = figs.create_graph_iot(sensor_iot, time_iot)
     return graphJSON

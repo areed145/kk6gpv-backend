@@ -1,10 +1,10 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="container">
+<div class="container-fluid">
     <h1>Aviation Weather</h1>
 </div>
-<div class="container" id="awc">
+<div class="container-fluid" id="awc">
     <div class="row">
         <div class="col-md-12">
             <div class="card-deck mt-4">
@@ -48,10 +48,10 @@
         <div class="col-md-12">
             <div class="card-deck mt-4">
                 <div class="card">
-                    <div class="chart" id="map_awc">
+                    <div class="map" id="map_awc">
                         <script>
                             var graphs = {{ plot | safe}};
-                            Plotly.plot('map_awc', graphs.data, graphs.layout, { displayModeBar: false });
+                            Plotly.plot('map_awc', graphs.data, graphs.layout, { displayModeBar: false, responsive: true });
                         </script>
                     </div>
                 </div>

@@ -49,56 +49,77 @@ if ($('#wx').length > 0) {
 if ($('#iot').length > 0) {
 
     $('#sensor_iot').on('change', function () {
+        var selections = [];
+        $('#sensor_iot option').each(function(i) {
+                if (this.selected == true) {
+                        selections.push(this.value);
+                }
+        });
+
         $.ajax({
             url: "/iot/graph",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
-                'sensor_iot': document.getElementById('sensor_iot').value,
+                'sensor_iot': selections,
                 'time_iot': document.getElementById('time_iot').value,
             },
             dataType: "json",
             success: function (data) {
-                // Plotly.react('graph_iot', data);
-                Plotly.plot('graph_iot', data);
-                Plotly.deleteTraces('graph_iot', 0);
+                Plotly.react('graph_iot', data);
+                // Plotly.plot('graph_iot', data);
+                // Plotly.deleteTraces('graph_iot', 0);
             }
         });
     })
 
     $('#time_iot').on('change', function () {
+        var selections = [];
+        $('#sensor_iot option').each(function(i) {
+                if (this.selected == true) {
+                        selections.push(this.value);
+                }
+        });
+
         $.ajax({
             url: "/iot/graph",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
-                'sensor_iot': document.getElementById('sensor_iot').value,
+                'sensor_iot': selections,
                 'time_iot': document.getElementById('time_iot').value,
             },
             dataType: "json",
             success: function (data) {
-                // Plotly.react('graph_iot', data);
-                Plotly.plot('graph_iot', data);
-                Plotly.deleteTraces('graph_iot', 0);
+                Plotly.react('graph_iot', data);
+                // Plotly.plot('graph_iot', data);
+                // Plotly.deleteTraces('graph_iot', 0);
             }
         });
     })
 
     setInterval(function () {
+        var selections = [];
+        $('#sensor_iot option').each(function(i) {
+                if (this.selected == true) {
+                        selections.push(this.value);
+                }
+        });
+
         $.ajax({
             url: "/iot/graph",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
-                'sensor_iot': document.getElementById('sensor_iot').value,
+                'sensor_iot': selections,
                 'time_iot': document.getElementById('time_iot').value,
             },
             dataType: "json",
         })
             .done(function (data) {
-                // Plotly.react('graph_iot', data);
-                Plotly.plot('graph_iot', data);
-                Plotly.deleteTraces('graph_iot', 0);
+                Plotly.react('graph_iot', data);
+                // Plotly.plot('graph_iot', data);
+                // Plotly.deleteTraces('graph_iot', 0);
             })
     }, 1000 * 5);
 

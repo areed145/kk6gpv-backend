@@ -1,10 +1,10 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="container" id="wx">
+<div class="container-fluid" id="wx">
   <h1>Station Weather</h1>
 </div>
-<div class="container">
+<div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
       <div class="card-deck mt-4">
@@ -92,7 +92,7 @@
           <div class="chart" id="fig_wr">
             <script>
               var graphs = {{ fig_wr | safe}};
-              Plotly.newPlot('fig_wr', graphs.data, graphs.layout, { displayModeBar: false });
+              Plotly.newPlot('fig_wr', graphs.data, graphs.layout, { displayModeBar: false, responsive: true });
             </script>
           </div>
         </div>

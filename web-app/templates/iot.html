@@ -1,10 +1,10 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="container" id="iot">
+<div class="container-fluid" id="iot">
   <h1>IoT</h1>
 </div>
-<div class="container">
+<div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
       <div class="card-deck mt-4">
@@ -14,7 +14,7 @@
           </div>
           <br>
           <div class="col-md">
-            <select class="form-control" id='sensor_iot'>
+            <select multiple class="form-control" id='sensor_iot'>
               <option value="sensor.load_1m">sensor.load_1m</option>
               <option value="sensor.load_5m">sensor.load_5m</option>
               <option value="sensor.load_15m">sensor.load_15m</option>
@@ -88,7 +88,7 @@
           <div class="chart" id="graph_iot">
             <script>
               var graphs = {{ plot | safe}};
-              Plotly.plot('graph_iot', graphs.data, graphs.layout, { displayModeBar: false });
+              Plotly.plot('graph_iot', graphs.data, graphs.layout, { displayModeBar: false, responsive: true });
             </script>
           </div>
         </div>

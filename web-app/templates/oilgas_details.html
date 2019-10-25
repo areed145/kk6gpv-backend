@@ -1,10 +1,10 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="container" id="oilgas_details">
+<div class="container-fluid" id="oilgas_details">
   <h1>Oil & Gas</h1>
 </div>
-<div class="container">
+<div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
       <div class="card-deck mt-4">
@@ -16,7 +16,7 @@
           <div class="chart" id="graph_oilgas">
             <script>
               var graphs = {{ plot | safe}};
-              Plotly.plot('graph_oilgas', graphs.data, graphs.layout, { displayModeBar: false });
+              Plotly.plot('graph_oilgas', graphs.data, graphs.layout, { displayModeBar: false, responsive: true });
             </script>
           </div>
         </div>

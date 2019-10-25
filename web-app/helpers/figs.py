@@ -150,29 +150,34 @@ def create_graph_iot(sensor, time):
     start, now = get_time_range(time)
     db = client.iot
     df = pd.DataFrame(
-        list(db.raw.find({'entity_id': sensor, 'timestamp_': {'$gt': start, '$lte': now}}).sort([('timestamp_', -1)])))
+        list(db.raw.find({'entity_id': {'$in': sensor}, 'timestamp_': {'$gt': start, '$lte': now}}).sort([('timestamp_', -1)])))
     if len(df) == 0:
-        df = pd.DataFrame(list(db.raw.find({'entity_id': sensor}).limit(2).sort([('timestamp_', -1)])))
+        df = pd.DataFrame(list(db.raw.find({'entity_id': {'$in': sensor}}).limit(2).sort([('timestamp_', -1)])))
         
-
-    data = [go.Scatter(x=df['timestamp_'],
-                       y=df['state'],
-                       name=df['entity_id'][0],
-                       line=dict(
-                           # color = 'rgb(255, 95, 63)',
-                           shape='spline',
-                           smoothing=0.7,
-                           width=3
-    ),
-        mode='lines')
-    ]
+    data = []
+    print(sensor)
+    for s in sensor:
+        print(s)
+        df_s = df[df['entity_id'] == s]
+        data.append(go.Scatter(x=df_s['timestamp_'],
+                        y=df_s['state'],
+                        name=df_s['entity_id'].values[0],
+                        line=dict(
+                            # color = 'rgb(255, 95, 63)',
+                            shape='spline',
+                            smoothing=0.7,
+                            width=3
+        ),
+            mode='lines')
+        )
 
     layout = go.Layout(autosize=True,
                        # height=1000,
-                       # showlegend=True,
+                       showlegend=True,
+                       legend=dict(orientation='h'),
                        xaxis=dict(range=[start, now]),
                        hovermode='closest',
-                       uirevision=True,
+                    #    uirevision=True,
                        margin=dict(r=50, t=30, b=30, l=60, pad=0),
                        )
     graphJSON = json.dumps(dict(data=data, layout=layout),
@@ -270,10 +275,9 @@ def get_graph_oilgas(api):
     ]
 
     layout = go.Layout(autosize=True,
-                       # height=1000,
-                       # showlegend=True,
-                    #    xaxis=dict(range=[start, now]),
                        hovermode='closest',
+                       showlegend=True,
+                       legend=dict(orientation='h'),
                        yaxis=dict(type='log'),
                        uirevision=True,
                        margin=dict(r=50, t=30, b=30, l=60, pad=0),
@@ -381,6 +385,8 @@ def create_map_oilgas():
                        #    showlegend=True,
                        hovermode='closest',
                        uirevision=True,
+                       showlegend=True,
+                       legend=dict(orientation='h'),
                        margin=dict(r=0, t=0, b=0, l=0, pad=0),
                        mapbox=dict(bearing=0,
                                    center=dict(lat=36, lon=-119),
@@ -586,6 +592,7 @@ def create_map_awc(prop):
                 ]
     layout = go.Layout(autosize=True,
                        # height=1000,
+                       legend=dict(orientation='h'),
                        showlegend=legend,
                        hovermode='closest',
                        uirevision=True,
