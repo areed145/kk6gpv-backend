@@ -10,8 +10,11 @@ body {
 .margin {
   height: 60px;
 }
-.map {
-  height: 150vh;
+.mapawc {
+  height: 70vh;
+}
+.mapog {
+  height: 90vh;
 }
 
 /* .footer {

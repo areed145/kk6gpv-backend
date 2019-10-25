@@ -7,7 +7,7 @@
 <div class="container-fluid" id="oilgas_maps">
     <div class="row">
         <div class="col-md-12">
-            <div class="map" id="map_oilgas">
+            <div class="mapog" id="map_oilgas">
                 <script>
                     var graphs = {{ plot | safe}};
                     Plotly.plot('map_oilgas', graphs.data, graphs.layout, {displayModeBar: false, responsive: true });
