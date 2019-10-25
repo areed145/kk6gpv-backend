@@ -1190,8 +1190,13 @@ def create_wx_figs(time, sid):
         # height=400,
         # width=500,
     )
-    
-    df_thp = pd.pivot_table(df_wx_raw, values='pressure_in', index=['temp_f'], columns=['relative_humidity'], aggfunc=np.mean)
+
+    df_thp = df_wx_raw[(df_wx_raw['temp_f'] > -10) & (df_wx_raw['temp_f'] < 120) &
+                       (df_wx_raw['pressure_in'] > 20) & (df_wx_raw['pressure_in'] < 50) &
+                       (df_wx_raw['relative_humidity'] > 0) & (df_wx_raw['relative_humidity'] < 100)]
+
+    df_thp = pd.pivot_table(df_thp, values='pressure_in', index=[
+                            'temp_f'], columns=['relative_humidity'], aggfunc=np.mean)
 
     data_thp = [
         go.Surface(x=df_thp.index.values,
@@ -1203,28 +1208,27 @@ def create_wx_figs(time, sid):
     ]
 
     layout_thp = go.Layout(autosize=True,
-                        scene={'xaxis': {
-                                    'title': 'Temperature (F)',
-                                    'tickfont': {'size': 10}, 
-                                    'titlefont': {'color': 'rgb(255, 95, 63)'}, 
-                                    'type': 'linear'
-                                    },
-                                'yaxis': {
-                                    'title': 'Humidity (%)',
-                                    'tickfont': {'size': 10},
-                                    'titlefont': {'color': 'rgb(63, 127, 255)'}, 
-                                    'tickangle': 1
-                                    },
-                                'zaxis': {
-                                    'title': 'Pressure (inHg)',
-                                    'tickfont': {'size': 10},
-                                    'titlefont': {'color': 'rgb(127, 255, 63)'}, 
-                                    },
-                                # 'camera': {'eye': {'x': 2, 'y': 1, 'z': 1.25}}, 
-                                # 'aspectmode': 'cube', 
-                                }
-                            )
-                                    
+                           scene={'xaxis': {
+                               'title': 'Temperature (F)',
+                               'tickfont': {'size': 10},
+                               'titlefont': {'color': 'rgb(255, 95, 63)'},
+                               'type': 'linear'
+                           },
+                               'yaxis': {
+                               'title': 'Humidity (%)',
+                               'tickfont': {'size': 10},
+                               'titlefont': {'color': 'rgb(63, 127, 255)'},
+                               'tickangle': 1
+                           },
+                               'zaxis': {
+                               'title': 'Pressure (inHg)',
+                               'tickfont': {'size': 10},
+                               'titlefont': {'color': 'rgb(127, 255, 63)'},
+                           },
+                               # 'camera': {'eye': {'x': 2, 'y': 1, 'z': 1.25}},
+                               # 'aspectmode': 'cube',
+                           }
+                           )
 
     graphJSON_td = json.dumps(dict(data=data_td, layout=layout_td),
                               cls=plotly.utils.PlotlyJSONEncoder)
