@@ -69,9 +69,9 @@ def awc():
 def wx():
     g.track_var['page'] = 'wx'
     time_wx = 'd_1'
-    fig_td, fig_pr, fig_pc, fig_wd, fig_su, fig_wr = figs.create_wx_figs(
+    fig_td, fig_pr, fig_pc, fig_wd, fig_su, fig_wr, fig_thp = figs.create_wx_figs(
         time_wx, sid)
-    return render_template('wx.html', times=times, fig_td=fig_td, fig_pr=fig_pr, fig_pc=fig_pc, fig_wd=fig_wd, fig_su=fig_su, fig_wr=fig_wr)
+    return render_template('wx.html', times=times, fig_td=fig_td, fig_pr=fig_pr, fig_pc=fig_pc, fig_wd=fig_wd, fig_su=fig_su, fig_wr=fig_wr, fig_thp=fig_thp)
 
 
 @cache.cached(timeout=60)
@@ -275,7 +275,7 @@ def map_aprs_change():
 @app.route('/wx/graph', methods=['GET', 'POST'])
 def graph_wx_change():
     time_wx = request.args['time_wx']
-    fig_td, fig_pr, fig_pc, fig_wd, fig_su, fig_wr = figs.create_wx_figs(
+    fig_td, fig_pr, fig_pc, fig_wd, fig_su, fig_wr, fig_thp = figs.create_wx_figs(
         time_wx, sid)
     data = {}
     data['fig_td'] = json.loads(fig_td)
@@ -284,6 +284,7 @@ def graph_wx_change():
     data['fig_wd'] = json.loads(fig_wd)
     data['fig_su'] = json.loads(fig_su)
     data['fig_wr'] = json.loads(fig_wr)
+    data['fig_thp'] = json.loads(fig_thp)
     return json.dumps(data, default=myconverter)
 
 

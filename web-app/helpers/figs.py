@@ -7,7 +7,7 @@ import plotly.graph_objs as go
 import json
 from datetime import datetime, timedelta
 
-client = MongoClient(os.environ['MONGODB_CLIENT'],maxPoolSize=10000)
+client = MongoClient(os.environ['MONGODB_CLIENT'], maxPoolSize=10000)
 
 mapbox_access_token = os.environ['MAPBOX_TOKEN']
 
@@ -152,21 +152,22 @@ def create_graph_iot(sensor, time):
     df = pd.DataFrame(
         list(db.raw.find({'entity_id': {'$in': sensor}, 'timestamp_': {'$gt': start, '$lte': now}}).sort([('timestamp_', -1)])))
     if len(df) == 0:
-        df = pd.DataFrame(list(db.raw.find({'entity_id': {'$in': sensor}}).limit(2).sort([('timestamp_', -1)])))
-        
+        df = pd.DataFrame(list(db.raw.find(
+            {'entity_id': {'$in': sensor}}).limit(2).sort([('timestamp_', -1)])))
+
     data = []
     print(sensor)
     for s in sensor:
         print(s)
         df_s = df[df['entity_id'] == s]
         data.append(go.Scatter(x=df_s['timestamp_'],
-                        y=df_s['state'],
-                        name=df_s['entity_id'].values[0],
-                        line=dict(
-                            # color = 'rgb(255, 95, 63)',
-                            shape='spline',
-                            smoothing=0.7,
-                            width=3
+                               y=df_s['state'],
+                               name=df_s['entity_id'].values[0],
+                               line=dict(
+            # color = 'rgb(255, 95, 63)',
+            shape='spline',
+            smoothing=0.7,
+            width=3
         ),
             mode='lines')
         )
@@ -177,12 +178,13 @@ def create_graph_iot(sensor, time):
                        legend=dict(orientation='h'),
                        xaxis=dict(range=[start, now]),
                        hovermode='closest',
-                    #    uirevision=True,
+                       #    uirevision=True,
                        margin=dict(r=50, t=30, b=30, l=60, pad=0),
                        )
     graphJSON = json.dumps(dict(data=data, layout=layout),
                            cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
+
 
 def get_graph_oilgas(api):
 
@@ -226,7 +228,7 @@ def get_graph_oilgas(api):
     df.fillna(0, inplace=True)
     df.sort_values(by='date', inplace=True)
 
-    for col in ['date','oil','water','gas','wtrstm']:
+    for col in ['date', 'oil', 'water', 'gas', 'wtrstm']:
         if col not in df:
             df[col] = 0
         if col not in ['date']:
@@ -236,41 +238,41 @@ def get_graph_oilgas(api):
                        y=df['oil'],
                        name='oil',
                        line=dict(
-                           color = '#50bf37',
-                           shape='spline',
-                           smoothing=0.3,
-                           width=3
-    ),  
-        mode='lines'),
-        go.Scatter(x=df['date'],
-                       y=df['water'],
-                       name='water',
-                       line=dict(
-                           color = '#4286f4',
+                           color='#50bf37',
                            shape='spline',
                            smoothing=0.3,
                            width=3
     ),
         mode='lines'),
         go.Scatter(x=df['date'],
-                       y=df['gas'],
-                       name='gas',
-                       line=dict(
-                           color = '#ef2626',
-                           shape='spline',
-                           smoothing=0.3,
-                           width=3
-    ),
+                   y=df['water'],
+                   name='water',
+                   line=dict(
+            color='#4286f4',
+            shape='spline',
+            smoothing=0.3,
+            width=3
+        ),
         mode='lines'),
         go.Scatter(x=df['date'],
-                       y=df['wtrstm'],
-                       name='wtrstm',
-                       line=dict(
-                           color = '#fcd555',
-                           shape='spline',
-                           smoothing=0.3,
-                           width=3
-    ),
+                   y=df['gas'],
+                   name='gas',
+                   line=dict(
+            color='#ef2626',
+            shape='spline',
+            smoothing=0.3,
+            width=3
+        ),
+        mode='lines'),
+        go.Scatter(x=df['date'],
+                   y=df['wtrstm'],
+                   name='wtrstm',
+                   line=dict(
+            color='#fcd555',
+            shape='spline',
+            smoothing=0.3,
+            width=3
+        ),
         mode='lines'),
     ]
 
@@ -286,15 +288,16 @@ def get_graph_oilgas(api):
                            cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
+
 def create_map_oilgas():
     db = client.petroleum
     df_wells = pd.DataFrame(
-        list(db.doggr.find({}, {'field': 1, 'lease': 1, 'well': 1, 'operator': 1, 'api': 1, 'latitude': 1, 'longitude': 1, 'oil_cum' : 1, 'water_cum' : 1, 'gas_cum' : 1, 'wtrstm_cum' : 1})))
-    
+        list(db.doggr.find({}, {'field': 1, 'lease': 1, 'well': 1, 'operator': 1, 'api': 1, 'latitude': 1, 'longitude': 1, 'oil_cum': 1, 'water_cum': 1, 'gas_cum': 1, 'wtrstm_cum': 1})))
+
     df_wells.fillna(0, inplace=True)
     for col in ['oil_cum', 'water_cum', 'gas_cum', 'wtrstm_cum']:
         df_wells[col] = df_wells[col].astype(int)
-    
+
     df_oil = df_wells[df_wells['oil_cum'] > 0]
     df_water = df_wells[df_wells['water_cum'] > 0]
     df_gas = df_wells[df_wells['gas_cum'] > 0]
@@ -313,8 +316,10 @@ def create_map_oilgas():
                                              len=0.30,
                                          ),
                                          colorscale=scl_wtr,
-                                         cmin=df_water['water_cum'].quantile(0.01),
-                                         cmax=df_water['water_cum'].quantile(0.75),
+                                         cmin=df_water['water_cum'].quantile(
+                                             0.01),
+                                         cmax=df_water['water_cum'].quantile(
+                                             0.75),
                                          )
                              ),
             go.Scattermapbox(lat=df_oil['latitude'].values,
@@ -347,8 +352,10 @@ def create_map_oilgas():
                                              len=0.30,
                                          ),
                                          colorscale=scl_cyc,
-                                         cmin=df_wtrstm['wtrstm_cum'].quantile(0.01),
-                                         cmax=df_wtrstm['wtrstm_cum'].quantile(0.75),
+                                         cmin=df_wtrstm['wtrstm_cum'].quantile(
+                                             0.01),
+                                         cmax=df_wtrstm['wtrstm_cum'].quantile(
+                                             0.75),
                                          )
                              ),
             go.Scattermapbox(lat=df_gas['latitude'].values,
@@ -399,7 +406,8 @@ def create_map_oilgas():
     graphJSON = json.dumps(dict(data=data, layout=layout),
                            cls=plotly.utils.PlotlyJSONEncoder)
 
-    df_wells = df_wells[['field', 'lease', 'well', 'operator', 'api', 'oil_cum', 'water_cum', 'gas_cum', 'wtrstm_cum']]
+    df_wells = df_wells[['field', 'lease', 'well', 'operator',
+                         'api', 'oil_cum', 'water_cum', 'gas_cum', 'wtrstm_cum']]
 
     return graphJSON, df_wells
 
@@ -689,10 +697,10 @@ def create_map_aprs(script, prop, time):
                    y=df['speed'],
                    name='Speed (mph)',
                    line=dict(color='rgb(255, 127, 63)',
-                             width=2, 
-                             shape='spline', 
+                             width=2,
+                             shape='spline',
                              smoothing=0.7
-                           ),
+                             ),
                    # xaxis='x', yaxis='y',
                    mode='lines'),
     ]
@@ -706,7 +714,8 @@ def create_map_aprs(script, prop, time):
                                         titlefont=dict(
                                             color='rgb(255, 95, 63)')
                                         ),
-                             xaxis=dict(type='date', fixedrange=False, range=[start, now]),
+                             xaxis=dict(type='date', fixedrange=False,
+                                        range=[start, now]),
                              margin=dict(r=50, t=30, b=30, l=60, pad=0),
                              showlegend=False,
                              )
@@ -716,7 +725,7 @@ def create_map_aprs(script, prop, time):
                    y=df['altitude'],
                    name='Altitude (ft)',
                    line=dict(color='rgb(255, 95, 63)',
-                             width=2, shape='spline', 
+                             width=2, shape='spline',
                              smoothing=0.7),
                    # xaxis='x', yaxis='y',
                    mode='lines'),
@@ -730,7 +739,8 @@ def create_map_aprs(script, prop, time):
                                       fixedrange=True,
                                       titlefont=dict(color='rgb(255, 95, 63)')
                                       ),
-                           xaxis=dict(type='date', fixedrange=False, range=[start, now]),
+                           xaxis=dict(type='date', fixedrange=False,
+                                      range=[start, now]),
                            margin=dict(r=50, t=30, b=30, l=60, pad=0),
                            showlegend=False,
                            )
@@ -740,7 +750,7 @@ def create_map_aprs(script, prop, time):
                    y=df['course'],
                    name='Course (degrees)',
                    line=dict(color='rgb(255, 63, 63)',
-                             width=2, shape='spline', 
+                             width=2, shape='spline',
                              smoothing=0.7),
                    # xaxis='x', yaxis='y',
                    mode='lines'),
@@ -755,7 +765,8 @@ def create_map_aprs(script, prop, time):
                                          titlefont=dict(
                                              color='rgb(255, 95, 63)')
                                          ),
-                              xaxis=dict(type='date', fixedrange=False, range=[start, now]),
+                              xaxis=dict(type='date', fixedrange=False,
+                                         range=[start, now]),
                               margin=dict(r=50, t=30, b=30, l=60, pad=0),
                               showlegend=False,
                               )
@@ -797,9 +808,11 @@ def create_map_aprs(script, prop, time):
 
     return graphJSON_map, graphJSON_speed, graphJSON_alt, graphJSON_course, rows
 
+
 def get_wx_latest(sid):
     db = client.wx
     return list(db.raw.find({'station_id': sid}).sort([('observation_time_rfc822', -1)]).limit(1))[0]
+
 
 def create_wx_figs(time, sid):
     start, now = get_time_range(time)
@@ -904,28 +917,28 @@ def create_wx_figs(time, sid):
         go.Scatter(x=df_wx_raw.index,
                    y=df_wx_raw['temp_f'],
                    name='Temperature (F)',
-                   line=dict(color='rgb(255, 95, 63)', width=3, shape='spline', 
+                   line=dict(color='rgb(255, 95, 63)', width=3, shape='spline',
                              smoothing=0.7),
                    xaxis='x', yaxis='y',
                    mode='lines'),
         go.Scatter(x=df_wx_raw.index,
                    y=df_wx_raw['heat_index_f'],
                    name='Heat Index (F)',
-                   line=dict(color='#F42ED0', width=3, shape='spline', 
+                   line=dict(color='#F42ED0', width=3, shape='spline',
                              smoothing=0.7),
                    xaxis='x', yaxis='y',
                    mode='lines'),
         go.Scatter(x=df_wx_raw.index,
                    y=df_wx_raw['windchill_f'],
                    name='Windchill (F)',
-                   line=dict(color='#2EE8F4', width=3, shape='spline', 
+                   line=dict(color='#2EE8F4', width=3, shape='spline',
                              smoothing=0.7),
                    xaxis='x', yaxis='y',
                    mode='lines'),
         go.Scatter(x=df_wx_raw.index,
                    y=df_wx_raw['dewpoint_f'],
                    name='Dewpoint (F)',
-                   line=dict(color='rgb(255, 127, 63)', width=3, shape='spline', 
+                   line=dict(color='rgb(255, 127, 63)', width=3, shape='spline',
                              smoothing=0.7),
                    xaxis='x', yaxis='y2',
                    mode='lines'),
@@ -959,14 +972,14 @@ def create_wx_figs(time, sid):
         go.Scatter(x=df_wx_raw.index,
                    y=df_wx_raw['pressure_in'],
                    name='Pressure (inHg)',
-                   line=dict(color='rgb(127, 255, 63)', width=3, shape='spline', 
+                   line=dict(color='rgb(127, 255, 63)', width=3, shape='spline',
                              smoothing=0.7),
                    xaxis='x', yaxis='y',
                    mode='lines'),
         go.Scatter(x=df_wx_raw.index,
                    y=df_wx_raw['relative_humidity'],
                    name='Humidity (%)',
-                   line=dict(color='rgb(63, 127, 255)', width=3, shape='spline', 
+                   line=dict(color='rgb(63, 127, 255)', width=3, shape='spline',
                              smoothing=0.7),
                    xaxis='x', yaxis='y2',
                    mode='lines'),
@@ -1000,14 +1013,14 @@ def create_wx_figs(time, sid):
         go.Scatter(x=df_wx_raw.index,
                    y=df_wx_raw['precip_1hr_in'],
                    name='Precip (in/hr)',
-                   line=dict(color='rgb(31, 190, 255)', width=3, shape='spline', 
+                   line=dict(color='rgb(31, 190, 255)', width=3, shape='spline',
                              smoothing=0.7),
                    xaxis='x', yaxis='y',
                    mode='lines'),
         go.Scatter(x=df_wx_raw.index,
                    y=df_wx_raw['precip_cum_in'],
                    name='Precip Cumulative (in)',
-                   line=dict(color='rgb(63, 255, 255)', width=3, shape='spline', 
+                   line=dict(color='rgb(63, 255, 255)', width=3, shape='spline',
                              smoothing=0.7),
                    xaxis='x', yaxis='y2',
                    mode='lines'),
@@ -1048,14 +1061,14 @@ def create_wx_figs(time, sid):
         go.Scatter(x=df_wx_raw.index,
                    y=df_wx_raw['wind_gust_mph'] * 0.869,
                    name='Wind Gust (kts)',
-                   line=dict(color='rgb(31, 190, 15)', width=3, shape='spline', 
+                   line=dict(color='rgb(31, 190, 15)', width=3, shape='spline',
                              smoothing=0.7),
                    xaxis='x', yaxis='y2',
                    mode='lines'),
         go.Scatter(x=df_wx_raw.index,
                    y=df_wx_raw['wind_mph'] * 0.869,
                    name='Wind Speed (kts)',
-                   line=dict(color='rgb(127, 255, 31)', width=3, shape='spline', 
+                   line=dict(color='rgb(127, 255, 31)', width=3, shape='spline',
                              smoothing=0.7),
                    xaxis='x', yaxis='y2',
                    mode='lines'),
@@ -1089,14 +1102,14 @@ def create_wx_figs(time, sid):
         go.Scatter(x=df_wx_raw.index,
                    y=df_wx_raw['solar_radiation'],
                    name='Solar Radiation (W/m<sup>2</sup>)',
-                   line=dict(color='rgb(255, 63, 127)', width=3, shape='spline', 
+                   line=dict(color='rgb(255, 63, 127)', width=3, shape='spline',
                              smoothing=0.7),
                    xaxis='x', yaxis='y',
                    mode='lines'),
         go.Scatter(x=df_wx_raw.index,
                    y=df_wx_raw['UV'],
                    name='UV',
-                   line=dict(color='rgb(255, 190, 63)', width=3, shape='spline', 
+                   line=dict(color='rgb(255, 190, 63)', width=3, shape='spline',
                              smoothing=0.7),
                    xaxis='x', yaxis='y2',
                    mode='lines'),
@@ -1177,6 +1190,41 @@ def create_wx_figs(time, sid):
         # height=400,
         # width=500,
     )
+    
+    df_thp = pd.pivot_table(df_wx_raw, values='pressure_in', index=['temp_f'], columns=['relative_humidity'], aggfunc=np.mean)
+
+    data_thp = [
+        go.Surface(x=df_thp.index.values,
+                   y=df_thp.columns.values,
+                   z=df_thp.values,
+                   colorscale=cs_normal,
+                   connectgaps=True,
+                   ),
+    ]
+
+    layout_thp = go.Layout(autosize=True,
+                        scene={'xaxis': {
+                                    'title': 'Temperature (F)',
+                                    'tickfont': {'size': 10}, 
+                                    'titlefont': {'color': 'rgb(255, 95, 63)'}, 
+                                    'type': 'linear'
+                                    },
+                                'yaxis': {
+                                    'title': 'Humidity (%)',
+                                    'tickfont': {'size': 10},
+                                    'titlefont': {'color': 'rgb(63, 127, 255)'}, 
+                                    'tickangle': 1
+                                    },
+                                'zaxis': {
+                                    'title': 'Pressure (inHg)',
+                                    'tickfont': {'size': 10},
+                                    'titlefont': {'color': 'rgb(127, 255, 63)'}, 
+                                    },
+                                # 'camera': {'eye': {'x': 2, 'y': 1, 'z': 1.25}}, 
+                                # 'aspectmode': 'cube', 
+                                }
+                            )
+                                    
 
     graphJSON_td = json.dumps(dict(data=data_td, layout=layout_td),
                               cls=plotly.utils.PlotlyJSONEncoder)
@@ -1196,7 +1244,10 @@ def create_wx_figs(time, sid):
     graphJSON_wr = json.dumps(dict(data=data_wr, layout=layout_wr),
                               cls=plotly.utils.PlotlyJSONEncoder)
 
-    return graphJSON_td, graphJSON_pr, graphJSON_pc, graphJSON_wd, graphJSON_su, graphJSON_wr
+    graphJSON_thp = json.dumps(dict(data=data_thp, layout=layout_thp),
+                               cls=plotly.utils.PlotlyJSONEncoder)
+
+    return graphJSON_td, graphJSON_pr, graphJSON_pc, graphJSON_wd, graphJSON_su, graphJSON_wr, graphJSON_thp
 
 
 def create_map_oilgas_folium():
@@ -1209,13 +1260,10 @@ def create_map_oilgas_folium():
     import folium
     from folium.plugins import FastMarkerCluster
 
-    folium_map = folium.Map(location=[df_wells['latitude'].mean(),
-                                    df_wells['longitude'].mean()],
-                          zoom_start=6,
-                          tiles="stamenterrain",
-                          #width='75%',
-                          #height='75%'
-                          )
+    folium_map = folium.Map(location=[df_wells['latitude'].mean(), df_wells['longitude'].mean()],
+                            zoom_start=6,
+                            tiles="stamenterrain",
+                            )
     callback = """\
     function (row) {
         var icon, marker;
@@ -1226,9 +1274,9 @@ def create_map_oilgas_folium():
         return marker;
     };
     """
-    folium_map.add_child(FastMarkerCluster(df_wells[['latitude', 'longitude']].values.tolist(), 
-                                        callback=callback,
-                                        disableClusteringAtZoom=15,
-                                        maxClusterRadius=40,
-                                        ))
+    folium_map.add_child(FastMarkerCluster(df_wells[['latitude', 'longitude']].values.tolist(),
+                                           callback=callback,
+                                           disableClusteringAtZoom=15,
+                                           maxClusterRadius=40,
+                                           ))
     return folium_map

@@ -20,6 +20,7 @@ if ($('#wx').length > 0) {
                 Plotly.react('fig_wd', data.fig_wd);
                 Plotly.react('fig_su', data.fig_su);
                 Plotly.react('fig_wr', data.fig_wr);
+                Plotly.react('fig_thp', data.fig_thp);
             }
         });
     })
