@@ -1208,6 +1208,7 @@ def create_wx_figs(time, sid):
     ]
 
     layout_thp = go.Layout(autosize=True,
+                          margin=dict(r=50, t=30, b=30, l=60, pad=0),
                            scene={'xaxis': {
                                'title': 'Temperature (F)',
                                'tickfont': {'size': 10},
