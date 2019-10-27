@@ -10,6 +10,7 @@ import dns
 import aprslib
 from datetime import datetime
 from pymongo import MongoClient
+import os
 
 def unpack_dict(d):
     try:
