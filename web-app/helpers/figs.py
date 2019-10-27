@@ -1192,11 +1192,15 @@ def create_wx_figs(time, sid):
     )
 
     df_thp = df_wx_raw[(df_wx_raw['temp_f'] > -10) & (df_wx_raw['temp_f'] < 120) &
-                       (df_wx_raw['pressure_in'] > 20) & (df_wx_raw['pressure_in'] < 50) &
+                       (df_wx_raw['pressure_in'] > 10) & (df_wx_raw['pressure_in'] < 40) &
                        (df_wx_raw['relative_humidity'] > 0) & (df_wx_raw['relative_humidity'] < 100)]
 
-    df_thp = pd.pivot_table(df_thp, values='pressure_in', index=[
-                            'temp_f'], columns=['relative_humidity'], aggfunc=np.mean)
+    df_thp['temp_f_u'] = np.round(df_thp['temp_f'],0)
+    df_thp['pressure_in_u'] = np.round(df_thp['pressure_in'],1)
+    df_thp['relative_humidity_u'] = np.round(df_thp['relative_humidity'],0)
+
+    df_thp = pd.pivot_table(df_thp, values='pressure_in_u', index=[
+                            'temp_f_u'], columns=['relative_humidity_u'], aggfunc=np.mean)
 
     data_thp = [
         go.Surface(x=df_thp.index.values,
