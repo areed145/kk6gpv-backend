@@ -606,10 +606,19 @@ def create_map_awc(prop):
                                    pitch=0,
                                    zoom=3,
                                    layers=[
+                                    #    dict(below='traces', opacity=0.5, sourcetype='raster', source=[
+                                    #        'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/sat_meteo_imagery_time/MapServer/export?transparent=true&format=png8&layers=16&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image'
+                                    #    ]),
+                                       dict(below='traces', sourcetype='raster', source=[
+                                           'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer/export?transparent=true&format=png8&layers=show%3A3&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image'
+                                       ]),
+                                    #    dict(below='traces', sourcetype='raster', source=[
+                                    #        'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/sat_meteo_emulated_imagery_lightningstrikedensity_goes_time/MapServer/export?transparent=true&format=png8&layers=show%3A3&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image'
+                                    #    ]),
                                        #    dict(below='traces', sourcetype='raster', source=[
                                        #         'https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}'],),
-                                       dict(below='traces', sourcetype='raster', source=[
-                                            'https://geo.weather.gc.ca/geomet/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&BBOX={bbox-epsg-3857}&CRS=EPSG:3857&WIDTH=1000&HEIGHT=1000&LAYERS=RADAR_1KM_RDBR&TILED=true&FORMAT=image/png'],),
+                                    #    dict(below='traces', sourcetype='raster', source=[
+                                    #         'https://geo.weather.gc.ca/geomet/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&BBOX={bbox-epsg-3857}&CRS=EPSG:3857&WIDTH=1000&HEIGHT=1000&LAYERS=RADAR_1KM_RDBR&TILED=true&FORMAT=image/png'],),
                                    ]))
 
     graphJSON = json.dumps(dict(data=data, layout=layout),
