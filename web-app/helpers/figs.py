@@ -111,41 +111,6 @@ def get_time_range(time):
     return start, now
 
 
-def create_plot(feature):
-    if feature == 'bar':
-        N = 40
-        x = np.linspace(0, 1, N)
-        y = np.random.randn(N)
-        df = pd.DataFrame({'x': x, 'y': y})  # creating a sample dataframe
-        data = [
-            go.Bar(
-                x=df['x'],  # assign x as the dataframe column 'x'
-                y=df['y']
-            )
-        ]
-    else:
-        N = 1000
-        random_x = np.random.randn(N)
-        random_y = np.random.randn(N)
-
-        # Create a trace
-        data = [go.Scattergl(
-            x=random_x,
-            y=random_y,
-            mode='markers'
-        )]
-    layout = go.Layout(autosize=True,
-                       # height=1000,
-                       #    showlegend=True,
-                       hovermode='closest',
-                       uirevision=True,
-                       margin=dict(r=0, t=0, b=0, l=0, pad=0),
-                       )
-    graphJSON = json.dumps(dict(data=data, layout=layout),
-                           cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON
-
-
 def create_graph_iot(sensor, time):
     start, now = get_time_range(time)
     db = client.iot
@@ -307,6 +272,7 @@ def create_map_oilgas():
                              lon=df_water['longitude'].values,
                              mode='markers',
                              name='water',
+                             visible='legendonly',
                              text=df_water['water_cum'].values,
                              marker=dict(size=13,
                                          color=df_water['water_cum'].values,
@@ -326,6 +292,7 @@ def create_map_oilgas():
                              lon=df_oil['longitude'].values,
                              mode='markers',
                              name='oil',
+                             visible=True,
                              text=df_oil['oil_cum'].values,
                              marker=dict(size=10,
                                          color=df_oil['oil_cum'].values,
@@ -343,6 +310,7 @@ def create_map_oilgas():
                              lon=df_wtrstm['longitude'].values,
                              mode='markers',
                              name='steam',
+                             visible='legendonly',
                              text=df_wtrstm['wtrstm_cum'].values,
                              marker=dict(size=7,
                                          color=df_wtrstm['wtrstm_cum'].values,
@@ -362,6 +330,7 @@ def create_map_oilgas():
                              lon=df_gas['longitude'].values,
                              mode='markers',
                              name='gas',
+                             visible='legendonly',
                              text=df_gas['gas_cum'].values,
                              marker=dict(size=7,
                                          color=df_gas['gas_cum'].values,
@@ -380,6 +349,7 @@ def create_map_oilgas():
                              mode='markers',
                              text=df_wells['api'].values,
                              name='wells',
+                             visible=True,
                              marker=dict(
                                  size=4,
                                  color='black',
@@ -598,6 +568,7 @@ def create_map_awc(prop):
                                              )
                                  )
                 ]
+
     layout = go.Layout(autosize=True,
                        # height=1000,
                        legend=dict(orientation='h'),
@@ -610,9 +581,14 @@ def create_map_awc(prop):
                                    accesstoken=mapbox_access_token,
                                    style='satellite-streets',
                                    pitch=0,
-                                   zoom=3
-                                   )
-                       )
+                                   zoom=3,
+                                   layers=[
+                                       #    dict(below='traces', sourcetype='raster', source=[
+                                       #         'https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}'],),
+                                       dict(below='traces', sourcetype='raster', source=[
+                                            'https://geo.weather.gc.ca/geomet/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&BBOX={bbox-epsg-3857}&CRS=EPSG:3857&WIDTH=1000&HEIGHT=1000&LAYERS=RADAR_1KM_RDBR&TILED=true&FORMAT=image/png'],),
+                                   ]))
+
     graphJSON = json.dumps(dict(data=data, layout=layout),
                            cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
@@ -712,8 +688,8 @@ def create_map_aprs(script, prop, time):
                                         # range=[td_min,td_max],
                                         fixedrange=True,
                                         titlefont=dict(
-                                            color='rgb(255, 95, 63)')
-                                        ),
+                                 color='rgb(255, 95, 63)')
+                             ),
                              xaxis=dict(type='date', fixedrange=False,
                                         range=[start, now]),
                              margin=dict(r=50, t=30, b=30, l=60, pad=0),
@@ -763,8 +739,8 @@ def create_map_aprs(script, prop, time):
                                          # range=[td_min,td_max],
                                          fixedrange=True,
                                          titlefont=dict(
-                                             color='rgb(255, 95, 63)')
-                                         ),
+                                  color='rgb(255, 95, 63)')
+                              ),
                               xaxis=dict(type='date', fixedrange=False,
                                          range=[start, now]),
                               margin=dict(r=50, t=30, b=30, l=60, pad=0),
@@ -826,7 +802,7 @@ def create_wx_figs(time, sid):
             '$lte': now
         }}).sort([('observation_time_rfc822', -1)])))
     df_wx_raw.index = df_wx_raw['observation_time_rfc822']
-    #df_wx_raw = df_wx_raw.tz_localize('UTC').tz_convert('US/Central')
+    # df_wx_raw = df_wx_raw.tz_localize('UTC').tz_convert('US/Central')
 
     for col in df_wx_raw.columns:
         try:
@@ -838,19 +814,19 @@ def create_wx_figs(time, sid):
         (df_wx_raw['temp_f'] - df_wx_raw['dewpoint_f']) / 4.4) * 1000 + 50
     df_wx_raw.loc[df_wx_raw['pressure_in'] < 0, 'pressure_in'] = pd.np.nan
 
-    #df_wx_raw2 = df_wx_raw.resample('5T').mean().interpolate()
-    #df_wx_raw2['dat'] = df_wx_raw2.index
-    #df_wx_raw2['temp_delta'] = df_wx_raw2.temp_f.diff()
-    #df_wx_raw2['precip_today_delta'] = df_wx_raw2.precip_today_in.diff()
-    #df_wx_raw2.loc[df_wx_raw2['precip_today_delta'] < 0, 'precip_today_delta'] = 0
-    #df_wx_raw2['precip_cum_in'] = df_wx_raw2.precip_today_delta.cumsum()
-    #df_wx_raw2['pres_delta'] = df_wx_raw2.pressure_in.diff()
-    #df_wx_raw2['dat_delta'] = df_wx_raw2.dat.diff().dt.seconds / 360
-    #df_wx_raw2['dTdt'] = df_wx_raw2['temp_delta'] / df_wx_raw2['dat_delta']
-    #df_wx_raw2['dPdt'] = df_wx_raw2['pres_delta'] / df_wx_raw2['dat_delta']
-    #df_wx_raw3 = df_wx_raw2.drop(columns=['dat'])
-    #df_wx_raw3 = df_wx_raw3.rolling(20*3).mean().add_suffix('_roll')
-    #df_wx_raw = df_wx_raw2.join(df_wx_raw3)
+    # df_wx_raw2 = df_wx_raw.resample('5T').mean().interpolate()
+    # df_wx_raw2['dat'] = df_wx_raw2.index
+    # df_wx_raw2['temp_delta'] = df_wx_raw2.temp_f.diff()
+    # df_wx_raw2['precip_today_delta'] = df_wx_raw2.precip_today_in.diff()
+    # df_wx_raw2.loc[df_wx_raw2['precip_today_delta'] < 0, 'precip_today_delta'] = 0
+    # df_wx_raw2['precip_cum_in'] = df_wx_raw2.precip_today_delta.cumsum()
+    # df_wx_raw2['pres_delta'] = df_wx_raw2.pressure_in.diff()
+    # df_wx_raw2['dat_delta'] = df_wx_raw2.dat.diff().dt.seconds / 360
+    # df_wx_raw2['dTdt'] = df_wx_raw2['temp_delta'] / df_wx_raw2['dat_delta']
+    # df_wx_raw2['dPdt'] = df_wx_raw2['pres_delta'] / df_wx_raw2['dat_delta']
+    # df_wx_raw3 = df_wx_raw2.drop(columns=['dat'])
+    # df_wx_raw3 = df_wx_raw3.rolling(20*3).mean().add_suffix('_roll')
+    # df_wx_raw = df_wx_raw2.join(df_wx_raw3)
 
     df_wx_raw['dat'] = df_wx_raw.index
     df_wx_raw.sort_values(by='dat', inplace=True)
@@ -886,7 +862,7 @@ def create_wx_figs(time, sid):
     wind['count'] = 1
     ct = len(wind)
     wind = pd.pivot_table(wind, values='count', index=[
-                          'wind_degrees_cat'], columns=['wind_cat'], aggfunc=np.sum)
+        'wind_degrees_cat'], columns=['wind_cat'], aggfunc=np.sum)
     ix = np.arange(0, 360, 5)
     col = ['calm', '0-1', '1-2', '2-5', '5-10', '>10']
     wind_temp = pd.DataFrame(data=0, index=ix, columns=col)
@@ -1175,7 +1151,7 @@ def create_wx_figs(time, sid):
     layout_wr = go.Layout(
         polar=dict(
             radialaxis=dict(
-                #visible = False,
+                # visible = False,
                 showline=False,
                 showticklabels=False,
                 ticks='',
@@ -1186,7 +1162,7 @@ def create_wx_figs(time, sid):
                 direction="clockwise",
             )
         ),
-        #showlegend = False,
+        # showlegend = False,
         # height=400,
         # width=500,
     )
@@ -1195,12 +1171,12 @@ def create_wx_figs(time, sid):
                        (df_wx_raw['pressure_in'] > 10) & (df_wx_raw['pressure_in'] < 40) &
                        (df_wx_raw['relative_humidity'] > 0) & (df_wx_raw['relative_humidity'] < 100)]
 
-    df_thp['temp_f_u'] = np.round(df_thp['temp_f'],0)
-    df_thp['pressure_in_u'] = np.round(df_thp['pressure_in'],1)
-    df_thp['relative_humidity_u'] = np.round(df_thp['relative_humidity'],0)
+    df_thp['temp_f_u'] = np.round(df_thp['temp_f'], 0)
+    df_thp['pressure_in_u'] = np.round(df_thp['pressure_in'], 1)
+    df_thp['relative_humidity_u'] = np.round(df_thp['relative_humidity'], 0)
 
     df_thp = pd.pivot_table(df_thp, values='pressure_in_u', index=[
-                            'temp_f_u'], columns=['relative_humidity_u'], aggfunc=np.mean)
+        'temp_f_u'], columns=['relative_humidity_u'], aggfunc=np.mean)
 
     data_thp = [
         go.Surface(x=df_thp.index.values,
@@ -1264,7 +1240,7 @@ def create_map_oilgas_folium():
     df_wells = pd.DataFrame(
         list(db.doggr.find({}, {'latitude': 1, 'longitude': 1})))
 
-    #df_wells = df_wells.sample(n=500)
+    # df_wells = df_wells.sample(n=500)
 
     import folium
     from folium.plugins import FastMarkerCluster
