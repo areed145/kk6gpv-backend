@@ -606,9 +606,9 @@ def create_map_awc(prop):
                                    pitch=0,
                                    zoom=3,
                                    layers=[
-                                    #    dict(below='traces', opacity=0.5, sourcetype='raster', source=[
-                                    #        'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/sat_meteo_imagery_time/MapServer/export?transparent=true&format=png8&layers=16&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image'
-                                    #    ]),
+                                        dict(below='traces', opacity=0.5, sourcetype='raster', source=[
+                                            'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/sat_meteo_imagery_time/MapServer/export?transparent=true&format=png8&layers=16&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image'
+                                        ]),
                                        dict(below='traces', sourcetype='raster', source=[
                                            'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer/export?transparent=true&format=png8&layers=show%3A3&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image'
                                        ]),
