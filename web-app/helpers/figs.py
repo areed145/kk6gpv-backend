@@ -129,7 +129,6 @@ def create_graph_iot(sensor, time):
                                y=df_s['state'],
                                name=df_s['entity_id'].values[0],
                                line=dict(
-            # color = 'rgb(255, 95, 63)',
             shape='spline',
             smoothing=0.7,
             width=3
@@ -138,7 +137,6 @@ def create_graph_iot(sensor, time):
         )
 
     layout = go.Layout(autosize=True,
-                       # height=1000,
                        showlegend=True,
                        legend=dict(orientation='h'),
                        xaxis=dict(range=[start, now]),
@@ -268,7 +266,15 @@ def create_map_oilgas():
     df_gas = df_wells[df_wells['gas_cum'] > 0]
     df_wtrstm = df_wells[df_wells['wtrstm_cum'] > 0]
 
-    data = [go.Scattermapbox(lat=df_water['latitude'].values,
+    data = [
+            # go.Densitymapbox(lat=df_oil['latitude'].values,
+            #                  lon=df_oil['longitude'].values, 
+            #                  z=df_oil['oil_cum'].values, 
+            #                  colorscale=scl_oil,
+            #                  zmin=0,
+            #                  zmax=10000000,
+            #                  radius=10),
+            go.Scattermapbox(lat=df_water['latitude'].values,
                              lon=df_water['longitude'].values,
                              mode='markers',
                              name='water',
@@ -353,13 +359,11 @@ def create_map_oilgas():
                              marker=dict(
                                  size=4,
                                  color='black',
-            ),
-    ),
+                                 ),
+                            ),
     ]
 
     layout = go.Layout(autosize=True,
-                       # height=1000,
-                       #    showlegend=True,
                        hovermode='closest',
                        uirevision=True,
                        showlegend=True,
