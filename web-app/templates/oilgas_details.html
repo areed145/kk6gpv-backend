@@ -10,7 +10,69 @@
       <div class="card-deck mt-4">
         <div class="card">
           <div class="card-header">
-            <h5 class="card-title" align=center>Production Detail: {{ api }}</h5>
+            <h5 class="card-title" align=center>Well Detail: {{ header['api'] }}</h5>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md"><h6>API:</h6>{{ header['api'] }}</div>
+            <div class="col-md"><h6>Operator:</h6>{{ header['operator'] }}</div>
+            <div class="col-md"><h6>Field:</h6>{{ header['field'] }}</div>
+            <div class="col-md"><h6>Lease:</h6>{{ header['lease'] }}</div>
+            <div class="col-md"><h6>Well Name:</h6>{{ header['well'] }}</div>
+          </div>
+          <div class="row">
+            <div class="col-md"><h6>Area:</h6>{{ header['area'] }}</div>
+            <div class="col-md"><h6>District:</h6>{{ header['district'] }}</div>
+            <div class="col-md"><h6>County:</h6>{{ header['county'] }}</div>
+          </div>
+          <div class="row">
+            <div class="col-md"><h6>Section:</h6>{{ header['section'] }}</div>
+            <div class="col-md"><h6>Township:</h6>{{ header['township'] }}</div>
+            <div class="col-md"><h6>Range:</h6>{{ header['rnge'] }}</div>
+            <div class="col-md"><h6>BM:</h6>{{ header['bm'] }}</div>
+          </div>
+          <div class="row">
+            <div class="col-md"><h6>Spud Date:</h6>{{ header['spuddate'] }}</div>
+            <div class="col-md"><h6>PWT:</h6>{{ header['pwt'] }}</div>
+            <div class="col-md"><h6>Well Status:</h6>{{ header['wellstatus'] }}</div>
+          </div>
+          <div class="row">
+            <div class="col-md"><h6>Latitude:</h6>{{ header['latitude'] }}</div>
+            <div class="col-md"><h6>Longitude:</h6>{{ header['longitude'] }}</div>
+            <div class="col-md"><h6>Elevation:</h6>{{ header['elev'] }}</div>
+            <div class="col-md"><h6>GIS Source:</h6>{{ header['gissrc'] }}</div>
+          </div>
+          <div class="row">
+            <div class="col-md"><h6>Oil Cum:</h6>{{ header['oil_cum'] }}</div>
+            <div class="col-md"><h6>Water Cum:</h6>{{ header['water_cum'] }}</div>
+            <div class="col-md"><h6>Gas Cum:</h6>{{ header['gas_cum'] }}</div>
+            <div class="col-md"><h6>Water/Steam Cum:</h6>{{ header['wtrstm_cum'] }}</div>
+          </div>
+          <br>
+        </div>
+        <div class="card">
+            <div class="card-header">
+              <h5 class="card-title" align=center>Well Location: {{ header['api'] }}</h5>
+            </div>
+            <div class="chart" id="map_oilgas">
+                <script>
+                  var graphs = {{ map | safe }};
+                  Plotly.plot('map_oilgas', graphs.data, graphs.layout, {
+                    displayModeBar: false,
+                    responsive: true
+                  });
+                </script>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card-deck mt-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title" align=center>Production Detail: {{ header['api'] }}</h5>
           </div>
           <br>
           <div class="chart" id="graph_oilgas">
@@ -21,6 +83,22 @@
                 responsive: true
               });
             </script>
+          </div>
+          <div class="row">
+            <div class="col-md">
+              <h6>X-axis:</h6>
+              <select class="form-control" id='plot_axis'>
+                <option value="normal">Normal</option>
+                <option value="log">Logarithmic</option>
+              </select>
+            </div>
+            <div class="col-md">
+              <h6>Y-axis:</h6>
+              <select class="form-control" id='plot_axis'>
+                <option value="normal">Normal</option>
+                <option value="log">Logarithmic</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
