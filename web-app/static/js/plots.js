@@ -161,7 +161,7 @@ if ($('#aprs').length > 0) {
             content += '<td>' + rows[i].course + '</td>';
             content += '</tr>';
         }
-        $('#table_paged tbody').html(content);
+        $('#table_full tbody').html(content);
     }
 
     $('#type_aprs').on('change', function () {
