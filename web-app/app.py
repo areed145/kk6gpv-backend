@@ -282,11 +282,12 @@ def map_aprs_change():
 @app.route('/wx/graph', methods=['GET', 'POST'])
 def graph_wx_change():
     time_wx = request.args['time_wx']
-    fig_td, fig_pr, fig_pc, fig_wd, fig_su, fig_wr, fig_thp = figs.create_wx_figs(
+    fig_td, fig_pr, fig_cb, fig_pc, fig_wd, fig_su, fig_wr, fig_thp = figs.create_wx_figs(
         time_wx, sid)
     data = {}
     data['fig_td'] = json.loads(fig_td)
     data['fig_pr'] = json.loads(fig_pr)
+    data['fig_cb'] = json.loads(fig_cb)
     data['fig_pc'] = json.loads(fig_pc)
     data['fig_wd'] = json.loads(fig_wd)
     data['fig_su'] = json.loads(fig_su)
