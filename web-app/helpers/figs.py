@@ -142,6 +142,54 @@ def get_time_range(time):
     return start, now
 
 
+def create_3d_plot(df, x, y, z, cs, x_name, y_name, z_name, x_color, y_color, z_color):
+    df = df[(df[x] > -9999) & (df[x] < 9999) &
+            (df[y] > -9999) & (df[y] < 9999) &
+            (df[z] > -9999) & (df[z] < 9999)]
+
+    df[x+'_u'] = np.round(df[x], 1)
+    df[y+'_u'] = np.round(df[y], 1)
+    df[z+'_u'] = np.round(df[z], 1)
+
+    df = pd.pivot_table(df, values=z+'_u', index=[
+        x+'_u'], columns=[y+'_u'], aggfunc=np.mean)
+
+    data = [
+        go.Surface(x=df.index.values,
+                   y=df.columns.values,
+                   z=df.values,
+                   colorscale=cs,
+                   connectgaps=True,
+                   ),
+    ]
+
+    layout = go.Layout(autosize=True,
+                       margin=dict(r=10, t=10, b=10, l=10, pad=0),
+                       scene={'aspectmode': 'cube',
+                           'xaxis': {
+                           'title': x_name,
+                           'tickfont': {'size': 10},
+                           'titlefont': {'color': x_color},
+                           'type': 'linear'
+                       },
+                           'yaxis': {
+                           'title': y_name,
+                           'tickfont': {'size': 10},
+                           'titlefont': {'color': y_color},
+                           'tickangle': 1
+                       },
+                           'zaxis': {
+                           'title': z_name,
+                           'tickfont': {'size': 10},
+                           'titlefont': {'color': z_color},
+                       },
+                       }
+                       )
+    graphJSON = json.dumps(dict(data=data, layout=layout),
+                           cls=plotly.utils.PlotlyJSONEncoder)
+    return graphJSON
+
+
 def create_graph_iot(sensor, time):
     start, now = get_time_range(time)
     db = client.iot
@@ -687,7 +735,6 @@ def create_map_awc(prop, lat=38, lon=-96, zoom=3, satellite='0', radar='0', ligh
     zoom = float(zoom)
 
     layout = go.Layout(autosize=True,
-                       # height=1000,
                        legend=dict(orientation='h'),
                        showlegend=legend,
                        hovermode='closest',
@@ -713,8 +760,6 @@ def create_map_aprs(script, prop, time):
               'course': [0, 359, 1, 0, 'degrees'], }
 
     start, now = get_time_range(time)
-    # start = str(start)
-    # now = str(now)
     db = client.aprs
     if script == 'prefix':
         df = pd.DataFrame(list(db.raw.find({
@@ -726,7 +771,6 @@ def create_map_aprs(script, prop, time):
     else:
         df = pd.DataFrame(list(db.raw.find({
             'script': script,
-            # 'from': 'KK6GPV',
             'latitude': {'$exists': True, '$ne': None},
             'timestamp_': {'$gt': start, '$lte': now}
         }).sort([('timestamp_', -1)])))
@@ -766,7 +810,6 @@ def create_map_aprs(script, prop, time):
                                      )
                     ]
     layout_map = go.Layout(autosize=True,
-                           # height=1000,
                            showlegend=False,
                            hovermode='closest',
                            uirevision=True,
@@ -789,7 +832,6 @@ def create_map_aprs(script, prop, time):
                              shape='spline',
                              smoothing=0.7
                              ),
-                   # xaxis='x', yaxis='y',
                    mode='lines'),
     ]
 
@@ -797,7 +839,6 @@ def create_map_aprs(script, prop, time):
                              height=200,
                              yaxis=dict(domain=[0.02, 0.98],
                                         title='Speed (mph)',
-                                        # range=[td_min,td_max],
                                         fixedrange=True,
                                         titlefont=dict(
                                  color='rgb(255, 95, 63)')
@@ -815,7 +856,6 @@ def create_map_aprs(script, prop, time):
                    line=dict(color='rgb(255, 95, 63)',
                              width=2, shape='spline',
                              smoothing=0.7),
-                   # xaxis='x', yaxis='y',
                    mode='lines'),
     ]
 
@@ -823,7 +863,6 @@ def create_map_aprs(script, prop, time):
                            height=200,
                            yaxis=dict(domain=[0.02, 0.98],
                                       title='Altitude (ft)',
-                                      # range=[td_min,td_max],
                                       fixedrange=True,
                                       titlefont=dict(color='rgb(255, 95, 63)')
                                       ),
@@ -840,7 +879,6 @@ def create_map_aprs(script, prop, time):
                    line=dict(color='rgb(255, 63, 63)',
                              width=2, shape='spline',
                              smoothing=0.7),
-                   # xaxis='x', yaxis='y',
                    mode='lines'),
     ]
 
@@ -848,7 +886,6 @@ def create_map_aprs(script, prop, time):
                               height=200,
                               yaxis=dict(domain=[0.02, 0.98],
                                          title='Course (degrees)',
-                                         # range=[td_min,td_max],
                                          fixedrange=True,
                                          titlefont=dict(
                                   color='rgb(255, 95, 63)')
@@ -1137,6 +1174,32 @@ def create_wx_figs(time, sid):
                           showlegend=False,
                           )
 
+    data_cb = [
+        go.Scatter(x=df_wx_raw.index,
+                   y=df_wx_raw['cloudbase'],
+                   name='Minimum Cloudbase (ft)',
+                   line=dict(color='rgb(90, 66, 245)', width=3, shape='spline',
+                             smoothing=0.7),
+                   xaxis='x', yaxis='y',
+                   mode='lines'),
+    ]
+
+    layout_cb = go.Layout(autosize=True,
+                          height=200,
+                          yaxis=dict(domain=[0.02, 0.98],
+                                     title='Minimum Cloudbase (ft)',
+                                     # range=[0,120],
+                                     fixedrange=True,
+                                     titlefont=dict(color='rgb(90, 66, 245)')
+                                     ),
+                          xaxis=dict(type='date',
+                                     # fixedrange=True,
+                                     range=[dt_min, dt_max],
+                                     ),
+                          margin=dict(r=50, t=30, b=30, l=60, pad=0),
+                          showlegend=False,
+                          )
+
     data_wd = [
         go.Scatter(x=df_wx_raw.index,
                    y=df_wx_raw['wind_degrees'],
@@ -1173,7 +1236,7 @@ def create_wx_figs(time, sid):
                                       title='Wind Speed / Gust (kts)',
                                       overlaying='y',
                                       side='right',
-                                      # range=[0,120],
+                                      range=[0, df_wx_raw['wind_gust_mph'].max() * 0.869],
                                       fixedrange=True,
                                       titlefont=dict(color='rgb(127, 255, 31)')
                                       ),
@@ -1278,50 +1341,6 @@ def create_wx_figs(time, sid):
         # width=500,
     )
 
-    df_thp = df_wx_raw[(df_wx_raw['temp_f'] > -10) & (df_wx_raw['temp_f'] < 120) &
-                       (df_wx_raw['pressure_in'] > 10) & (df_wx_raw['pressure_in'] < 40) &
-                       (df_wx_raw['relative_humidity'] > 0) & (df_wx_raw['relative_humidity'] < 100)]
-
-    df_thp['temp_f_u'] = np.round(df_thp['temp_f'], 0)
-    df_thp['pressure_in_u'] = np.round(df_thp['pressure_in'], 1)
-    df_thp['relative_humidity_u'] = np.round(df_thp['relative_humidity'], 0)
-
-    df_thp = pd.pivot_table(df_thp, values='pressure_in_u', index=[
-        'temp_f_u'], columns=['relative_humidity_u'], aggfunc=np.mean)
-
-    data_thp = [
-        go.Surface(x=df_thp.index.values,
-                   y=df_thp.columns.values,
-                   z=df_thp.values,
-                   colorscale=cs_normal,
-                   connectgaps=True,
-                   ),
-    ]
-
-    layout_thp = go.Layout(autosize=True,
-                           margin=dict(r=10, t=10, b=10, l=10, pad=0),
-                           scene={'xaxis': {
-                               'title': 'Temperature (F)',
-                               'tickfont': {'size': 10},
-                               'titlefont': {'color': 'rgb(255, 95, 63)'},
-                               'type': 'linear'
-                           },
-                               'yaxis': {
-                               'title': 'Humidity (%)',
-                               'tickfont': {'size': 10},
-                               'titlefont': {'color': 'rgb(63, 127, 255)'},
-                               'tickangle': 1
-                           },
-                               'zaxis': {
-                               'title': 'Pressure (inHg)',
-                               'tickfont': {'size': 10},
-                               'titlefont': {'color': 'rgb(127, 255, 63)'},
-                           },
-                               # 'camera': {'eye': {'x': 2, 'y': 1, 'z': 1.25}},
-                               # 'aspectmode': 'cube',
-                           }
-                           )
-
     graphJSON_td = json.dumps(dict(data=data_td, layout=layout_td),
                               cls=plotly.utils.PlotlyJSONEncoder)
 
@@ -1329,6 +1348,9 @@ def create_wx_figs(time, sid):
                               cls=plotly.utils.PlotlyJSONEncoder)
 
     graphJSON_pc = json.dumps(dict(data=data_pc, layout=layout_pc),
+                              cls=plotly.utils.PlotlyJSONEncoder)
+
+    graphJSON_cb = json.dumps(dict(data=data_cb, layout=layout_cb),
                               cls=plotly.utils.PlotlyJSONEncoder)
 
     graphJSON_wd = json.dumps(dict(data=data_wd, layout=layout_wd),
@@ -1340,7 +1362,7 @@ def create_wx_figs(time, sid):
     graphJSON_wr = json.dumps(dict(data=data_wr, layout=layout_wr),
                               cls=plotly.utils.PlotlyJSONEncoder)
 
-    graphJSON_thp = json.dumps(dict(data=data_thp, layout=layout_thp),
-                               cls=plotly.utils.PlotlyJSONEncoder)
+    graphJSON_thp = create_3d_plot(df_wx_raw, 'temp_f', 'dewpoint_f', 'relative_humidity', cs_normal, 'Temperature (F)',
+                                   'Dewpoint (F)', 'Humidity (%)', 'rgb(255, 95, 63)', 'rgb(255, 127, 63)', 'rgb(63, 127, 255)')
 
-    return graphJSON_td, graphJSON_pr, graphJSON_pc, graphJSON_wd, graphJSON_su, graphJSON_wr, graphJSON_thp
+    return graphJSON_td, graphJSON_pr, graphJSON_cb, graphJSON_pc, graphJSON_wd, graphJSON_su, graphJSON_wr, graphJSON_thp

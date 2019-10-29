@@ -69,9 +69,9 @@ def awc():
 def wx():
     g.track_var['page'] = 'wx'
     time_wx = 'd_1'
-    fig_td, fig_pr, fig_pc, fig_wd, fig_su, fig_wr, fig_thp = figs.create_wx_figs(
+    fig_td, fig_pr, fig_cb, fig_pc, fig_wd, fig_su, fig_wr, fig_thp = figs.create_wx_figs(
         time_wx, sid)
-    return render_template('wx.html', times=times, fig_td=fig_td, fig_pr=fig_pr, fig_pc=fig_pc, fig_wd=fig_wd, fig_su=fig_su, fig_wr=fig_wr, fig_thp=fig_thp)
+    return render_template('wx.html', times=times, fig_td=fig_td, fig_pr=fig_pr, fig_cb=fig_cb, fig_pc=fig_pc, fig_wd=fig_wd, fig_su=fig_su, fig_wr=fig_wr, fig_thp=fig_thp)
 
 
 @cache.cached(timeout=60)
