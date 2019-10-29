@@ -76,6 +76,14 @@ def wx():
 
 @cache.cached(timeout=60)
 @t.include
+@app.route('/blips')
+def blips():
+    g.track_var['page'] = 'blips'
+    return render_template('blips.html')
+
+
+@cache.cached(timeout=60)
+@t.include
 @app.route('/iot')
 def iot():
     g.track_var['page'] = 'iot'
