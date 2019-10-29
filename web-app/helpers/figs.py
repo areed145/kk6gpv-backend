@@ -634,8 +634,8 @@ def create_map_awc(prop, lat=38, lon=-96, zoom=3, satellite='0', radar='0', ligh
             cmax = 3
         elif prop == 'altim_in_hg_delta':
             cs = cs_updown
-            cmin = -0.05
-            cmax = 0.05
+            cmin = -0.03
+            cmax = 0.03
         elif prop == 'wind_speed_kt_delta':
             cs = cs_updown
             cmin = -5
