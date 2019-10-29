@@ -36,19 +36,15 @@ def convert(val):
     return val
 
 
-def get_range(message, rad, awc, prop):
+def get_var(message, rad, awc, prop):
     r = 2
     lat = message['latitude']
     lon = message['longitude']
-    #elev = message['elevation_m']
-    #val = message[prop]
     df = pd.DataFrame(list(awc.find({'latitude': {'$gt': lat-r}, 'latitude': {
                       '$lt': lat+r}, 'longitude': {'$gt': lon-r}, 'longitude': {'$lt': lon+r}})))
     df['dist'] = np.arccos(np.sin(lat*np.pi/180) * np.sin(df['latitude']*np.pi/180) + np.cos(lat*np.pi/180)
                            * np.cos(df['latitude']*np.pi/180) * np.cos((df['longitude']*np.pi/180) - (lon*np.pi/180))) * 6371
     df = df[df['dist'] <= rad]
-    #df['r2'] = df[prop] * df['elevation_m']
-    #df['dPe'] = df['r2'] - (val * elev)
     if len(df) >= 3:
         df = df[(df[prop] < df[prop].quantile(0.99)) &
                 (df[prop] > df[prop].quantile(0.01))]
@@ -96,25 +92,29 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                     except:
                         pass
             message['observation_time'] = pd.to_datetime(
-                message['observation_time'])
-            message['timestamp'] = datetime.utcnow()
-            message['topic'] = 'wx/awc'
-            message['ttl'] = datetime.utcnow()
-            message['temp_c_var'] = get_range(message, 150, awc, 'temp_c')
-            message['altim_in_hg_var'] = get_range(
-                message, 250, awc, 'altim_in_hg')
+                message['observation_time'], utc=True)
             prev = get_prev(message, awc)
-            for col in ['temp_c', 'dewpoint_c', 'altim_in_hg', 'wind_speed_kt', 'wind_gust_kt', 'cloud_base_ft_agl_0']:
+            prev['observation_time'] = pd.to_datetime(
+                prev['observation_time'], utc=True)
+            if message['observation_time'] > prev['observation_time'][0]:
+                message['timestamp'] = datetime.utcnow()
+                message['topic'] = 'wx/awc'
+                message['ttl'] = datetime.utcnow()
+                message['temp_c_var'] = get_var(message, 150, awc, 'temp_c')
+                message['altim_in_hg_var'] = get_var(
+                    message, 250, awc, 'altim_in_hg')
+                for col in ['temp_c', 'dewpoint_c', 'altim_in_hg', 'wind_speed_kt', 'wind_gust_kt', 'cloud_base_ft_agl_0']:
+                    try:
+                        message[col+'_delta'] = message[col] - prev[col][0]
+                    except:
+                        pass
                 try:
-                    message[col+'_delta'] = message[col] - prev[col][0]
+                    awc.replace_one(
+                        {'station_id': message['station_id']}, message, upsert=True)
+                    print(message)
                 except:
-                    pass
-            try:
-                # awc.insert_one(message)
-                awc.replace_one(
-                    {'station_id': message['station_id']}, message, upsert=True)
-                print(message)
-            except:
+                    print('duplicate post')
+            else:
                 print('duplicate post')
     except:
         print('failed')
