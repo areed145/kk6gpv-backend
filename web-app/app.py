@@ -258,7 +258,8 @@ def map_awc_update():
     satellite = request.args['satellite']
     radar = request.args['radar']
     lightning = request.args['lightning']
-    graphJSON = figs.create_map_awc(prop_awc, lat, lon, zoom, satellite, radar, lightning)
+    graphJSON = figs.create_map_awc(
+        prop_awc, lat, lon, zoom, satellite, radar, lightning)
     return graphJSON
 
 

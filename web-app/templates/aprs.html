@@ -60,8 +60,11 @@
                 <div class="card">
                     <div class="chart" id="map_aprs">
                         <script>
-                            var graphs = {{ map_aprs | safe}};
-                            Plotly.plot('map_aprs', graphs.data, graphs.layout, { displayModeBar: false, responsive: true });
+                            var graphs = {{ map_aprs | safe }};
+                            Plotly.plot('map_aprs', graphs.data, graphs.layout, {
+                                displayModeBar: false,
+                                responsive: true
+                            });
                         </script>
                     </div>
                 </div>
@@ -74,8 +77,11 @@
                 <div class="card">
                     <div class="chart" id="plot_speed">
                         <script>
-                            var graphs = {{ plot_speed | safe}};
-                            Plotly.plot('plot_speed', graphs.data, graphs.layout, { displayModeBar: false, responsive: true });
+                            var graphs = {{ plot_speed | safe }};
+                            Plotly.plot('plot_speed', graphs.data, graphs.layout, {
+                                displayModeBar: false,
+                                responsive: true
+                            });
                         </script>
                     </div>
                 </div>
@@ -88,8 +94,11 @@
                 <div class="card">
                     <div class="chart" id="plot_alt">
                         <script>
-                            var graphs = {{ plot_alt | safe}};
-                            Plotly.plot('plot_alt', graphs.data, graphs.layout, { displayModeBar: false, responsive: true });
+                            var graphs = {{ plot_alt | safe }};
+                            Plotly.plot('plot_alt', graphs.data, graphs.layout, {
+                                displayModeBar: false,
+                                responsive: true
+                            });
                         </script>
                     </div>
                 </div>
@@ -102,8 +111,11 @@
                 <div class="card">
                     <div class="chart" id="plot_course">
                         <script>
-                            var graphs = {{ plot_course | safe}};
-                            Plotly.plot('plot_course', graphs.data, graphs.layout, { displayModeBar: false, responsive: true });
+                            var graphs = {{ plot_course | safe }};
+                            Plotly.plot('plot_course', graphs.data, graphs.layout, {
+                                displayModeBar: false,
+                                responsive: true
+                            });
                         </script>
                     </div>
                 </div>

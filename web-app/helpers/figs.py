@@ -62,6 +62,18 @@ cs_circle = [
     [1.000, '#f7856f'],
 ]
 
+cs_updown = [
+    [0.000, '#4186f4'],
+    [0.125, '#77aaf9'],
+    [0.250, '#aeccfc'],
+    [0.375, '#bac8e0'],
+    [0.500, '#BCBCBC'],
+    [0.625, '#d8bdb8'],
+    [0.750, '#e2aba1'],
+    [0.875, '#f7856f'],
+    [1.000, '#f45f42'],
+]
+
 cs_circle = [
     [0.000, '#ff4336'],
     [0.067, '#ff7936'],
@@ -403,38 +415,6 @@ def create_map_oilgas():
     return graphJSON, df_wells
 
 
-def add_layers_awc(lat, lon, zoom, satellite, radar, lightning):
-    layers = []
-    if satellite == '1':
-        layers.append(dict(below='traces', opacity=0.5, sourcetype='raster', source=[
-                      'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/sat_meteo_imagery_time/MapServer/export?transparent=true&format=png8&layers=16&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image']))
-    if radar == '1':
-        layers.append(dict(below='traces', sourcetype='raster', source=[
-                      'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer/export?transparent=true&format=png8&layers=show%3A3&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image']))
-    if lightning == '1':
-        layers.append(dict(below='traces', sourcetype='raster', source=[
-                      'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/sat_meteo_emulated_imagery_lightningstrikedensity_goes_time/MapServer/export?transparent=true&format=png8&layers=show%3A3&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image']))
-
-    lat = float(lat)
-    lon = float(lon)
-    zoom = float(zoom)
-
-    layout = go.Layout(uirevision=True,
-                       mapbox=dict(
-                           bearing=0,
-                           pitch=0,
-                           center=dict(lat=lat, lon=lon),
-                           zoom=zoom,
-                           accesstoken=mapbox_access_token,
-                           style='satellite-streets',
-                           layers=layers
-                       )
-                       )
-
-    graphJSON = json.dumps(layout, cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON
-
-
 def create_map_awc(prop, lat=38, lon=-96, zoom=3, satellite='0', radar='0', lightning='0'):
     params = {'flight_category': [0, 0, 0, 0, ''],
               'temp_c': [0, 100, 1.8, 32, 'F'],
@@ -599,6 +579,30 @@ def create_map_awc(prop, lat=38, lon=-96, zoom=3, satellite='0', radar='0', ligh
             cs = cs_rdgn
             cmin = 0
             cmax = 5
+        elif prop == 'temp_c_delta':
+            cs = cs_updown
+            cmin = -3
+            cmax = 3
+        elif prop == 'dewpoint_c_delta':
+            cs = cs_updown
+            cmin = -3
+            cmax = 3
+        elif prop == 'altim_in_hg_delta':
+            cs = cs_updown
+            cmin = -0.02
+            cmax = 0.02
+        elif prop == 'wind_speed_kt_delta':
+            cs = cs_updown
+            cmin = -5
+            cmax = 5
+        elif prop == 'wind_gust_kt_delta':
+            cs = cs_updown
+            cmin = -5
+            cmax = 5
+        elif prop == 'cloud_base_ft_agl_0_delta':
+            cs = cs_updown
+            cmin = -1000
+            cmax = 1000
         else:
             cs = cs_normal
             cmin = df[prop].quantile(0.01)

@@ -12,15 +12,16 @@ from datetime import datetime
 from pymongo import MongoClient
 import os
 
+
 def unpack_dict(d):
     try:
-        message = dict()  
+        message = dict()
         message['timestamp_'] = datetime.utcnow()
         message['ttl'] = datetime.utcnow()
         message['script'] = 'radius'
-        for k,v in d.items():
+        for k, v in d.items():
             try:
-                for k1,v1 in v.items():
+                for k1, v1 in v.items():
                     message[k+'_'+k1] = v1
             except:
                 try:
@@ -32,17 +33,18 @@ def unpack_dict(d):
     except:
         print('unpack failed')
 
+
 if __name__ == '__main__':
     while True:
         try:
             # MongoDB client
-            client=MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
-            db=client.aprs
-            raw=db.raw
+            client = MongoClient('mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db')
+            db = client.aprs
+            raw = db.raw
 
             # Mosquitto client
             ais = aprslib.IS('N0CALL', '13023', port=14580)
-            ais.set_filter('r/30/-95/250 t/n') 
+            ais.set_filter('r/30/-95/250 t/n')
             ais.connect()
             ais.consumer(unpack_dict, raw=False)
         except:

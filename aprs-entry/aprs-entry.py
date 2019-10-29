@@ -12,14 +12,15 @@ from datetime import datetime
 from pymongo import MongoClient
 import os
 
+
 def unpack_dict(d):
     try:
-        message = dict()  
+        message = dict()
         message['timestamp_'] = datetime.utcnow()
         message['script'] = 'entry'
-        for k,v in d.items():
+        for k, v in d.items():
             try:
-                for k1,v1 in v.items():
+                for k1, v1 in v.items():
                     message[k+'_'+k1] = v1
             except:
                 try:
@@ -31,13 +32,14 @@ def unpack_dict(d):
     except:
         print('unpack failed')
 
+
 if __name__ == '__main__':
     while True:
         try:
             # MongoDB client
             client = MongoClient(os.environ['MONGODB_CLIENT'])
-            db=client.aprs
-            raw=db.raw
+            db = client.aprs
+            raw = db.raw
 
             # Mosquitto client
             ais = aprslib.IS('N0CALL', '13023', port=14580)

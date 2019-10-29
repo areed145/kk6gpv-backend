@@ -16,11 +16,13 @@ import time
 import os
 
 keys_main = ('station_id', 'station_type', 'observation_time_rfc822',
-        'temp_f', 'relative_humidity',
-        'wind_dir', 'wind_degrees', 'wind_mph', 'wind_gust_mph',
-        'pressure_in', 'dewpoint_f', 'heat_index_f', 'windchill_f',
-        'solar_radiation', 'UV', 'precip_1hr_in', 'precip_today_in')
-keys_location = ('latitude', 'longitude', 'city', 'state', 'neighborhood','elevation','zip')
+             'temp_f', 'relative_humidity',
+             'wind_dir', 'wind_degrees', 'wind_mph', 'wind_gust_mph',
+             'pressure_in', 'dewpoint_f', 'heat_index_f', 'windchill_f',
+             'solar_radiation', 'UV', 'precip_1hr_in', 'precip_today_in')
+keys_location = ('latitude', 'longitude', 'city', 'state',
+                 'neighborhood', 'elevation', 'zip')
+
 
 def convert(val):
     try:
@@ -31,6 +33,7 @@ def convert(val):
         val = None
     return val
 
+
 def get_current(sid):
     url = 'http://api.wunderground.com/weatherstation/WXCurrentObXML.asp?ID='+sid
     xml = urllib.request.urlopen(url).read()
@@ -40,7 +43,8 @@ def get_current(sid):
         message[key] = convert(tree.find(key).text)
     for key in keys_location:
         message[key] = convert(tree.find('location').find(key).text)
-    message['observation_time_rfc822'] = pd.to_datetime(message['observation_time_rfc822'])
+    message['observation_time_rfc822'] = pd.to_datetime(
+        message['observation_time_rfc822'])
     message['timestamp'] = datetime.utcnow()
     message['topic'] = 'wx/raw'
     message['elevation'] = convert(message['elevation'][:-2])
@@ -51,9 +55,13 @@ def get_current(sid):
     except:
         print('duplicate current post')
 
+
 def get_history(sid, m, d, y):
-    url = 'https://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID='+sid+'&day='+str(d)+'&month='+str(m)+'&year='+str(y)+'&graphspan=day&format=XML'
-    hdr = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
+    url = 'https://www.wunderground.com/weatherstation/WXDailyHistory.asp?ID=' + \
+        sid+'&day='+str(d)+'&month='+str(m)+'&year=' + \
+        str(y)+'&graphspan=day&format=XML'
+    hdr = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36'}
     req = urllib.request.Request(url, headers=hdr)
     xml = urllib.request.urlopen(req).read()
     tree = ET.fromstring(xml)
@@ -63,7 +71,8 @@ def get_history(sid, m, d, y):
             message[key] = convert(tree[i].find(key).text)
         for key in keys_location:
             message[key] = convert(tree[i].find('location').find(key).text)
-        message['observation_time_rfc822'] = pd.to_datetime(message['observation_time_rfc822'])
+        message['observation_time_rfc822'] = pd.to_datetime(
+            message['observation_time_rfc822'])
         message['timestamp'] = datetime.utcnow()
         message['topic'] = 'wx/raw'
         message['elevation'] = convert(message['elevation'][:-2])
@@ -73,11 +82,12 @@ def get_history(sid, m, d, y):
         except:
             print('duplicate history post')
 
+
 if __name__ == '__main__':
     # MongoDB client
     client = MongoClient(os.environ['MONGODB_CLIENT'])
-    db=client.wx
-    raw=db.raw
+    db = client.wx
+    raw = db.raw
 
     sid = os.environ['SID']
     last_hour = datetime.now().hour - 1
@@ -95,9 +105,11 @@ if __name__ == '__main__':
             print('skipping current '+str(datetime.now()))
         if(datetime.now().hour != last_hour):
             try:
-                get_history(sid, datetime.utcnow().month, datetime.utcnow().day, datetime.utcnow().year)
+                get_history(sid, datetime.utcnow().month,
+                            datetime.utcnow().day, datetime.utcnow().year)
                 yesterday = datetime.utcnow() - timedelta(days=1)
-                get_history(sid, yesterday.month, yesterday.day, yesterday.year)
+                get_history(sid, yesterday.month,
+                            yesterday.day, yesterday.year)
                 last_hour = datetime.now().hour
                 print('getting history '+str(datetime.now()))
             except:

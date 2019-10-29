@@ -87,8 +87,11 @@
         <div class="card">
           <div class="chart" id="graph_iot">
             <script>
-              var graphs = {{ plot | safe}};
-              Plotly.plot('graph_iot', graphs.data, graphs.layout, { displayModeBar: false, responsive: true });
+              var graphs = {{ plot | safe }};
+              Plotly.plot('graph_iot', graphs.data, graphs.layout, {
+                displayModeBar: false,
+                responsive: true
+              });
             </script>
           </div>
         </div>
