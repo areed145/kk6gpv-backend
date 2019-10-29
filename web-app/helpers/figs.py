@@ -185,41 +185,43 @@ def get_graph_oilgas(api):
     df = pd.DataFrame()
 
     df_header = pd.DataFrame(list(db.doggr.find({'api': api})))
-    
+
     header = {}
-    for col in ['lease','well','county','countycode','district','operator','operatorcode','field','fieldcode','area', 'areacode', 'section', 'township', 'rnge', 'bm', 'wellstatus', 'pwt', 'spuddate', 'gissrc', 'elev', 'latitude', 'longitude', 'api', 'gas_cum', 'oil_cum', 'water_cum', 'wtrstm_cum']:
+    for col in ['lease', 'well', 'county', 'countycode', 'district', 'operator', 'operatorcode', 'field', 'fieldcode', 'area', 'areacode', 'section', 'township', 'rnge', 'bm', 'wellstatus', 'pwt', 'spuddate', 'gissrc', 'elev', 'latitude', 'longitude', 'api', 'gas_cum', 'oil_cum', 'water_cum', 'wtrstm_cum']:
         try:
             header[col] = df_header[col][0]
         except:
             pass
 
     data_loc = [go.Scattermapbox(lat=df_header['latitude'].values,
-                         lon=df_header['longitude'].values,
-                         mode='markers',
-                         text=df_header['api'].values,
-                         name='wells',
-                         visible=True,
-                         marker=dict(
-                             size=12,
-                             color='purple',
-                            ),
-                        ),
-                ]
+                                 lon=df_header['longitude'].values,
+                                 mode='markers',
+                                 text=df_header['api'].values,
+                                 name='wells',
+                                 visible=True,
+                                 marker=dict(
+        size=12,
+        color='purple',
+    ),
+    ),
+    ]
 
     layout_loc = go.Layout(autosize=True,
-                       hovermode='closest',
-                       showlegend=False,
-                       margin=dict(r=0, t=0, b=0, l=0, pad=0),
-                       mapbox=dict(bearing=0,
-                                   center=dict(lat=df_header['latitude'].values[0], lon=df_header['longitude'].values[0]),
-                                   accesstoken=mapbox_access_token,
-                                   style='satellite-streets',
-                                   pitch=0,
-                                   zoom=8
-                                   )
-                       )
+                           hovermode='closest',
+                           showlegend=False,
+                           margin=dict(r=0, t=0, b=0, l=0, pad=0),
+                           mapbox=dict(bearing=0,
+                                       center=dict(
+                                           lat=df_header['latitude'].values[0], lon=df_header['longitude'].values[0]),
+                                       accesstoken=mapbox_access_token,
+                                       style='satellite-streets',
+                                       pitch=0,
+                                       zoom=8
+                                       )
+                           )
 
-    graphJSON_loc = json.dumps(dict(data=data_loc, layout=layout_loc), cls=plotly.utils.PlotlyJSONEncoder)
+    graphJSON_loc = json.dumps(
+        dict(data=data_loc, layout=layout_loc), cls=plotly.utils.PlotlyJSONEncoder)
 
     try:
         df_prod = pd.DataFrame(list(db.doggr.aggregate([
@@ -482,6 +484,15 @@ def create_map_awc(prop, lat=38, lon=-96, zoom=3, satellite='0', radar='0', ligh
 
     df = pd.DataFrame(list(db.awc.find()))
 
+    if prop == 'temp_dewpoint_spread':
+        df['temp_dewpoint_spread'] = df['temp_c'] - df['dewpoint_c']
+
+    if prop == 'age':
+        df['age'] = (datetime.utcnow() - df['observation_time']
+                     ).astype('timedelta64[m]')
+
+    df.dropna(subset=[prop], inplace=True)
+
     legend = False
 
     if prop == 'flight_category':
@@ -606,13 +617,10 @@ def create_map_awc(prop, lat=38, lon=-96, zoom=3, satellite='0', radar='0', ligh
             cmin = 0
             cmax = 2000
         elif prop == 'age':
-            df['age'] = (datetime.utcnow() - df['observation_time']
-                         ).astype('timedelta64[m]')
             cs = cs_gnrd
             cmin = 0
             cmax = 60
         elif prop == 'temp_dewpoint_spread':
-            df['temp_dewpoint_spread'] = df['temp_c'] - df['dewpoint_c']
             cs = cs_rdgn
             cmin = 0
             cmax = 5
