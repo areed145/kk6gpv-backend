@@ -140,9 +140,7 @@ def create_graph_iot(sensor, time):
             {'entity_id': {'$in': sensor}}).limit(2).sort([('timestamp_', -1)])))
 
     data = []
-    print(sensor)
     for s in sensor:
-        print(s)
         df_s = df[df['entity_id'] == s]
         data.append(go.Scatter(x=df_s['timestamp_'],
                                y=df_s['state'],
@@ -286,100 +284,100 @@ def create_map_oilgas():
     df_wtrstm = df_wells[df_wells['wtrstm_cum'] > 0]
 
     data = [
-            # go.Densitymapbox(lat=df_oil['latitude'].values,
-            #                  lon=df_oil['longitude'].values, 
-            #                  z=df_oil['oil_cum'].values, 
-            #                  colorscale=scl_oil,
-            #                  zmin=0,
-            #                  zmax=10000000,
-            #                  radius=10),
-            go.Scattermapbox(lat=df_water['latitude'].values,
-                             lon=df_water['longitude'].values,
-                             mode='markers',
-                             name='water',
-                             visible='legendonly',
-                             text=df_water['water_cum'].values,
-                             marker=dict(size=13,
-                                         color=df_water['water_cum'].values,
-                                         colorbar=dict(
-                                             title='water',
-                                             lenmode='fraction',
-                                             len=0.30,
-                                         ),
-                                         colorscale=scl_wtr,
-                                         cmin=df_water['water_cum'].quantile(
-                                             0.01),
-                                         cmax=df_water['water_cum'].quantile(
-                                             0.75),
-                                         )
-                             ),
-            go.Scattermapbox(lat=df_oil['latitude'].values,
-                             lon=df_oil['longitude'].values,
-                             mode='markers',
-                             name='oil',
-                             visible=True,
-                             text=df_oil['oil_cum'].values,
-                             marker=dict(size=10,
-                                         color=df_oil['oil_cum'].values,
-                                         colorbar=dict(
-                                             title='oil',
-                                             lenmode='fraction',
-                                             len=0.30,
-                                         ),
-                                         colorscale=scl_oil,
-                                         cmin=df_oil['oil_cum'].quantile(0.01),
-                                         cmax=df_oil['oil_cum'].quantile(0.75),
-                                         )
-                             ),
-            go.Scattermapbox(lat=df_wtrstm['latitude'].values,
-                             lon=df_wtrstm['longitude'].values,
-                             mode='markers',
-                             name='steam',
-                             visible='legendonly',
-                             text=df_wtrstm['wtrstm_cum'].values,
-                             marker=dict(size=7,
-                                         color=df_wtrstm['wtrstm_cum'].values,
-                                         colorbar=dict(
-                                             title='steam',
-                                             lenmode='fraction',
-                                             len=0.30,
-                                         ),
-                                         colorscale=scl_cyc,
-                                         cmin=df_wtrstm['wtrstm_cum'].quantile(
-                                             0.01),
-                                         cmax=df_wtrstm['wtrstm_cum'].quantile(
-                                             0.75),
-                                         )
-                             ),
-            go.Scattermapbox(lat=df_gas['latitude'].values,
-                             lon=df_gas['longitude'].values,
-                             mode='markers',
-                             name='gas',
-                             visible='legendonly',
-                             text=df_gas['gas_cum'].values,
-                             marker=dict(size=7,
-                                         color=df_gas['gas_cum'].values,
-                                         colorbar=dict(
-                                             title='gas',
-                                             lenmode='fraction',
-                                             len=0.30,
-                                         ),
-                                         colorscale=scl_gas,
-                                         cmin=df_gas['gas_cum'].quantile(0.01),
-                                         cmax=df_gas['gas_cum'].quantile(0.75),
-                                         )
-                             ),
-            go.Scattermapbox(lat=df_wells['latitude'].values,
-                             lon=df_wells['longitude'].values,
-                             mode='markers',
-                             text=df_wells['api'].values,
-                             name='wells',
-                             visible=True,
-                             marker=dict(
-                                 size=4,
-                                 color='black',
-                                 ),
-                            ),
+        # go.Densitymapbox(lat=df_oil['latitude'].values,
+        #                  lon=df_oil['longitude'].values,
+        #                  z=df_oil['oil_cum'].values,
+        #                  colorscale=scl_oil,
+        #                  zmin=0,
+        #                  zmax=10000000,
+        #                  radius=10),
+        go.Scattermapbox(lat=df_water['latitude'].values,
+                         lon=df_water['longitude'].values,
+                         mode='markers',
+                         name='water',
+                         visible='legendonly',
+                         text=df_water['water_cum'].values,
+                         marker=dict(size=13,
+                                     color=df_water['water_cum'].values,
+                                     colorbar=dict(
+                                         title='water',
+                                         lenmode='fraction',
+                                         len=0.30,
+                                     ),
+                                     colorscale=scl_wtr,
+                                     cmin=df_water['water_cum'].quantile(
+                                         0.01),
+                                     cmax=df_water['water_cum'].quantile(
+                                         0.75),
+                                     )
+                         ),
+        go.Scattermapbox(lat=df_oil['latitude'].values,
+                         lon=df_oil['longitude'].values,
+                         mode='markers',
+                         name='oil',
+                         visible=True,
+                         text=df_oil['oil_cum'].values,
+                         marker=dict(size=10,
+                                     color=df_oil['oil_cum'].values,
+                                     colorbar=dict(
+                                         title='oil',
+                                         lenmode='fraction',
+                                         len=0.30,
+                                     ),
+                                     colorscale=scl_oil,
+                                     cmin=df_oil['oil_cum'].quantile(0.01),
+                                     cmax=df_oil['oil_cum'].quantile(0.75),
+                                     )
+                         ),
+        go.Scattermapbox(lat=df_wtrstm['latitude'].values,
+                         lon=df_wtrstm['longitude'].values,
+                         mode='markers',
+                         name='steam',
+                         visible='legendonly',
+                         text=df_wtrstm['wtrstm_cum'].values,
+                         marker=dict(size=7,
+                                     color=df_wtrstm['wtrstm_cum'].values,
+                                     colorbar=dict(
+                                         title='steam',
+                                         lenmode='fraction',
+                                         len=0.30,
+                                     ),
+                                     colorscale=scl_cyc,
+                                     cmin=df_wtrstm['wtrstm_cum'].quantile(
+                                         0.01),
+                                     cmax=df_wtrstm['wtrstm_cum'].quantile(
+                                         0.75),
+                                     )
+                         ),
+        go.Scattermapbox(lat=df_gas['latitude'].values,
+                         lon=df_gas['longitude'].values,
+                         mode='markers',
+                         name='gas',
+                         visible='legendonly',
+                         text=df_gas['gas_cum'].values,
+                         marker=dict(size=7,
+                                     color=df_gas['gas_cum'].values,
+                                     colorbar=dict(
+                                         title='gas',
+                                         lenmode='fraction',
+                                         len=0.30,
+                                     ),
+                                     colorscale=scl_gas,
+                                     cmin=df_gas['gas_cum'].quantile(0.01),
+                                     cmax=df_gas['gas_cum'].quantile(0.75),
+                                     )
+                         ),
+        go.Scattermapbox(lat=df_wells['latitude'].values,
+                         lon=df_wells['longitude'].values,
+                         mode='markers',
+                         text=df_wells['api'].values,
+                         name='wells',
+                         visible=True,
+                         marker=dict(
+            size=4,
+            color='black',
+        ),
+        ),
     ]
 
     layout = go.Layout(autosize=True,
@@ -405,7 +403,39 @@ def create_map_oilgas():
     return graphJSON, df_wells
 
 
-def create_map_awc(prop):
+def add_layers_awc(lat, lon, zoom, satellite, radar, lightning):
+    layers = []
+    if satellite == '1':
+        layers.append(dict(below='traces', opacity=0.5, sourcetype='raster', source=[
+                      'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/sat_meteo_imagery_time/MapServer/export?transparent=true&format=png8&layers=16&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image']))
+    if radar == '1':
+        layers.append(dict(below='traces', sourcetype='raster', source=[
+                      'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer/export?transparent=true&format=png8&layers=show%3A3&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image']))
+    if lightning == '1':
+        layers.append(dict(below='traces', sourcetype='raster', source=[
+                      'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/sat_meteo_emulated_imagery_lightningstrikedensity_goes_time/MapServer/export?transparent=true&format=png8&layers=show%3A3&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image']))
+
+    lat = float(lat)
+    lon = float(lon)
+    zoom = float(zoom)
+
+    layout = go.Layout(uirevision=True,
+                       mapbox=dict(
+                           bearing=0,
+                           pitch=0,
+                           center=dict(lat=lat, lon=lon),
+                           zoom=zoom,
+                           accesstoken=mapbox_access_token,
+                           style='satellite-streets',
+                           layers=layers
+                       )
+                       )
+
+    graphJSON = json.dumps(layout, cls=plotly.utils.PlotlyJSONEncoder)
+    return graphJSON
+
+
+def create_map_awc(prop, lat=38, lon=-96, zoom=3, satellite='0', radar='0', lightning='0'):
     params = {'flight_category': [0, 0, 0, 0, ''],
               'temp_c': [0, 100, 1.8, 32, 'F'],
               'temp_c_var': [0, 100, 1.8, 0, 'F'],
@@ -592,6 +622,21 @@ def create_map_awc(prop):
                                  )
                 ]
 
+    layers = []
+    if satellite == '1':
+        layers.append(dict(below='traces', opacity=0.5, sourcetype='raster', source=[
+                      'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/sat_meteo_imagery_time/MapServer/export?transparent=true&format=png8&layers=16&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image']))
+    if radar == '1':
+        layers.append(dict(below='traces', sourcetype='raster', source=[
+                      'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer/export?transparent=true&format=png8&layers=show%3A3&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image']))
+    if lightning == '1':
+        layers.append(dict(below='traces', sourcetype='raster', source=[
+                      'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/sat_meteo_emulated_imagery_lightningstrikedensity_goes_time/MapServer/export?transparent=true&format=png8&layers=show%3A3&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image']))
+
+    lat = float(lat)
+    lon = float(lon)
+    zoom = float(zoom)
+
     layout = go.Layout(autosize=True,
                        # height=1000,
                        legend=dict(orientation='h'),
@@ -600,26 +645,12 @@ def create_map_awc(prop):
                        uirevision=True,
                        margin=dict(r=0, t=0, b=0, l=0, pad=0),
                        mapbox=dict(bearing=0,
-                                   center=dict(lat=38, lon=-96),
+                                   center=dict(lat=lat, lon=lon),
                                    accesstoken=mapbox_access_token,
                                    style='satellite-streets',
                                    pitch=0,
-                                   zoom=3,
-                                   layers=[
-                                    #    dict(below='traces', opacity=0.5, sourcetype='raster', source=[
-                                    #        'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/sat_meteo_imagery_time/MapServer/export?transparent=true&format=png8&layers=16&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image'
-                                    #    ]),
-                                       dict(below='traces', sourcetype='raster', source=[
-                                           'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/radar_meteo_imagery_nexrad_time/MapServer/export?transparent=true&format=png8&layers=show%3A3&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image'
-                                       ]),
-                                    #    dict(below='traces', sourcetype='raster', source=[
-                                    #        'https://nowcoast.noaa.gov/arcgis/rest/services/nowcoast/sat_meteo_emulated_imagery_lightningstrikedensity_goes_time/MapServer/export?transparent=true&format=png8&layers=show%3A3&bbox={bbox-epsg-3857}&bboxSR=3857&imageSR=3857&f=image'
-                                    #    ]),
-                                       #    dict(below='traces', sourcetype='raster', source=[
-                                       #         'https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/tile/{z}/{y}/{x}'],),
-                                    #    dict(below='traces', sourcetype='raster', source=[
-                                    #         'https://geo.weather.gc.ca/geomet/?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&BBOX={bbox-epsg-3857}&CRS=EPSG:3857&WIDTH=1000&HEIGHT=1000&LAYERS=RADAR_1KM_RDBR&TILED=true&FORMAT=image/png'],),
-                                   ]))
+                                   layers=layers,
+                                   zoom=zoom))
 
     graphJSON = json.dumps(dict(data=data, layout=layout),
                            cls=plotly.utils.PlotlyJSONEncoder)
@@ -812,7 +843,6 @@ def create_map_aprs(script, prop, time):
         r['course'] = row['course']
         # r['raw'] = row['raw']
         rows.append(r)
-    # print(rows)
 
     return graphJSON_map, graphJSON_speed, graphJSON_alt, graphJSON_course, rows
 

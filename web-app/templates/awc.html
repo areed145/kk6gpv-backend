@@ -41,6 +41,18 @@
                     </div>
                     <br>
                 </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title" align=center>Layers</h5>
+                    </div>
+                    <br>
+                    <div class="col-md">
+                        <button type="button" class="btn btn-primary" id="satellite">Satellite</button>
+                        <button type="button" class="btn btn-primary" id="radar">Radar</button>
+                        <button type="button" class="btn btn-primary" id="lightning">Lightning</button>
+                    </div>
+                    <br>
+                </div>
             </div>
         </div>
     </div>
@@ -50,8 +62,11 @@
                 <div class="card">
                     <div class="mapawc" id="map_awc">
                         <script>
-                            var graphs = {{ plot | safe}};
-                            Plotly.plot('map_awc', graphs.data, graphs.layout, { displayModeBar: false, responsive: true });
+                            var graphs = {{ plot | safe }};
+                            Plotly.plot('map_awc', graphs.data, graphs.layout, {
+                                displayModeBar: false,
+                                responsive: true
+                            });
                         </script>
                     </div>
                 </div>

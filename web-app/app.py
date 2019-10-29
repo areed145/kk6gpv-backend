@@ -249,10 +249,16 @@ def about():
     return render_template('about.html')
 
 
-@app.route('/awc/map', methods=['GET', 'POST'])
-def map_awc_change():
+@app.route('/awc/update', methods=['GET', 'POST'])
+def map_awc_update():
     prop_awc = request.args['prop_awc']
-    graphJSON = figs.create_map_awc(prop_awc)
+    lat = request.args['lat']
+    lon = request.args['lon']
+    zoom = request.args['zoom']
+    satellite = request.args['satellite']
+    radar = request.args['radar']
+    lightning = request.args['lightning']
+    graphJSON = figs.create_map_awc(prop_awc, lat, lon, zoom, satellite, radar, lightning)
     return graphJSON
 
 

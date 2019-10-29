@@ -70,8 +70,6 @@ if ($('#iot').length > 0) {
             dataType: "json",
             success: function (data) {
                 Plotly.react('graph_iot', data);
-                // Plotly.plot('graph_iot', data);
-                // Plotly.deleteTraces('graph_iot', 0);
             }
         });
     })
@@ -95,8 +93,6 @@ if ($('#iot').length > 0) {
             dataType: "json",
             success: function (data) {
                 Plotly.react('graph_iot', data);
-                // Plotly.plot('graph_iot', data);
-                // Plotly.deleteTraces('graph_iot', 0);
             }
         });
     })
@@ -121,8 +117,6 @@ if ($('#iot').length > 0) {
             })
             .done(function (data) {
                 Plotly.react('graph_iot', data);
-                // Plotly.plot('graph_iot', data);
-                // Plotly.deleteTraces('graph_iot', 0);
             })
     }, 1000 * 5);
 
@@ -165,7 +159,6 @@ if ($('#aprs').length > 0) {
             content += '<td>' + rows[i].speed + '</td>';
             content += '<td>' + rows[i].altitude + '</td>';
             content += '<td>' + rows[i].course + '</td>';
-            // content += '<td>' + rows[i].raw + '</td>';
             content += '</tr>';
         }
         $('#table_paged tbody').html(content);
@@ -188,8 +181,6 @@ if ($('#aprs').length > 0) {
                 Plotly.react('plot_alt', data.plot_alt);
                 Plotly.react('plot_course', data.plot_course);
                 Proc(data.rows);
-                // Plotly.plot('map_aprs', data);
-                // Plotly.deleteTraces('map_aprs', 0);
             }
         });
     })
@@ -207,11 +198,6 @@ if ($('#aprs').length > 0) {
             dataType: "json",
             success: function (data) {
                 Plotly.react('map_aprs', data.map_aprs);
-                // Plotly.react('plot_speed', data.plot_speed);
-                // Plotly.react('plot_alt', data.plot_alt);
-                // Plotly.react('plot_course', data.plot_course);
-                // Plotly.plot('map_aprs', data);
-                // Plotly.deleteTraces('map_aprs', 0);    
             }
         });
     })
@@ -225,7 +211,6 @@ if ($('#aprs').length > 0) {
                 'type_aprs': document.getElementById('type_aprs').value,
                 'prop_aprs': document.getElementById('prop_aprs').value,
                 'time_aprs': document.getElementById('time_aprs').value,
-                // 'update': true,
             },
             dataType: "json",
             success: function (data) {
@@ -234,8 +219,6 @@ if ($('#aprs').length > 0) {
                 Plotly.react('plot_alt', data.plot_alt);
                 Plotly.react('plot_course', data.plot_course);
                 Proc(data.rows);
-                // Plotly.plot('map_aprs', data);
-                // Plotly.deleteTraces('map_aprs', 0);    
             }
         });
     })
@@ -249,7 +232,6 @@ if ($('#aprs').length > 0) {
                     'type_aprs': document.getElementById('type_aprs').value,
                     'prop_aprs': document.getElementById('prop_aprs').value,
                     'time_aprs': document.getElementById('time_aprs').value,
-                    // 'update': true,
                 },
                 dataType: "json",
             })
@@ -259,8 +241,6 @@ if ($('#aprs').length > 0) {
                 Plotly.react('plot_alt', data.plot_alt);
                 Plotly.react('plot_course', data.plot_course);
                 Proc(data.rows);
-                // Plotly.plot('map_aprs', data);
-                // Plotly.deleteTraces('map_aprs', 0);    
             })
     }, 1000 * time_int);
 
@@ -268,40 +248,154 @@ if ($('#aprs').length > 0) {
 
 if ($('#awc').length > 0) {
 
-    $('#prop_awc').on('change', function () {
+    var satellite = 0;
+    var radar = 0;
+    var lightning = 0;
+
+    $('#satellite').on('click', function () {
+        var map_awc = document.getElementById('map_awc');
+        var lat = map_awc.layout.mapbox.center.lat;
+        var lon = map_awc.layout.mapbox.center.lon;
+        var zoom = map_awc.layout.mapbox.zoom;
+
+        if (satellite == 0) {
+            satellite = 1;
+        } else {
+            satellite = 0;
+        }
+
         $.ajax({
-            url: "/awc/map",
+            url: "/awc/update",
             type: "GET",
             contentType: 'application/json;charset=UTF-8',
             data: {
                 'prop_awc': document.getElementById('prop_awc').value,
-                // 'update': true,
+                'lat': lat,
+                'lon': lon,
+                'zoom': zoom,
+                'satellite': satellite,
+                'radar': radar,
+                'lightning': lightning,
             },
             dataType: "json",
             success: function (data) {
                 Plotly.react('map_awc', data);
-                // Plotly.plot('map_awc', data);
-                // Plotly.deleteTraces('map_awc', 0);
+            }
+        });
+    })
 
+    $('#radar').on('click', function () {
+        var map_awc = document.getElementById('map_awc');
+        var lat = map_awc.layout.mapbox.center.lat;
+        var lon = map_awc.layout.mapbox.center.lon;
+        var zoom = map_awc.layout.mapbox.zoom;
+
+        if (radar == 0) {
+            radar = 1;
+        } else {
+            radar = 0;
+        }
+
+        $.ajax({
+            url: "/awc/update",
+            type: "GET",
+            contentType: 'application/json;charset=UTF-8',
+            data: {
+                'prop_awc': document.getElementById('prop_awc').value,
+                'lat': lat,
+                'lon': lon,
+                'zoom': zoom,
+                'satellite': satellite,
+                'radar': radar,
+                'lightning': lightning,
+            },
+            dataType: "json",
+            success: function (data) {
+                Plotly.react('map_awc', data);
+            }
+        });
+    })
+
+    $('#lightning').on('click', function () {
+        var map_awc = document.getElementById('map_awc');
+        var lat = map_awc.layout.mapbox.center.lat;
+        var lon = map_awc.layout.mapbox.center.lon;
+        var zoom = map_awc.layout.mapbox.zoom;
+
+        if (lightning == 0) {
+            lightning = 1;
+        } else {
+            lightning = 0;
+        }
+        $.ajax({
+            url: "/awc/update",
+            type: "GET",
+            contentType: 'application/json;charset=UTF-8',
+            data: {
+                'prop_awc': document.getElementById('prop_awc').value,
+                'lat': lat,
+                'lon': lon,
+                'zoom': zoom,
+                'satellite': satellite,
+                'radar': radar,
+                'lightning': lightning,
+            },
+            dataType: "json",
+            success: function (data) {
+                Plotly.react('map_awc', data);
+            }
+        });
+    })
+
+    $('#prop_awc').on('change', function () {
+        var map_awc = document.getElementById('map_awc');
+        var lat = map_awc.layout.mapbox.center.lat;
+        var lon = map_awc.layout.mapbox.center.lon;
+        var zoom = map_awc.layout.mapbox.zoom;
+
+        $.ajax({
+            url: "/awc/update",
+            type: "GET",
+            contentType: 'application/json;charset=UTF-8',
+            data: {
+                'prop_awc': document.getElementById('prop_awc').value,
+                'lat': lat,
+                'lon': lon,
+                'zoom': zoom,
+                'satellite': satellite,
+                'radar': radar,
+                'lightning': lightning,
+            },
+            dataType: "json",
+            success: function (data) {
+                Plotly.react('map_awc', data);
             }
         });
     })
 
     setInterval(function () {
+        var map_awc = document.getElementById('map_awc');
+        var lat = map_awc.layout.mapbox.center.lat;
+        var lon = map_awc.layout.mapbox.center.lon;
+        var zoom = map_awc.layout.mapbox.zoom;
+
         $.ajax({
-                url: "/awc/map",
+                url: "/awc/update",
                 type: "GET",
                 contentType: 'application/json;charset=UTF-8',
                 data: {
                     'prop_awc': document.getElementById('prop_awc').value,
-                    // 'update': true,
+                    'lat': lat,
+                    'lon': lon,
+                    'zoom': zoom,
+                    'satellite': satellite,
+                    'radar': radar,
+                    'lightning': lightning,
                 },
                 dataType: "json",
             })
             .done(function (data) {
                 Plotly.react('map_awc', data);
-                // Plotly.plot('map_awc', data);
-                // Plotly.deleteTraces('map_awc', 0);
             })
     }, 1000 * 60);
 
