@@ -1,0 +1,51 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="container-fluid">
+    <h1>Oil & Gas</h1>
+</div>
+<div class="container-fluid">
+    <div id='map'></div>
+    <script>
+        mapboxgl.accessToken =
+            'pk.eyJ1IjoiYXJlZWQxNDUiLCJhIjoiY2phdzNsN2ZoMGh0bjMybzF3cTkycWYyciJ9.4aS7z-guI2VDlP3duMg2FA';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/light-v10',
+            center: [-96, 37.8],
+            zoom: 3
+        });
+
+        map.on('load', function () {
+
+            map.addSource('wells', {
+                type: 'geojson',
+                data: 'http://0.0.0.0:4000/static/wells.geojson'
+            });
+
+            map.addLayer({
+                'id': 'population',
+                'type': 'circle',
+                'source': 'wells',
+            });
+        });
+    </script>
+    <div id="log-event"></div>
+    <div id="log-layout"></div>
+</div>
+{% endblock %}
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Draw GeoJSON points</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body> -->

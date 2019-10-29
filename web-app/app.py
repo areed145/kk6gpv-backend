@@ -235,10 +235,10 @@ def oilgas_detail(api):
 
 @cache.cached(timeout=60)
 @t.include
-@app.route('/oilgas/folium')
-def oilgas_folium():
-    g.track_var['page'] = 'oilgas/folium'
-    return render_template('oilgas_folium.html')
+@app.route('/oilgas/mapbox')
+def oilgas_mapbox():
+    g.track_var['page'] = 'oilgas/mapbox'
+    return render_template('oilgas_mapbox.html')
 
 
 @cache.cached(timeout=60)
@@ -309,11 +309,6 @@ def create_oilgas():
     with open('static/oilgas.json', 'w') as outfile:
         json.dump(map_oilgas, outfile)
     sum_oilgas.to_feather('static/oilgas_sum.feather')
-
-
-@app.route('/oilgas/folium/create')
-def create_oilgas_folium():
-    figs.create_map_oilgas_folium().save('templates/map.html')
 
 
 if __name__ == '__main__':
