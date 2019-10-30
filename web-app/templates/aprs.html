@@ -129,11 +129,7 @@
                 <div class="card">
                     <div class="chart" id="plot_course">
                         <script>
-                            var graphs = {
-                                {
-                                    plot_course | safe
-                                }
-                            };
+                            var graphs = {{ plot_course | safe }};
                             Plotly.plot('plot_course', graphs.data, graphs.layout, {
                                 displayModeBar: false,
                                 responsive: true
