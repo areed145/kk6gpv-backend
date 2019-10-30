@@ -334,7 +334,8 @@ def user_blogs(user_id=None):
 
 
 @app.route('/posts/<string:blog_id>')
-def blog_posts(blog_id):
+@app.route('/posts')
+def blog_posts(blog_id='bca7359faed442669aa888a2657b331f'):
     blog = Blog.from_mongo(blog_id)
     posts = blog.get_posts()
 
