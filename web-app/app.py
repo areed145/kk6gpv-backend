@@ -42,8 +42,7 @@ app.config["FILEUPLOAD_ALLOWED_EXTENSIONS"] = ["png", "jpg", "jpeg", "gif"]
 engine = create_engine('sqlite:////tmp/blog.db')
 meta = MetaData()
 sql_storage = SQLAStorage(engine, metadata=meta)
-blog_engine = BloggingEngine(app, sql_storage, cache=cache, extensions=[
-                             CodeHiliteExtension({})])
+blog_engine = BloggingEngine(app, sql_storage, cache=cache, extensions=[CodeHiliteExtension({})])
 login_manager = LoginManager(app)
 meta.create_all(bind=engine)
 

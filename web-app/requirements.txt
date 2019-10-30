@@ -9,8 +9,10 @@ Click==7.0
 dnspython==1.16.0
 feather-format==0.4.0
 Flask==1.1.1
+Flask-Admin==1.5.3
 Flask-Blogging==1.2.2
 Flask-Caching==1.7.2
+Flask-Login==0.4.1
 flask-mongoengine==0.9.5
 Flask-PyMongo==2.3.0
 Flask-Track-Usage==2.0.0
@@ -23,6 +25,7 @@ isort==4.3.21
 itsdangerous==1.1.0
 Jinja2==2.10.1
 lazy-object-proxy==1.4.2
+Markdown==2.6.11
 MarkupSafe==1.1.1
 mccabe==0.6.1
 mongoengine==0.18.2
