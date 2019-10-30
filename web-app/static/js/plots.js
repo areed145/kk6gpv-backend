@@ -1,6 +1,8 @@
-$(document).ready(function () {
-    $('#table_paged').DataTable();
-});
+if ($('#table_paged').length > 0) {
+    $(document).ready(function () {
+        $('#table_paged').DataTable();
+    });
+}
 
 if ($('#wx').length > 0) {
 
