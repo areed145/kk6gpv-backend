@@ -4,13 +4,18 @@ import atexit
 import json
 import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, render_template, request, g
+from flask import Flask, render_template, request, g, redirect, render_template_string
 from helpers import figs, flickr
 
 from pymongo import MongoClient
 from flask_track_usage import TrackUsage
 from flask_track_usage.storage.mongo import MongoPiggybackStorage
 from flask_caching import Cache
+
+from sqlalchemy import create_engine, MetaData
+from flask_login import UserMixin, LoginManager, login_user, logout_user
+from flask_blogging import BloggingEngine, SQLAStorage
+from markdown.extensions.codehilite import CodeHiliteExtension
 
 import json
 import feather
@@ -24,6 +29,23 @@ sid = os.environ['SID']
 client = MongoClient(os.environ['MONGODB_CLIENT'])
 db = client.coconut_barometer
 stats = db.stats
+
+app.config["SECRET_KEY"] = "secret"  # for WTF-forms and login
+app.config["BLOGGING_URL_PREFIX"] = "/blog"
+app.config["BLOGGING_DISQUS_SITENAME"] = "test"
+app.config["BLOGGING_SITEURL"] = "http://localhost:4000"
+app.config["BLOGGING_SITENAME"] = "kk6gpv"
+app.config["BLOGGING_KEYWORDS"] = ["blog", "meta", "keywords"]
+app.config["FILEUPLOAD_IMG_FOLDER"] = "fileupload"
+app.config["FILEUPLOAD_PREFIX"] = "/fileupload"
+app.config["FILEUPLOAD_ALLOWED_EXTENSIONS"] = ["png", "jpg", "jpeg", "gif"]
+engine = create_engine('sqlite:////tmp/blog.db')
+meta = MetaData()
+sql_storage = SQLAStorage(engine, metadata=meta)
+blog_engine = BloggingEngine(app, sql_storage, cache=cache, extensions=[
+                             CodeHiliteExtension({})])
+login_manager = LoginManager(app)
+meta.create_all(bind=engine)
 
 times = dict(m_5='5m', h_1='1h', h_6='6h', d_1='1d',
              d_2='2d', d_7='7d', d_30='30d')
@@ -263,6 +285,40 @@ def oilgas_mapbox():
 def about():
     g.track_var['page'] = 'about'
     return render_template('about.html')
+
+
+@cache.cached(timeout=60)
+@t.include
+@app.route('/blogfront')
+def blog():
+    return render_template('blog.html')
+
+
+class User(UserMixin):
+    def __init__(self, user_id):
+        self.id = user_id
+
+    def get_name(self):
+        return "Adam Reeder"  # typically the user's name
+
+
+@login_manager.user_loader
+@blog_engine.user_loader
+def load_user(user_id):
+    return User(user_id)
+
+
+@app.route("/login/")
+def login():
+    user = User("testuser")
+    login_user(user)
+    return redirect("/blog")
+
+
+@app.route("/logout/")
+def logout():
+    logout_user()
+    return redirect("/")
 
 
 @app.route('/awc/update', methods=['GET', 'POST'])
