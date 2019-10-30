@@ -4,18 +4,19 @@ import atexit
 import json
 import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
-from flask import Flask, render_template, request, g, redirect, render_template_string
+from flask import Flask, render_template, request, session, g, redirect, render_template_string, make_response
 from helpers import figs, flickr
+from helpers.blog import Database, Blog, Post, User
 
 from pymongo import MongoClient
 from flask_track_usage import TrackUsage
 from flask_track_usage.storage.mongo import MongoPiggybackStorage
 from flask_caching import Cache
 
-from sqlalchemy import create_engine, MetaData
-from flask_login import UserMixin, LoginManager, login_user, logout_user
-from flask_blogging import BloggingEngine, SQLAStorage
-from markdown.extensions.codehilite import CodeHiliteExtension
+# from sqlalchemy import create_engine, MetaData
+# from flask_login import UserMixin, LoginManager, login_user, logout_user
+# from flask_blogging import BloggingEngine, SQLAStorage
+# from markdown.extensions.codehilite import CodeHiliteExtension
 
 import json
 import feather
@@ -30,21 +31,7 @@ client = MongoClient(os.environ['MONGODB_CLIENT'])
 db = client.coconut_barometer
 stats = db.stats
 
-app.config["SECRET_KEY"] = "secret"  # for WTF-forms and login
-app.config["BLOGGING_URL_PREFIX"] = "/blog"
-app.config["BLOGGING_DISQUS_SITENAME"] = "test"
-app.config["BLOGGING_SITEURL"] = "http://localhost:4000"
-app.config["BLOGGING_SITENAME"] = "kk6gpv"
-app.config["BLOGGING_KEYWORDS"] = ["blog", "meta", "keywords"]
-app.config["FILEUPLOAD_IMG_FOLDER"] = "fileupload"
-app.config["FILEUPLOAD_PREFIX"] = "/fileupload"
-app.config["FILEUPLOAD_ALLOWED_EXTENSIONS"] = ["png", "jpg", "jpeg", "gif"]
-engine = create_engine('sqlite:////tmp/blog.db')
-meta = MetaData()
-sql_storage = SQLAStorage(engine, metadata=meta)
-blog_engine = BloggingEngine(app, sql_storage, cache=cache, extensions=[CodeHiliteExtension({})])
-login_manager = LoginManager(app)
-meta.create_all(bind=engine)
+app.secret_key = "olga"
 
 times = dict(m_5='5m', h_1='1h', h_6='6h', d_1='1d',
              d_2='2d', d_7='7d', d_30='30d')
@@ -286,38 +273,102 @@ def about():
     return render_template('about.html')
 
 
-@cache.cached(timeout=60)
-@t.include
-@app.route('/blogfront')
-def blog():
-    return render_template('blog.html')
+# @app.route('/blogfront')
+# def home_template():
+#     return render_template('home.html')
 
 
-class User(UserMixin):
-    def __init__(self, user_id):
-        self.id = user_id
-
-    def get_name(self):
-        return "Adam Reeder"  # typically the user's name
+@app.route('/login')  # www.my_site.com/api/login
+def login_template():
+    return render_template('login.html')
+    # return "hello, world"
 
 
-@login_manager.user_loader
-@blog_engine.user_loader
-def load_user(user_id):
-    return User(user_id)
+@app.route('/register')  # 127.0.0.1:4995/register
+def register_template():
+    return render_template('register.html')
 
 
-@app.route("/login/")
-def login():
-    user = User("testuser")
-    login_user(user)
-    return redirect("/blog")
+@app.before_first_request
+def initialize_database():
+    Database.initialize()
 
 
-@app.route("/logout/")
-def logout():
-    logout_user()
-    return redirect("/")
+@app.route('/auth/login', methods=['POST'])
+def login_user():
+    email = request.form['email']
+    password = request.form['password']
+
+    if User.login_valid(email, password):
+        user = User.get_by_email(session['email'])
+        blogs = user.get_blogs()
+
+        return render_template('profile.html', blogs=blogs, email=user.email)
+    else:
+        return False
+
+    
+
+
+@app.route('/auth/register', methods=['POST'])
+def register_user():
+    email = request.form['email']
+    password = request.form['password']
+
+    User.register(email, password)
+
+    return render_template('profile.html', email=session['email'])
+
+
+@app.route('/blogs/<string:user_id>')
+@app.route('/blogs')
+def user_blogs(user_id=None):
+    if user_id is not None:
+        user = User.get_by_id(user_id)
+    else:
+        user = User.get_by_email(session['email'])
+
+    blogs = user.get_blogs()
+
+    return render_template("user_blogs.html", blogs=blogs, email=user.email)
+
+
+@app.route('/posts/<string:blog_id>')
+def blog_posts(blog_id):
+    blog = Blog.from_mongo(blog_id)
+    posts = blog.get_posts()
+
+    return render_template('posts.html', posts=posts, blog_title=blog.title, blog_id=blog._id)
+
+
+@app.route('/blogs/new', methods=['POST', 'GET'])
+def create_new_blog():
+    if request.method == 'GET':
+        return render_template('new_blog.html')
+    else:
+        title = request.form['title']
+        description = request.form['description']
+        user = User.get_by_email(session['email'])
+
+        new_blog = Blog(user.email, title, description, user._id)
+        new_blog.save_to_mongo()
+
+        return make_response(user_blogs(user._id))
+
+
+@app.route('/posts/new/<string:blog_id>', methods=['POST', 'GET'])
+def create_new_post(blog_id):
+    if request.method == 'GET':
+        return render_template('new_post.html', blog_id=blog_id)
+    else:
+        title = request.form['title']
+        content = request.form['content']
+        user = User.get_by_email(session['email'])
+
+        new_post = Post(blog_id, title, content, user.email)
+        new_post.save_to_mongo()
+
+        return make_response(blog_posts(blog_id))
 
 
 @app.route('/awc/update', methods=['GET', 'POST'])
