@@ -13,11 +13,6 @@ from flask_track_usage import TrackUsage
 from flask_track_usage.storage.mongo import MongoPiggybackStorage
 from flask_caching import Cache
 
-# from sqlalchemy import create_engine, MetaData
-# from flask_login import UserMixin, LoginManager, login_user, logout_user
-# from flask_blogging import BloggingEngine, SQLAStorage
-# from markdown.extensions.codehilite import CodeHiliteExtension
-
 import json
 import feather
 import pandas as pd
@@ -31,7 +26,7 @@ client = MongoClient(os.environ['MONGODB_CLIENT'])
 db = client.coconut_barometer
 stats = db.stats
 
-app.secret_key = "olga"
+app.secret_key = "secret"
 
 times = dict(m_5='5m', h_1='1h', h_6='6h', d_1='1d',
              d_2='2d', d_7='7d', d_30='30d')
@@ -306,8 +301,6 @@ def login_user():
         return render_template('profile.html', blogs=blogs, email=user.email)
     else:
         return False
-
-    
 
 
 @app.route('/auth/register', methods=['POST'])
