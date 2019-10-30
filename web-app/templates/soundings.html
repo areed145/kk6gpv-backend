@@ -1,0 +1,323 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="container-fluid">
+  <h1>Soundings</h1>
+</div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card-deck mt-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title" align=center>Sounding Options</h5>
+          </div>
+          <br>
+          <div class="col-md">
+            <div>
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button class="btn btn-success" id="defaultOpen"
+                  style="--button-color: #ffffff; --button-background-color: #f4416e; --button-background-color-dark: #992341;"
+                  onclick="open_tab(event, 'oak')">OAK</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f4416e; --button-background-color-dark: #992341;"
+                  onclick="open_tab(event, 'rev')">REV</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f4416e; --button-background-color-dark: #992341;"
+                  onclick="open_tab(event, 'lkn')">LKN</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f4416e; --button-background-color-dark: #992341;"
+                  onclick="open_tab(event, 'slc')">SLC</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f4416e; --button-background-color-dark: #992341;"
+                  onclick="open_tab(event, 'gjt')">GJT</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f4416e; --button-background-color-dark: #992341;"
+                  onclick="open_tab(event, 'dnr')">DNR</button>
+              </div>
+            </div>
+            <br>
+            <div>
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f45e41; --button-background-color-dark: #aa351e;"
+                  onclick="open_tab(event, 'vbg')">VBG</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f45e41; --button-background-color-dark: #aa351e;"
+                  onclick="open_tab(event, 'edw')">EDW</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f45e41; --button-background-color-dark: #aa351e;"
+                  onclick="open_tab(event, 'dra')">DRA</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f45e41; --button-background-color-dark: #aa351e;"
+                  onclick="open_tab(event, 'fgz')">FGZ</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f45e41; --button-background-color-dark: #aa351e;"
+                  onclick="open_tab(event, 'abq')">ABQ</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f45e41; --button-background-color-dark: #aa351e;"
+                  onclick="open_tab(event, 'ama')">AMA</button>
+              </div>
+            </div>
+            <br>
+            <div>
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f4af41; --button-background-color-dark: #af761a;"
+                  onclick="open_tab(event, 'nkx')">NKX</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f4af41; --button-background-color-dark: #af761a;"
+                  onclick="open_tab(event, 'tus')">TUS</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f4af41; --button-background-color-dark: #af761a;"
+                  onclick="open_tab(event, 'epz')">EPZ</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f4af41; --button-background-color-dark: #af761a;"
+                  onclick="open_tab(event, 'maf')">MAF</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #f4af41; --button-background-color-dark: #af761a;"
+                  onclick="open_tab(event, 'slidemt')">Slide Mt</button>
+              </div>
+            </div>
+            <br>
+            <div>
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #c7f441; --button-background-color-dark: #81a318;"
+                  onclick="open_tab(event, '925r')">925mb</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #c7f441; --button-background-color-dark: #81a318;"
+                  onclick="open_tab(event, '850r')">850mb</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #c7f441; --button-background-color-dark: #81a318;"
+                  onclick="open_tab(event, '700r')">700mb</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #c7f441; --button-background-color-dark: #81a318;"
+                  onclick="open_tab(event, '500r')">500mb</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #c7f441; --button-background-color-dark: #81a318;"
+                  onclick="open_tab(event, '300r')">300mb</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #c7f441; --button-background-color-dark: #81a318;"
+                  onclick="open_tab(event, '250r')">250mb</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #c7f441; --button-background-color-dark: #81a318;"
+                  onclick="open_tab(event, '200r')">200mb</button>
+              </div>
+            </div>
+            <br>
+            <div>
+              <div class="btn-group" role="group" aria-label="Basic example">
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #2eb8a6; --button-background-color-dark: #1d8876;"
+                  onclick="open_tab(event, '925c')">925mb</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #2eb8a6; --button-background-color-dark: #1d8876;"
+                  onclick="open_tab(event, '850c')">850mb</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #2eb8a6; --button-background-color-dark: #1d8876;"
+                  onclick="open_tab(event, '700c')">700mb</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #2eb8a6; --button-background-color-dark: #1d8876;"
+                  onclick="open_tab(event, '500c')">500mb</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #2eb8a6; --button-background-color-dark: #1d8876;"
+                  onclick="open_tab(event, '300c')">300mb</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #2eb8a6; --button-background-color-dark: #1d8876;"
+                  onclick="open_tab(event, '250c')">250mb</button>
+                <button class="btn btn-success"
+                  style="--button-color: #ffffff; --button-background-color: #2eb8a6; --button-background-color-dark: #1d8876;"
+                  onclick="open_tab(event, '200c')">200mb</button>
+              </div>
+            </div>
+            <br>
+            <div>
+              <p align=center><img src="static/images/imap_skewt.png" width=500 border=1></p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title" align=center>Sounding Plots</h5>
+          </div>
+          <div id="rev" class="tabcontent">
+            <h3>KREV</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/rev.gif" width="100%"></p>
+          </div>
+
+          <div id="oak" class="tabcontent">
+            <h3>KOAK</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/oak.gif" width="100%"></p>
+          </div>
+
+          <div id="edw" class="tabcontent">
+            <h3>KEDW</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/edw.gif" width="100%"></p>
+          </div>
+
+          <div id="vbg" class="tabcontent">
+            <h3>KVBG</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/vbg.gif" width="100%"></p>
+          </div>
+
+          <div id="nkx" class="tabcontent">
+            <h3>KNKX</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/nkx.gif" width="100%"></p>
+          </div>
+
+          <div id="dra" class="tabcontent">
+            <h3>NDRA</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/dra.gif" width="100%"></p>
+          </div>
+
+          <div id="abq" class="tabcontent">
+            <h3>KABQ</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/abq.gif" width="100%"></p>
+          </div>
+
+          <div id="lkn" class="tabcontent">
+            <h3>KLKN</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/lkn.gif" width="100%"></p>
+          </div>
+
+          <div id="slc" class="tabcontent">
+            <h3>KSLC</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/slc.gif" width="100%"></p>
+          </div>
+
+          <div id="gjt" class="tabcontent">
+            <h3>KGJT</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/gjt.gif" width="100%"></p>
+          </div>
+
+          <div id="dnr" class="tabcontent">
+            <h3>KDNR</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/dnr.gif" width="100%"></p>
+          </div>
+
+          <div id="fgz" class="tabcontent">
+            <h3>KFGZ</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/fgz.gif" width="100%"></p>
+          </div>
+
+          <div id="ama" class="tabcontent">
+            <h3>KAMA</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/ama.gif" width="100%"></p>
+          </div>
+
+          <div id="tus" class="tabcontent">
+            <h3>KTUS</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/twc.gif" width="100%"></p>
+          </div>
+
+          <div id="epz" class="tabcontent">
+            <h3>KEPZ</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/epz.gif" width="100%"></p>
+          </div>
+
+          <div id="maf" class="tabcontent">
+            <h3>KMAF</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/maf.gif" width="100%"></p>
+          </div>
+
+          <div id="925r" class="tabcontent">
+            <h3>925mb</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/upaRAOB_925.gif" width="100%"></p>
+          </div>
+
+          <div id="850r" class="tabcontent">
+            <h3>850mb</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/upaRAOB_850.gif" width="100%"></p>
+          </div>
+
+          <div id="700r" class="tabcontent">
+            <h3>700mb</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/upaRAOB_700.gif" width="100%"></p>
+          </div>
+
+          <div id="500r" class="tabcontent">
+            <h3>500mb</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/upaRAOB_500.gif" width="100%"></p>
+          </div>
+
+          <div id="300r" class="tabcontent">
+            <h3>300mb</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/upaRAOB_300.gif" width="100%"></p>
+          </div>
+
+          <div id="250r" class="tabcontent">
+            <h3>250mb</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/upaRAOB_250.gif" width="100%"></p>
+          </div>
+
+          <div id="200r" class="tabcontent">
+            <h3>200mb</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/upaRAOB_200.gif" width="100%"></p>
+          </div>
+
+          <div id="925c" class="tabcontent">
+            <h3>925mb</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/upaCNTR_925.gif" width="100%"></p>
+          </div>
+
+          <div id="850c" class="tabcontent">
+            <h3>850mb</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/upaCNTR_850.gif" width="100%"></p>
+          </div>
+
+          <div id="700c" class="tabcontent">
+            <h3>700mb</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/upaCNTR_700.gif" width="100%"></p>
+          </div>
+
+          <div id="500c" class="tabcontent">
+            <h3>500mb</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/upaCNTR_500.gif" width="100%"></p>
+          </div>
+
+          <div id="300c" class="tabcontent">
+            <h3>300mb</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/upaCNTR_300.gif" width="100%"></p>
+          </div>
+
+          <div id="250c" class="tabcontent">
+            <h3>250mb</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/upaCNTR_250.gif" width="100%"></p>
+          </div>
+
+          <div id="200c" class="tabcontent">
+            <h3>200mb</h3>
+            <p align=center><img src="http://weather.rap.ucar.edu/upper/upaCNTR_200.gif" width="100%"></p>
+          </div>
+
+          <div id="slidemt" class="tabcontent">
+            <h3>Slide Mountain</h3>
+            <p align=center><img src="http://www.wrh.noaa.gov/images/rev/remote/slideT.png" width="100%"></p>
+            <p align=center><img src="http://www.wrh.noaa.gov/images/rev/remote/slideW.png" width="100%"></p>
+          </div>
+
+          <script>
+            function open_tab(evt, Name) {
+              var i, tabcontent, tablinks;
+              tabcontent = document.getElementsByClassName("tabcontent");
+              for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+              }
+              tablinks = document.getElementsByClassName("btn");
+              for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+              }
+              document.getElementById(Name).style.display = "block";
+              evt.currentTarget.className += " active";
+            }
+
+            // Get the element with id="defaultOpen" and click on it
+            document.getElementById("defaultOpen").click();
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

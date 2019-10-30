@@ -84,6 +84,14 @@ def blips():
 
 @cache.cached(timeout=60)
 @t.include
+@app.route('/soundings')
+def soundings():
+    g.track_var['page'] = 'soundings'
+    return render_template('soundings.html')
+
+
+@cache.cached(timeout=60)
+@t.include
 @app.route('/iot')
 def iot():
     g.track_var['page'] = 'iot'

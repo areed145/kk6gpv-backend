@@ -47,9 +47,15 @@
                     </div>
                     <br>
                     <div class="col-md">
-                        <button type="button" class="btn btn-primary" id="satellite">Satellite</button>
-                        <button type="button" class="btn btn-primary" id="radar">Radar</button>
-                        <button type="button" class="btn btn-primary" id="lightning">Lightning</button>
+                        <button class="btn btn-success"
+                            style="--button-color: #ffffff; --button-background-color: #c53087; --button-background-color-dark: #881c5b;"
+                            id="satellite">Satellite</button>
+                        <button class="btn btn-success"
+                            style="--button-color: #ffffff; --button-background-color: #8a30c5; --button-background-color-dark: #531d77;"
+                            id="radar">Radar</button>
+                        <button class="btn btn-success"
+                            style="--button-color: #ffffff; --button-background-color: #30c5a5; --button-background-color-dark: #1a7a66;"
+                            id="lightning">Lightning</button>
                     </div>
                     <br>
                 </div>
@@ -62,7 +68,11 @@
                 <div class="card">
                     <div class="mapawc" id="map_awc">
                         <script>
-                            var graphs = {{ plot | safe }};
+                            var graphs = {
+                                {
+                                    plot | safe
+                                }
+                            };
                             Plotly.plot('map_awc', graphs.data, graphs.layout, {
                                 displayModeBar: false,
                                 responsive: true
