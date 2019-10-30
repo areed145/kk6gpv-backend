@@ -274,8 +274,11 @@ def map_awc_update():
     satellite = request.args['satellite']
     radar = request.args['radar']
     lightning = request.args['lightning']
+    precip = request.args['precip']
+    watchwarn = request.args['watchwarn']
+    temp = request.args['temp']
     graphJSON = figs.create_map_awc(
-        prop_awc, lat, lon, zoom, satellite, radar, lightning)
+        prop_awc, lat, lon, zoom, satellite, radar, lightning, precip, watchwarn, temp)
     return graphJSON
 
 

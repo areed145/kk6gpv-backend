@@ -253,6 +253,44 @@ if ($('#awc').length > 0) {
     var satellite = 0;
     var radar = 0;
     var lightning = 0;
+    var precip = 0;
+    var watchwarn = 0;
+    var temp = 0;
+
+    $('#temp').on('click', function () {
+        var map_awc = document.getElementById('map_awc');
+        var lat = map_awc.layout.mapbox.center.lat;
+        var lon = map_awc.layout.mapbox.center.lon;
+        var zoom = map_awc.layout.mapbox.zoom;
+
+        if (temp == 0) {
+            temp = 1;
+        } else {
+            temp = 0;
+        }
+
+        $.ajax({
+            url: "/awc/update",
+            type: "GET",
+            contentType: 'application/json;charset=UTF-8',
+            data: {
+                'prop_awc': document.getElementById('prop_awc').value,
+                'lat': lat,
+                'lon': lon,
+                'zoom': zoom,
+                'satellite': satellite,
+                'radar': radar,
+                'lightning': lightning,
+                'precip': precip,
+                'watchwarn': watchwarn,
+                'temp': temp,
+            },
+            dataType: "json",
+            success: function (data) {
+                Plotly.react('map_awc', data);
+            }
+        });
+    })
 
     $('#satellite').on('click', function () {
         var map_awc = document.getElementById('map_awc');
@@ -278,6 +316,9 @@ if ($('#awc').length > 0) {
                 'satellite': satellite,
                 'radar': radar,
                 'lightning': lightning,
+                'precip': precip,
+                'watchwarn': watchwarn,
+                'temp': temp,
             },
             dataType: "json",
             success: function (data) {
@@ -310,6 +351,9 @@ if ($('#awc').length > 0) {
                 'satellite': satellite,
                 'radar': radar,
                 'lightning': lightning,
+                'precip': precip,
+                'watchwarn': watchwarn,
+                'temp': temp,
             },
             dataType: "json",
             success: function (data) {
@@ -341,6 +385,77 @@ if ($('#awc').length > 0) {
                 'satellite': satellite,
                 'radar': radar,
                 'lightning': lightning,
+                'precip': precip,
+                'watchwarn': watchwarn,
+                'temp': temp,
+            },
+            dataType: "json",
+            success: function (data) {
+                Plotly.react('map_awc', data);
+            }
+        });
+    })
+
+    $('#precip').on('click', function () {
+        var map_awc = document.getElementById('map_awc');
+        var lat = map_awc.layout.mapbox.center.lat;
+        var lon = map_awc.layout.mapbox.center.lon;
+        var zoom = map_awc.layout.mapbox.zoom;
+
+        if (precip == 0) {
+            precip = 1;
+        } else {
+            precip = 0;
+        }
+        $.ajax({
+            url: "/awc/update",
+            type: "GET",
+            contentType: 'application/json;charset=UTF-8',
+            data: {
+                'prop_awc': document.getElementById('prop_awc').value,
+                'lat': lat,
+                'lon': lon,
+                'zoom': zoom,
+                'satellite': satellite,
+                'radar': radar,
+                'lightning': lightning,
+                'precip': precip,
+                'watchwarn': watchwarn,
+                'temp': temp,
+            },
+            dataType: "json",
+            success: function (data) {
+                Plotly.react('map_awc', data);
+            }
+        });
+    })
+
+    $('#watchwarn').on('click', function () {
+        var map_awc = document.getElementById('map_awc');
+        var lat = map_awc.layout.mapbox.center.lat;
+        var lon = map_awc.layout.mapbox.center.lon;
+        var zoom = map_awc.layout.mapbox.zoom;
+
+        if (watchwarn == 0) {
+            watchwarn = 1;
+        } else {
+            watchwarn = 0;
+        }
+        $.ajax({
+            url: "/awc/update",
+            type: "GET",
+            contentType: 'application/json;charset=UTF-8',
+            data: {
+                'prop_awc': document.getElementById('prop_awc').value,
+                'lat': lat,
+                'lon': lon,
+                'zoom': zoom,
+                'satellite': satellite,
+                'radar': radar,
+                'lightning': lightning,
+                'precip': precip,
+                'watchwarn': watchwarn,
+                'temp': temp,
             },
             dataType: "json",
             success: function (data) {
@@ -367,6 +482,9 @@ if ($('#awc').length > 0) {
                 'satellite': satellite,
                 'radar': radar,
                 'lightning': lightning,
+                'precip': precip,
+                'watchwarn': watchwarn,
+                'temp': temp,
             },
             dataType: "json",
             success: function (data) {
@@ -393,6 +511,9 @@ if ($('#awc').length > 0) {
                     'satellite': satellite,
                     'radar': radar,
                     'lightning': lightning,
+                    'precip': precip,
+                    'watchwarn': watchwarn,
+                    'temp': temp,
                 },
                 dataType: "json",
             })
