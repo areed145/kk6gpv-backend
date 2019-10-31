@@ -8,6 +8,9 @@ from flask import Flask, render_template, request, session, g, redirect, render_
 from helpers import figs, flickr
 from helpers.blog import Database, Blog, Post, User
 
+from micawber.providers import bootstrap_basic
+from micawber.contrib.mcflask import add_oembed_filters
+
 from pymongo import MongoClient
 from flask_track_usage import TrackUsage
 from flask_track_usage.storage.mongo import MongoPiggybackStorage
@@ -28,6 +31,9 @@ stats = db.stats
 
 app.secret_key = "secret"
 
+oembed_providers = bootstrap_basic()
+add_oembed_filters(app, oembed_providers)
+
 times = dict(m_5='5m', h_1='1h', h_6='6h', d_1='1d',
              d_2='2d', d_7='7d', d_30='30d')
 
@@ -45,6 +51,11 @@ sched.start()
 def myconverter(o):
     if isinstance(o, datetime.datetime):
         return o.__str__()
+
+
+@app.before_first_request
+def initialize_database():
+    Database.initialize()
 
 
 @cache.cached(timeout=60)
@@ -268,25 +279,9 @@ def about():
     return render_template('about.html')
 
 
-# @app.route('/blogfront')
-# def home_template():
-#     return render_template('home.html')
-
-
-@app.route('/login')  # www.my_site.com/api/login
+@app.route('/login')
 def login_template():
     return render_template('login.html')
-    # return "hello, world"
-
-
-@app.route('/register')  # 127.0.0.1:4995/register
-def register_template():
-    return render_template('register.html')
-
-
-@app.before_first_request
-def initialize_database():
-    Database.initialize()
 
 
 @app.route('/auth/login', methods=['POST'])
@@ -295,22 +290,12 @@ def login_user():
     password = request.form['password']
 
     if User.login_valid(email, password):
-        user = User.get_by_email(session['email'])
-        blogs = user.get_blogs()
-
-        return render_template('profile.html', blogs=blogs, email=user.email)
+        User.login(email)
+        user = User.get_by_email(email)
+        return render_template('profile.html', blogs=user.get_blogs(), email=session['email'])
     else:
+        session['email'] = None
         return False
-
-
-@app.route('/auth/register', methods=['POST'])
-def register_user():
-    email = request.form['email']
-    password = request.form['password']
-
-    User.register(email, password)
-
-    return render_template('profile.html', email=session['email'])
 
 
 @app.route('/blogs/<string:user_id>')

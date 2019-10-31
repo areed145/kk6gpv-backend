@@ -5,8 +5,8 @@
     {% if posts|length > 0 %}
         {% for post in posts %}
             <h3>{{ post.title }}</h3>
-            <p>{{ post.content }}</p>
-            <p>{{ post.author }}</p>
+            <p>{{ post.content|oembed(html=True) }}</p>
+            <p>by {{ post.author }} at {{ post.created_date }}</p>
             <hr>
         {% endfor %}
     {% else %}
