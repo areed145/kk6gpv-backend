@@ -2,6 +2,7 @@ aprslib==0.6.46
 APScheduler==3.6.1
 astroid==2.2.5
 autopep8==1.4.4
+beautifulsoup4==4.8.1
 branca==0.3.1
 certifi==2019.9.11
 chardet==3.0.4
@@ -28,6 +29,7 @@ lazy-object-proxy==1.4.2
 Markdown==2.6.11
 MarkupSafe==1.1.1
 mccabe==0.6.1
+micawber==0.5.1
 mongoengine==0.18.2
 numpy==1.17.2
 oauth2==1.9.0.post1
