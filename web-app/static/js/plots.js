@@ -247,7 +247,6 @@ if ($('#aprs').length > 0) {
                 Proc(data.rows);
             })
     }, 1000 * time_int);
-
 }
 
 if ($('#awc').length > 0) {
