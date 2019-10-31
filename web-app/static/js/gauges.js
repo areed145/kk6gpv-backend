@@ -1,4 +1,4 @@
-if ($('#gauges').length > 0) {
+if ($('#index').length > 0) {
     var ws = 70;
     var ls = 25;
     var gs = 360 - ws - (2 * ls);
@@ -15,13 +15,13 @@ if ($('#gauges').length > 0) {
     var gmax = 110;
     var leveldisp = level;
     if (level > gmax) {
-        level = gmax
-    };
+        level = gmax;
+    }
     if (level < gmin) {
-        level = gmin
-    };
+        level = gmin;
+    }
     var degrees = 360 - rot - ((level - gmin) / (gmax - gmin) * gs),
-        radius = .75;
+        radius = 0.75;
     var radians = degrees * Math.PI / 180;
     var x = radius * Math.cos(radians);
     var y = radius * Math.sin(radians);
@@ -70,7 +70,7 @@ if ($('#gauges').length > 0) {
                     'rgba(110, 154, 22, 0)', 'rgba(110, 154, 22, 0)'
                 ]
             },
-            hole: .5,
+            hole: 0.5,
             type: 'pie',
             showlegend: false
         }
@@ -125,13 +125,13 @@ if ($('#gauges').length > 0) {
     var gmax = 110;
     var leveldisp = level;
     if (level > gmax) {
-        level = gmax
-    };
+        level = gmax;
+    }
     if (level < gmin) {
-        level = gmin
-    };
+        level = gmin;
+    }
     var degrees = 360 - rot - ((level - gmin) / (gmax - gmin) * gs),
-        radius = .75;
+        radius = 0.75;
     var radians = degrees * Math.PI / 180;
     var x = radius * Math.cos(radians);
     var y = radius * Math.sin(radians);
@@ -180,7 +180,7 @@ if ($('#gauges').length > 0) {
                     'rgba(110, 154, 22, 0)', 'rgba(110, 154, 22, 0)'
                 ]
             },
-            hole: .5,
+            hole: 0.5,
             type: 'pie',
             showlegend: false
         }
@@ -235,13 +235,13 @@ if ($('#gauges').length > 0) {
     var gmax = 100;
     var leveldisp = level;
     if (level > gmax) {
-        level = gmax
-    };
+        level = gmax;
+    }
     if (level < gmin) {
-        level = gmin
-    };
+        level = gmin;
+    }
     var degrees = 360 - rot - ((level - gmin) / (gmax - gmin) * gs),
-        radius = .75;
+        radius = 0.75;
     var radians = degrees * Math.PI / 180;
     var x = radius * Math.cos(radians);
     var y = radius * Math.sin(radians);
@@ -284,7 +284,7 @@ if ($('#gauges').length > 0) {
                     'rgba(110, 154, 22, 0)', 'rgba(110, 154, 22, 0)'
                 ]
             },
-            hole: .5,
+            hole: 0.5,
             type: 'pie',
             showlegend: false
         }
@@ -339,13 +339,13 @@ if ($('#gauges').length > 0) {
     var gmax = 30.5;
     var leveldisp = level;
     if (level > gmax) {
-        level = gmax
-    };
+        level = gmax;
+    }
     if (level < gmin) {
-        level = gmin
-    };
+        level = gmin;
+    }
     var degrees = 360 - rot - ((level - gmin) / (gmax - gmin) * gs),
-        radius = .75;
+        radius = 0.75;
     var radians = degrees * Math.PI / 180;
     var x = radius * Math.cos(radians);
     var y = radius * Math.sin(radians);
@@ -388,7 +388,7 @@ if ($('#gauges').length > 0) {
                     'rgba(110, 154, 22, 0)', 'rgba(110, 154, 22, 0)'
                 ]
             },
-            hole: .5,
+            hole: 0.5,
             type: 'pie',
             showlegend: false
         }
@@ -443,13 +443,13 @@ if ($('#gauges').length > 0) {
     var gmax = 360;
     var leveldisp = level;
     if (level > gmax) {
-        level = gmax
-    };
+        level = gmax;
+    }
     if (level < gmin) {
-        level = gmin
-    };
+        level = gmin;
+    }
     var degrees = 360 + 90 - ((level - gmin) / (gmax - gmin) * 360),
-        radius = .75;
+        radius = 0.75;
     var radians = degrees * Math.PI / 180;
     var x = radius * Math.cos(radians);
     var y = radius * Math.sin(radians);
@@ -501,7 +501,7 @@ if ($('#gauges').length > 0) {
                     '#f7856f'
                 ]
             },
-            hole: .5,
+            hole: 0.5,
             type: 'pie',
             showlegend: false
         }
@@ -557,19 +557,19 @@ if ($('#gauges').length > 0) {
     var gmax = 15;
     var leveldisp = level;
     if (level > gmax) {
-        level = gmax
-    };
+        level = gmax;
+    }
     if (level < gmin) {
-        level = gmin
-    };
+        level = gmin;
+    }
     if (level2 > gmax) {
-        level2 = gmax
-    };
+        level2 = gmax;
+    }
     if (level2 < gmin) {
-        level2 = gmin
-    };
+        level2 = gmin;
+    }
     var degrees = 360 - rot - ((level - gmin) / (gmax - gmin) * gs),
-        radius = .75;
+        radius = 0.75;
     var radians = degrees * Math.PI / 180;
     var x = radius * Math.cos(radians);
     var y = radius * Math.sin(radians);
@@ -583,7 +583,7 @@ if ($('#gauges').length > 0) {
     var path2 = mainPath2.concat(pathX, space, pathY, pathEnd);
 
     var degrees = 360 - rot - ((level2 - gmin) / (gmax - gmin) * gs),
-        radius = .75;
+        radius = 0.75;
     var radians = degrees * Math.PI / 180;
     var x = radius * Math.cos(radians);
     var y = radius * Math.sin(radians);
@@ -627,7 +627,7 @@ if ($('#gauges').length > 0) {
                     'rgba(110, 154, 22, 0)', 'rgba(110, 154, 22, 0)'
                 ]
             },
-            hole: .5,
+            hole: 0.5,
             type: 'pie',
             showlegend: false
         }
@@ -698,13 +698,13 @@ if ($('#gauges').length > 0) {
     var gmax = 1.0;
     var leveldisp = level;
     if (level > gmax) {
-        level = gmax
-    };
+        level = gmax;
+    }
     if (level < gmin) {
-        level = gmin
-    };
+        level = gmin;
+    }
     var degrees = 360 - rot - ((level - gmin) / (gmax - gmin) * gs),
-        radius = .75;
+        radius = 0.75;
     var radians = degrees * Math.PI / 180;
     var x = radius * Math.cos(radians);
     var y = radius * Math.sin(radians);
@@ -747,7 +747,7 @@ if ($('#gauges').length > 0) {
                     'rgba(110, 154, 22, 0)', 'rgba(110, 154, 22, 0)'
                 ]
             },
-            hole: .5,
+            hole: 0.5,
             type: 'pie',
             showlegend: false
         }
@@ -802,13 +802,13 @@ if ($('#gauges').length > 0) {
     var gmax = 1000;
     var leveldisp = level;
     if (level > gmax) {
-        level = gmax
-    };
+        level = gmax;
+    }
     if (level < gmin) {
-        level = gmin
-    };
+        level = gmin;
+    }
     var degrees = 360 - rot - ((level - gmin) / (gmax - gmin) * gs),
-        radius = .75;
+        radius = 0.75;
     var radians = degrees * Math.PI / 180;
     var x = radius * Math.cos(radians);
     var y = radius * Math.sin(radians);
@@ -851,7 +851,7 @@ if ($('#gauges').length > 0) {
                     'rgba(110, 154, 22, 0)', 'rgba(110, 154, 22, 0)'
                 ]
             },
-            hole: .5,
+            hole: 0.5,
             type: 'pie',
             showlegend: false
         }
@@ -906,13 +906,13 @@ if ($('#gauges').length > 0) {
     var gmax = 8;
     var leveldisp = level;
     if (level > gmax) {
-        level = gmax
-    };
+        level = gmax;
+    }
     if (level < gmin) {
-        level = gmin
-    };
+        level = gmin;
+    }
     var degrees = 360 - rot - ((level - gmin) / (gmax - gmin) * gs),
-        radius = .75;
+        radius = 0.75;
     var radians = degrees * Math.PI / 180;
     var x = radius * Math.cos(radians);
     var y = radius * Math.sin(radians);
@@ -955,7 +955,7 @@ if ($('#gauges').length > 0) {
                     'rgba(110, 154, 22, 0)', 'rgba(110, 154, 22, 0)'
                 ]
             },
-            hole: .5,
+            hole: 0.5,
             type: 'pie',
             showlegend: false
         }
