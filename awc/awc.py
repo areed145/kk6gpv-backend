@@ -93,29 +93,43 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                         pass
             message['observation_time'] = pd.to_datetime(
                 message['observation_time'], utc=True)
-            prev = get_prev(message, awc)
-            prev['observation_time'] = pd.to_datetime(
-                prev['observation_time'], utc=True)
-            if message['observation_time'] > prev['observation_time'][0]:
+            try:
+                prev = get_prev(message, awc)
+                prev['observation_time'] = pd.to_datetime(
+                    prev['observation_time'], utc=True)
+                if message['observation_time'] > prev['observation_time'][0]:
+                    message['timestamp'] = datetime.utcnow()
+                    message['topic'] = 'wx/awc'
+                    message['ttl'] = datetime.utcnow()
+                    message['temp_c_var'] = get_var(
+                        message, 150, awc, 'temp_c')
+                    message['altim_in_hg_var'] = get_var(
+                        message, 250, awc, 'altim_in_hg')
+                    for col in ['temp_c', 'dewpoint_c', 'altim_in_hg', 'wind_speed_kt', 'wind_gust_kt', 'cloud_base_ft_agl_0']:
+                        try:
+                            message[col+'_delta'] = message[col] - prev[col][0]
+                        except:
+                            pass
+                    try:
+                        awc.replace_one(
+                            {'station_id': message['station_id']}, message, upsert=True)
+                        print(message)
+                    except:
+                        print('error')
+                else:
+                    print('duplicate post')
+            except:
+                print('first station post')
                 message['timestamp'] = datetime.utcnow()
                 message['topic'] = 'wx/awc'
                 message['ttl'] = datetime.utcnow()
-                message['temp_c_var'] = get_var(message, 150, awc, 'temp_c')
-                message['altim_in_hg_var'] = get_var(
-                    message, 250, awc, 'altim_in_hg')
-                for col in ['temp_c', 'dewpoint_c', 'altim_in_hg', 'wind_speed_kt', 'wind_gust_kt', 'cloud_base_ft_agl_0']:
-                    try:
-                        message[col+'_delta'] = message[col] - prev[col][0]
-                    except:
-                        pass
                 try:
                     awc.replace_one(
                         {'station_id': message['station_id']}, message, upsert=True)
                     print(message)
                 except:
-                    print('duplicate post')
-            else:
-                print('duplicate post')
+                    print('error')
+
     except:
         print('failed')
 
