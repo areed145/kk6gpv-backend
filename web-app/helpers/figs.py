@@ -469,7 +469,7 @@ def get_graph_oilgas(api):
                     y=df['pinjsurf'],
                     name='pinjsurf',
                     line=dict(
-                color='#e3b829',
+                color='#e38f29',
                 shape='spline',
                 smoothing=0.3,
                 width=3
