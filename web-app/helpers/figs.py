@@ -246,12 +246,17 @@ def get_prodinj(wells):
                 'prod.oil': 1,
                 'prod.water': 1,
                 'prod.gas': 1,
+                'prod.oilgrav': 1,
+                'prod.pcsg': 1,
+                'prod.ptbg': 1,
+                'prod.btu': 1,
             }}
         ])))
         df_prod = pd.DataFrame(list(df_['prod']))
         df_prod['api'] = df_['api']
         df_prod = df_prod.replace(0, np.nan)
-        df_prod.dropna(subset=['oil', 'water', 'gas'], how='all', inplace=True)
+        df_prod.dropna(subset=['oil', 'water', 'gas', 'oilgrav', 'pcsg', 'ptbg', 'btu'], how='all', inplace=True)
+        df_prod = df_prod.groupby(by=['api','date']).agg({'oil': 'sum', 'water': 'sum', 'gas': 'sum', 'oilgrav': 'mean', 'pcsg': 'max', 'ptbg': 'max', 'btu': 'mean'}).reset_index()
         df = df.append(df_prod)
     except:
         pass
@@ -263,12 +268,15 @@ def get_prodinj(wells):
                 'api': 1,
                 'inj.date': 1,
                 'inj.wtrstm': 1,
+                'inj.gasair': 1,
+                'inj.pinjsurf': 1,
             }}
         ])))
         df_inj = pd.DataFrame(list(df_['inj']))
         df_inj['api'] = df_['api']
         df_inj = df_inj.replace(0, np.nan)
-        df_inj.dropna(subset=['wtrstm'], how='all', inplace=True)
+        df_inj.dropna(subset=['wtrstm', 'gasair', 'pinjsurf'], how='all', inplace=True)
+        df_inj = df_inj.groupby(by=['api','date']).agg({'wtrstm': 'sum', 'gasair': 'sum', 'pinjsurf': 'max'}).reset_index()
         try:
             df = pd.merge(df, df_inj, how='outer', on=['api','date'])
         except:
@@ -280,7 +288,7 @@ def get_prodinj(wells):
     df.reset_index(drop=True, inplace=True)
     df.fillna(0, inplace=True)
 
-    for col in ['date', 'oil', 'water', 'gas', 'wtrstm']:
+    for col in ['date', 'oil', 'water', 'gas', 'oilgrav', 'pcsg', 'ptbg', 'btu', 'wtrstm', 'gasair', 'pinjsurf']:
         if col not in df:
             df[col] = 0
         if col not in ['date']:
@@ -371,43 +379,103 @@ def get_graph_oilgas(api):
                        y=df['oil'],
                        name='oil',
                        line=dict(
-                           color='#50bf37',
-                           shape='spline',
-                           smoothing=0.3,
-                           width=3
-    ),
-        mode='lines'),
-        go.Scatter(x=df['date'],
-                   y=df['water'],
-                   name='water',
-                   line=dict(
-            color='#4286f4',
-            shape='spline',
-            smoothing=0.3,
-            width=3
-        ),
-        mode='lines'),
-        go.Scatter(x=df['date'],
-                   y=df['gas'],
-                   name='gas',
-                   line=dict(
-            color='#ef2626',
-            shape='spline',
-            smoothing=0.3,
-            width=3
-        ),
-        mode='lines'),
-        go.Scatter(x=df['date'],
-                   y=df['wtrstm'],
-                   name='wtrstm',
-                   line=dict(
-            color='#fcd555',
-            shape='spline',
-            smoothing=0.3,
-            width=3
-        ),
-        mode='lines'),
-    ]
+                color='#50bf37',
+                shape='spline',
+                smoothing=0.3,
+                width=3
+            ),
+            mode='lines'),
+            go.Scatter(x=df['date'],
+                    y=df['water'],
+                    name='water',
+                    line=dict(
+                color='#4286f4',
+                shape='spline',
+                smoothing=0.3,
+                width=3
+            ),
+            mode='lines'),
+            go.Scatter(x=df['date'],
+                    y=df['gas'],
+                    name='gas',
+                    line=dict(
+                color='#ef2626',
+                shape='spline',
+                smoothing=0.3,
+                width=3
+            ),
+            mode='lines'),
+            go.Scatter(x=df['date'],
+                    y=df['wtrstm'],
+                    name='wtrstm',
+                    line=dict(
+                color='#fcd555',
+                shape='spline',
+                smoothing=0.3,
+                width=3
+            ),
+            mode='lines'),
+            go.Scatter(x=df['date'],
+                    y=df['gasair'],
+                    name='gasair',
+                    line=dict(
+                color='#e32980',
+                shape='spline',
+                smoothing=0.3,
+                width=3
+            ),
+            mode='lines'),
+            go.Scatter(x=df['date'],
+                    y=df['oilgrav'],
+                    name='oilgrav',
+                    line=dict(
+                color='#81d636',
+                shape='spline',
+                smoothing=0.3,
+                width=3
+            ),
+            mode='lines'),
+            go.Scatter(x=df['date'],
+                    y=df['pcsg'],
+                    name='pcsg',
+                    line=dict(
+                color='#4136d6',
+                shape='spline',
+                smoothing=0.3,
+                width=3
+            ),
+            mode='lines'),
+            go.Scatter(x=df['date'],
+                    y=df['ptbg'],
+                    name='ptbg',
+                    line=dict(
+                color='#7636d6',
+                shape='spline',
+                smoothing=0.3,
+                width=3
+            ),
+            mode='lines'),
+            go.Scatter(x=df['date'],
+                    y=df['btu'],
+                    name='btu',
+                    line=dict(
+                color='#d636d1',
+                shape='spline',
+                smoothing=0.3,
+                width=3
+            ),
+            mode='lines'),
+            go.Scatter(x=df['date'],
+                    y=df['pinjsurf'],
+                    name='pinjsurf',
+                    line=dict(
+                color='#e3b829',
+                shape='spline',
+                smoothing=0.3,
+                width=3
+            ),
+            mode='lines'),
+        ]
 
     layout = go.Layout(autosize=True,
                        hovermode='closest',
