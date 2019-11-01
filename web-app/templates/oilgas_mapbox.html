@@ -21,30 +21,30 @@
             trackUserLocation: true
         }));
 
-        // map.on('click', 'wells', function (e) {
-        //     var coordinates = e.features[0].geometry.coordinates.slice();
-        //     var field = e.features[0].properties.field;
-        //     var lease = e.features[0].properties.lease;
-        //     var well = e.features[0].properties.well;
-        //     var operator = e.features[0].properties.operator;
-        //     var api = e.features[0].properties.api;
-        //     var text = "<a href=\"/oilgas/details/"+api+"\" target=\"_blank\" title=\"Opens in a new window\">"+api+"</a><br>"
-        //     text += "<strong>"+lease+" "+well+"</strong><br>"
-        //     text += operator+"<br>"
-        //     text += field+"<br>"
+        map.on('click', 'wells', function (e) {
+            var coordinates = e.features[0].geometry.coordinates.slice();
+            var field = e.features[0].properties.field;
+            var lease = e.features[0].properties.lease;
+            var well = e.features[0].properties.well;
+            var operator = e.features[0].properties.operator;
+            var api = e.features[0].properties.api;
+            var text = "<a href=\"/oilgas/details/"+api+"\" target=\"_blank\" title=\"Opens in a new window\">"+api+"</a><br>"
+            text += "<strong>"+lease+" "+well+"</strong><br>"
+            text += operator+"<br>"
+            text += field+"<br>"
 
-        //     // Ensure that if the map is zoomed out such that multiple
-        //     // copies of the feature are visible, the popup appears
-        //     // over the copy being pointed to.
-        //     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        //     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        //     }
+            // Ensure that if the map is zoomed out such that multiple
+            // copies of the feature are visible, the popup appears
+            // over the copy being pointed to.
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
             
-        //     new mapboxgl.Popup()
-        //     .setLngLat(coordinates)
-        //     .setHTML(text)
-        //     .addTo(map);
-        // });
+            new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(text)
+            .addTo(map);
+        });
     </script>
     <div id="log-event"></div>
     <div id="log-layout"></div>
