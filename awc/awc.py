@@ -37,11 +37,11 @@ def convert(val):
 
 
 def get_var(message, rad, awc, prop):
-    r = rad/75
+    r = rad/50
     lat = message['latitude']
     lon = message['longitude']
-    df = pd.DataFrame(list(awc.find({'latitude': {'$gt': lat-r}, 'latitude': {
-                      '$lt': lat+r}, 'longitude': {'$gt': lon-r}, 'longitude': {'$lt': lon+r}})))
+    df = pd.DataFrame(list(awc.find({'latitude': {'$gt': lat-r, '$lt': lat+r}, 
+                                    'longitude': {'$gt': lon-r, '$lt': lon+r}})))
     df['dist'] = np.arccos(np.sin(lat*np.pi/180) * np.sin(df['latitude']*np.pi/180) + np.cos(lat*np.pi/180)
                            * np.cos(df['latitude']*np.pi/180) * np.cos((df['longitude']*np.pi/180) - (lon*np.pi/180))) * 6371
     df = df[df['dist'] <= rad]

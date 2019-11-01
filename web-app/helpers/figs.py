@@ -236,7 +236,7 @@ def create_graph_iot(sensor, time):
 
 def get_offsets_oilgas(header, rad):
     db = client.petroleum
-    r = rad/75
+    r = rad/50
     lat = header['latitude']
     lon = header['longitude']
     df = pd.DataFrame(list(db.doggr.find({'latitude': {'$gt': lat-r, '$lt': lat+r}, 
