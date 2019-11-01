@@ -8,43 +8,114 @@
           <div class="card-header">
             <h5 class="card-title" align=center>Well Detail: {{ header['api'] }}</h5>
           </div>
-          <br>
-          <div class="row">
-            <div class="col-md"><h6>API:</h6>{{ header['api'] }}</div>
-            <div class="col-md"><h6>Operator:</h6>{{ header['operator'] }}</div>
-            <div class="col-md"><h6>Field:</h6>{{ header['field'] }}</div>
-            <div class="col-md"><h6>Lease:</h6>{{ header['lease'] }}</div>
-            <div class="col-md"><h6>Well Name:</h6>{{ header['well'] }}</div>
+          <div class="table-responsive-md">
+            <table class="table table-sm" id="table_static">
+              <thead>
+                <tr>
+                  <td><h6>API</h6></td>
+                  <td><h6>Operator</h6></td>
+                  <td><h6>Field</h6></td>
+                  <td><h6>Lease</h6></td>
+                  <td><h6>Well Name</h6></td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ header['api'] }}</td>
+                  <td>{{ header['operator'] }}</td>
+                  <td>{{ header['field'] }}</td>
+                  <td>{{ header['lease'] }}</td>
+                  <td>{{ header['well'] }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table table-sm" id="table_static">
+              <thead>
+                <tr>
+                  <td><h6>Area</h6></td>
+                  <td><h6>District</h6></td>
+                  <td><h6>County</h6></td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ header['area'] }}</td>
+                  <td>{{ header['district'] }}</div>
+                  <td>{{ header['county'] }}</div>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table table-sm" id="table_static">
+              <thead>
+                <tr>
+                  <td><h6>Section</h6></td>
+                  <td><h6>Township</h6></td>
+                  <td><h6>Range</h6></td>
+                  <td><h6>BM</h6></td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ header['section'] }}</td>
+                  <td>{{ header['township'] }}</div>
+                  <td>{{ header['rnge'] }}</div>
+                  <td>{{ header['bm'] }}</div>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table table-sm" id="table_static">
+              <thead>
+                <tr>
+                  <td><h6>Spud Date</h6></td>
+                  <td><h6>PWT</h6></td>
+                  <td><h6>Well Status</h6></td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ header['spuddate'] }}</td>
+                  <td>{{ header['pwt'] }}</div>
+                  <td>{{ header['wellstatus'] }}</div>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table table-sm" id="table_static">
+              <thead>
+                <tr>
+                  <td><h6>Latitude</h6></td>
+                  <td><h6>Longitude</h6></td>
+                  <td><h6>Elevation</h6></td>
+                  <td><h6>GIS Source</h6></td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ header['latitude'] }}</td>
+                  <td>{{ header['longitude'] }}</div>
+                  <td>{{ header['elev'] }}</div>
+                  <td>{{ header['gissrc'] }}</div>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table table-sm" id="table_static">
+              <thead>
+                <tr>
+                  <td><h6>Oil Cum</h6></td>
+                  <td><h6>Water Cum</h6></td>
+                  <td><h6>Gas Cum</h6></td>
+                  <td><h6>Water/Steam Cum</h6></td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ header['oil_cum'] }}</td>
+                  <td>{{ header['water_cum'] }}</div>
+                  <td>{{ header['gas_cum'] }}</div>
+                  <td>{{ header['wtrstm_cum'] }}</div>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="row">
-            <div class="col-md"><h6>Area:</h6>{{ header['area'] }}</div>
-            <div class="col-md"><h6>District:</h6>{{ header['district'] }}</div>
-            <div class="col-md"><h6>County:</h6>{{ header['county'] }}</div>
-          </div>
-          <div class="row">
-            <div class="col-md"><h6>Section:</h6>{{ header['section'] }}</div>
-            <div class="col-md"><h6>Township:</h6>{{ header['township'] }}</div>
-            <div class="col-md"><h6>Range:</h6>{{ header['rnge'] }}</div>
-            <div class="col-md"><h6>BM:</h6>{{ header['bm'] }}</div>
-          </div>
-          <div class="row">
-            <div class="col-md"><h6>Spud Date:</h6>{{ header['spuddate'] }}</div>
-            <div class="col-md"><h6>PWT:</h6>{{ header['pwt'] }}</div>
-            <div class="col-md"><h6>Well Status:</h6>{{ header['wellstatus'] }}</div>
-          </div>
-          <div class="row">
-            <div class="col-md"><h6>Latitude:</h6>{{ header['latitude'] }}</div>
-            <div class="col-md"><h6>Longitude:</h6>{{ header['longitude'] }}</div>
-            <div class="col-md"><h6>Elevation:</h6>{{ header['elev'] }}</div>
-            <div class="col-md"><h6>GIS Source:</h6>{{ header['gissrc'] }}</div>
-          </div>
-          <div class="row">
-            <div class="col-md"><h6>Oil Cum:</h6>{{ header['oil_cum'] }}</div>
-            <div class="col-md"><h6>Water Cum:</h6>{{ header['water_cum'] }}</div>
-            <div class="col-md"><h6>Gas Cum:</h6>{{ header['gas_cum'] }}</div>
-            <div class="col-md"><h6>Water/Steam Cum:</h6>{{ header['wtrstm_cum'] }}</div>
-          </div>
-          <br>
         </div>
         <div class="card">
             <div class="card-header">
@@ -116,22 +187,6 @@
                   responsive: true
                 });
               </script>
-            </div>
-            <div class="row">
-              <div class="col-md">
-                <h6>X-axis:</h6>
-                <select class="form-control" id='plot_axis'>
-                  <option value="normal">Normal</option>
-                  <option value="log">Logarithmic</option>
-                </select>
-              </div>
-              <div class="col-md">
-                <h6>Y-axis:</h6>
-                <select class="form-control" id='plot_axis'>
-                  <option value="normal">Normal</option>
-                  <option value="log">Logarithmic</option>
-                </select>
-              </div>
             </div>
           </div>
         </div>

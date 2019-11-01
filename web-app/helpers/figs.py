@@ -101,11 +101,11 @@ scl_oil = [
 ]
 
 scl_oil_log = [
-    [0, '#dbdbdb'],             #0
-    [1./1000, '#d6ed42'],       #10
-    [1./100, '#78ed42'],        #100
-    [1./10, '#50bf37'],         #1000
-    [1., '#06721e']             #10000
+    [0, '#dbdbdb'],  # 0
+    [1./1000, '#d6ed42'],  # 10
+    [1./100, '#78ed42'],  # 100
+    [1./10, '#50bf37'],  # 1000
+    [1., '#06721e']  # 10000
 ]
 
 scl_wtr = [
@@ -233,14 +233,68 @@ def create_graph_iot(sensor, time):
                            cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
+def get_prodinj(wells):
+    db = client.petroleum
+    df = pd.DataFrame()
+    try:
+        df_ = pd.DataFrame(list(db.doggr.aggregate([
+            {'$unwind': '$prod'},
+            {'$match': {'api': {'$in':wells}}},
+            {'$project': {
+                'api': 1,
+                'prod.date': 1,
+                'prod.oil': 1,
+                'prod.water': 1,
+                'prod.gas': 1,
+            }}
+        ])))
+        df_prod = pd.DataFrame(list(df_['prod']))
+        df_prod['api'] = df_['api']
+        df_prod = df_prod.replace(0, np.nan)
+        df_prod.dropna(subset=['oil', 'water', 'gas'], how='all', inplace=True)
+        df = df.append(df_prod)
+    except:
+        pass
+    try:
+        df_ = pd.DataFrame(list(db.doggr.aggregate([
+            {'$unwind': '$inj'},
+            {'$match': {'api': {'$in':wells}}},
+            {'$project': {
+                'api': 1,
+                'inj.date': 1,
+                'inj.wtrstm': 1,
+            }}
+        ])))
+        df_inj = pd.DataFrame(list(df_['inj']))
+        df_inj['api'] = df_['api']
+        df_inj = df_inj.replace(0, np.nan)
+        df_inj.dropna(subset=['wtrstm'], how='all', inplace=True)
+        try:
+            df = pd.merge(df, df_inj, how='outer', on=['api','date'])
+        except:
+            df = df.append(df_inj)
+    except:
+        pass
+
+    df.sort_values(by=['api', 'date'], inplace=True)
+    df.reset_index(drop=True, inplace=True)
+    df.fillna(0, inplace=True)
+
+    for col in ['date', 'oil', 'water', 'gas', 'wtrstm']:
+        if col not in df:
+            df[col] = 0
+        if col not in ['date']:
+            df[col] = df[col]/30.45
+    return df
+
 
 def get_offsets_oilgas(header, rad):
     db = client.petroleum
     r = rad/50
     lat = header['latitude']
     lon = header['longitude']
-    df = pd.DataFrame(list(db.doggr.find({'latitude': {'$gt': lat-r, '$lt': lat+r}, 
-                                        'longitude': {'$gt': lon-r,'$lt': lon+r}})))
+    df = pd.DataFrame(list(db.doggr.find({'latitude': {'$gt': lat-r, '$lt': lat+r},
+                                          'longitude': {'$gt': lon-r, '$lt': lon+r}})))
     df['dist'] = np.arccos(np.sin(lat*np.pi/180) * np.sin(df['latitude']*np.pi/180) + np.cos(lat*np.pi/180)
                            * np.cos(df['latitude']*np.pi/180) * np.cos((df['longitude']*np.pi/180) - (lon*np.pi/180))) * 6371
     df = df[df['dist'] <= rad]
@@ -248,21 +302,8 @@ def get_offsets_oilgas(header, rad):
     offsets = df[:25]['api'].tolist()
     dists = df[:25]['dist'].tolist()
 
-    df = pd.DataFrame(list(db.doggr.aggregate([
-        {'$unwind': '$prod'},
-        {'$match': {'api': {'$in':offsets}}},
-        {'$project': {
-            'api': 1,
-            'prod.date': 1,
-            'prod.oil': 1,
-            # 'prod.water': 1,
-            # 'prod.gas': 1,
-        }}
-    ])))
-    
-    df_offsets = pd.DataFrame(list(df['prod']))
-    df_offsets['api'] = df['api']
-    df_offsets['api'] = df_offsets['api'].apply(lambda x: str(np.round(dists[offsets.index(x)],3))+' mi - '+x)
+    df_offsets = get_prodinj(offsets)
+    df_offsets['api'] = df_offsets['api'].apply(lambda x: str(np.round(dists[offsets.index(x)], 3))+' mi - '+x)
     df_offsets.sort_values(by='api', inplace=True)
     data = [
         go.Heatmap(
@@ -275,18 +316,17 @@ def get_offsets_oilgas(header, rad):
 
     layout = go.Layout(autosize=True,
                        margin=dict(r=10, t=10, b=30, l=150, pad=0),
-                       yaxis = dict(autorange = 'reversed'),
+                       yaxis=dict(autorange='reversed'),
                        )
     graphJSON_offsets = json.dumps(dict(data=data, layout=layout),
-                           cls=plotly.utils.PlotlyJSONEncoder)
+                                   cls=plotly.utils.PlotlyJSONEncoder)
 
-    map_offsets= []
+    map_offsets = []
     return graphJSON_offsets, map_offsets, offsets
 
 
 def get_graph_oilgas(api):
     db = client.petroleum
-    df = pd.DataFrame()
     df_header = pd.DataFrame(list(db.doggr.find({'api': api})))
     header = {}
     for col in ['lease', 'well', 'county', 'countycode', 'district', 'operator', 'operatorcode', 'field', 'fieldcode', 'area', 'areacode', 'section', 'township', 'rnge', 'bm', 'wellstatus', 'pwt', 'spuddate', 'gissrc', 'elev', 'latitude', 'longitude', 'api', 'gas_cum', 'oil_cum', 'water_cum', 'wtrstm_cum']:
@@ -302,11 +342,11 @@ def get_graph_oilgas(api):
                                  name='wells',
                                  visible=True,
                                  marker=dict(
-        size=12,
-        color='purple',
-    ),
-    ),
-    ]
+                                     size=12,
+                                     color='purple',
+                                     ),
+                                ),
+                ]
 
     layout_loc = go.Layout(autosize=True,
                            hovermode='closest',
@@ -318,54 +358,14 @@ def get_graph_oilgas(api):
                                        accesstoken=mapbox_access_token,
                                        style='satellite-streets',
                                        pitch=0,
-                                       zoom=8
+                                       zoom=16
                                        )
                            )
 
     graphJSON_loc = json.dumps(
         dict(data=data_loc, layout=layout_loc), cls=plotly.utils.PlotlyJSONEncoder)
 
-    try:
-        df_prod = pd.DataFrame(list(db.doggr.aggregate([
-            {'$unwind': '$prod'},
-            {'$match': {'api': api}},
-            {'$project': {
-                'prod.date': 1,
-                'prod.oil': 1,
-                'prod.water': 1,
-                'prod.gas': 1,
-            }}
-        ])))
-        df_prod = pd.DataFrame(list(df_prod['prod']))
-        df = df.append(df_prod)
-    except:
-        pass
-
-    try:
-        df_inj = pd.DataFrame(list(db.doggr.aggregate([
-            {'$unwind': '$inj'},
-            {'$match': {'api': api}},
-            {'$project': {
-                'inj.date': 1,
-                'inj.wtrstm': 1,
-            }}
-        ])))
-        df_inj = pd.DataFrame(list(df_inj['inj']))
-        try:
-            df = pd.merge(df, df_inj, how='outer', on='date')
-        except:
-            df = df.append(df_inj)
-    except:
-        pass
-
-    df.fillna(0, inplace=True)
-    df.sort_values(by='date', inplace=True)
-
-    for col in ['date', 'oil', 'water', 'gas', 'wtrstm']:
-        if col not in df:
-            df[col] = 0
-        if col not in ['date']:
-            df[col] = df[col]/30.45
+    df = get_prodinj([api])
 
     data = [go.Scatter(x=df['date'],
                        y=df['oil'],
