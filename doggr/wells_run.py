@@ -4,6 +4,7 @@
 Created on Fri Jan 19 11:28:51 2018
 
 @author: areed145
+
 """
 
 from queue import Queue
@@ -16,6 +17,15 @@ import datetime
 from pymongo import MongoClient
 import pymongo
 import os
+
+'''
+ftp://ftp.consrv.ca.gov/pub/oil/Online_Data/Production_Injection_Data/2018CaliforniaOilAndGasWells.csv
+ftp://ftp.consrv.ca.gov/pub/oil/Online_Data/Production_Injection_Data/2018CaliforniaOilAndGasWellMonthlyProduction.csv
+ftp://ftp.consrv.ca.gov/pub/oil/Online_Data/Production_Injection_Data/2018CaliforniaOilAndGasWellMonthlyInjection.csv
+ftp://ftp.consrv.ca.gov/pub/oil/Online_Data/Production_Injection_Data/2019CaliforniaOilAndGasWells.csv
+ftp://ftp.consrv.ca.gov/pub/oil/Online_Data/Production_Injection_Data/2019CaliforniaOilAndGasWellMonthlyProduction.csv
+ftp://ftp.consrv.ca.gov/pub/oil/Online_Data/Production_Injection_Data/2019CaliforniaOilAndGasWellMonthlyInjection.csv
+'''
 
 d = pd.read_csv('AllWells_20180131.csv')
 apis = d['API'].copy(deep=True)

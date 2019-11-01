@@ -6,10 +6,10 @@
     <script>
         mapboxgl.accessToken =
             'pk.eyJ1IjoiYXJlZWQxNDUiLCJhIjoiY2phdzNsN2ZoMGh0bjMybzF3cTkycWYyciJ9.4aS7z-guI2VDlP3duMg2FA';
-            
+        
         var map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/satellite-v9',
+            style: 'mapbox://styles/areed145/ck2glq80r168d1cp8siebrplp',
             center: [-119, 36],
             zoom: 5
         });
@@ -21,63 +21,30 @@
             trackUserLocation: true
         }));
 
-        map.on('load', function () {
+        // map.on('click', 'wells', function (e) {
+        //     var coordinates = e.features[0].geometry.coordinates.slice();
+        //     var field = e.features[0].properties.field;
+        //     var lease = e.features[0].properties.lease;
+        //     var well = e.features[0].properties.well;
+        //     var operator = e.features[0].properties.operator;
+        //     var api = e.features[0].properties.api;
+        //     var text = "<a href=\"/oilgas/details/"+api+"\" target=\"_blank\" title=\"Opens in a new window\">"+api+"</a><br>"
+        //     text += "<strong>"+lease+" "+well+"</strong><br>"
+        //     text += operator+"<br>"
+        //     text += field+"<br>"
 
-            map.addSource('wells', {
-                type: 'geojson',
-                data: '../static/wells.geojson'
-            });
-
-            map.addLayer({
-                'id': 'wells',
-                'type': 'circle',
-                'source': 'wells',
-                'paint': {
-                    'circle-radius': {
-                        'base': 1.75,
-                        'stops': [
-                            [12, 4],
-                            [22, 20]
-                        ]
-                    },
-                    'circle-color': [
-                        'match',
-                        ['get', 'pwt'],
-                        'OG', '#46940a',
-                        'SC', '#71d624',
-                        'WF', '#2483d6',
-                        'SF', '#db2e3f',
-                        /* other */
-                        '#000000'
-                    ]
-                }
-            });
-        });
-
-        map.on('click', 'wells', function (e) {
-            var coordinates = e.features[0].geometry.coordinates.slice();
-            var field = e.features[0].properties.field;
-            var lease = e.features[0].properties.lease;
-            var well = e.features[0].properties.well;
-            var operator = e.features[0].properties.operator;
-            var api = e.features[0].properties.api;
-            var text = "<a href=\"/oilgas/details/"+api+"\" target=\"_blank\" title=\"Opens in a new window\">"+api+"</a><br>"
-            text += "<strong>"+lease+" "+well+"</strong><br>"
-            text += operator+"<br>"
-            text += field+"<br>"
-
-            // Ensure that if the map is zoomed out such that multiple
-            // copies of the feature are visible, the popup appears
-            // over the copy being pointed to.
-            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-            }
+        //     // Ensure that if the map is zoomed out such that multiple
+        //     // copies of the feature are visible, the popup appears
+        //     // over the copy being pointed to.
+        //     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        //     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+        //     }
             
-            new mapboxgl.Popup()
-            .setLngLat(coordinates)
-            .setHTML(text)
-            .addTo(map);
-        });
+        //     new mapboxgl.Popup()
+        //     .setLngLat(coordinates)
+        //     .setHTML(text)
+        //     .addTo(map);
+        // });
     </script>
     <div id="log-event"></div>
     <div id="log-layout"></div>
