@@ -115,6 +115,14 @@ scl_wtr = [
     [1.00, '#0255db']
 ]
 
+scl_wtr_log = [
+    [0, '#dbdbdb'],  # 0
+    [1./1000, '#caf0f7'],  # 10
+    [1./100, '#64d6ea'],  # 100
+    [1./10, '#4286f4'],  # 1000
+    [1., '#0255db']  # 10000
+]
+
 scl_gas = [
     [0.00, '#fcbfbf'],
     [0.33, '#f28282'],
@@ -127,6 +135,14 @@ scl_stm = [
     [0.33, '#ed87c4'],
     [0.66, '#e22f9b'],
     [1.00, '#930b5d']
+]
+
+scl_stm_log = [
+    [0, '#dbdbdb'],  # 0
+    [1./1000, '#edb6d7'],  # 10
+    [1./100, '#ed87c4'],  # 100
+    [1./10, '#e22f9b'],  # 1000
+    [1., '#930b5d']  # 10000
 ]
 
 scl_cyc = [
@@ -313,12 +329,30 @@ def get_offsets_oilgas(header, rad):
     df_offsets = get_prodinj(offsets)
     df_offsets['api'] = df_offsets['api'].apply(lambda x: str(np.round(dists[offsets.index(x)], 3))+' mi - '+x)
     df_offsets.sort_values(by='api', inplace=True)
-    data = [
+    data_offset_oil = [
         go.Heatmap(
-            z=df_offsets['oil']/30.45,
+            z=df_offsets['oil'],
             x=df_offsets['date'],
             y=df_offsets['api'],
             colorscale=scl_oil_log,
+        ),
+    ]
+
+    data_offset_stm = [
+        go.Heatmap(
+            z=df_offsets['wtrstm'],
+            x=df_offsets['date'],
+            y=df_offsets['api'],
+            colorscale=scl_stm_log,
+        ),
+    ]
+
+    data_offset_wtr = [
+        go.Heatmap(
+            z=df_offsets['water'],
+            x=df_offsets['date'],
+            y=df_offsets['api'],
+            colorscale=scl_wtr_log,
         ),
     ]
 
@@ -326,11 +360,17 @@ def get_offsets_oilgas(header, rad):
                        margin=dict(r=10, t=10, b=30, l=150, pad=0),
                        yaxis=dict(autorange='reversed'),
                        )
-    graphJSON_offsets = json.dumps(dict(data=data, layout=layout),
+    graphJSON_offset_oil = json.dumps(dict(data=data_offset_oil, layout=layout),
+                                   cls=plotly.utils.PlotlyJSONEncoder)
+
+    graphJSON_offset_stm = json.dumps(dict(data=data_offset_stm, layout=layout),
+                                   cls=plotly.utils.PlotlyJSONEncoder)
+
+    graphJSON_offset_wtr = json.dumps(dict(data=data_offset_wtr, layout=layout),
                                    cls=plotly.utils.PlotlyJSONEncoder)
 
     map_offsets = []
-    return graphJSON_offsets, map_offsets, offsets
+    return graphJSON_offset_oil, graphJSON_offset_stm, graphJSON_offset_wtr, map_offsets, offsets
 
 
 def get_graph_oilgas(api):
