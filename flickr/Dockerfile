@@ -1,0 +1,17 @@
+FROM python:3.7-slim-buster
+
+LABEL maintainer="areed145@gmail.com"
+
+WORKDIR /flickr
+
+COPY . /flickr
+
+# We copy just the requirements.txt first to leverage Docker cache
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
+
+# EXPOSE 80
+
+ENV MONGODB_CLIENT 'mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db'
+
+CMD ["python", "flickr.py"]

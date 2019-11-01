@@ -7,25 +7,25 @@ import datetime
 
 class Database(object):
 
-    URI = os.environ['MONGODB_CLIENT']
-    DATABASE = 'blog'
+    client = os.environ['MONGODB_CLIENT']
+    db = 'blog'
 
     @staticmethod
     def initialize():
-        client = MongoClient(Database.URI)
-        Database.DATABASE = client['fullstack']
+        client = MongoClient(Database.client)
+        Database.db = client['fullstack']
 
     @staticmethod
     def insert(collection, data):
-        Database.DATABASE[collection].insert(data)
+        Database.db[collection].insert(data)
 
     @staticmethod
     def find(collection, query):
-        return Database.DATABASE[collection].find(query)
+        return Database.db[collection].find(query).sort([('created_date', -1)])
 
     @staticmethod
     def find_one(collection, query):
-        return Database.DATABASE[collection].find_one(query)
+        return Database.db[collection].find_one(query)
 
 
 class Blog(object):
