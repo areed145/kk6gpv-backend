@@ -37,7 +37,7 @@ def convert(val):
 
 
 def get_var(message, rad, awc, prop):
-    r = 2
+    r = rad/75
     lat = message['latitude']
     lon = message['longitude']
     df = pd.DataFrame(list(awc.find({'latitude': {'$gt': lat-r}, 'latitude': {

@@ -100,6 +100,14 @@ scl_oil = [
     [1.00, '#06721e']
 ]
 
+scl_oil_log = [
+    [0, '#dbdbdb'],             #0
+    [1./1000, '#d6ed42'],       #10
+    [1./100, '#78ed42'],        #100
+    [1./10, '#50bf37'],         #1000
+    [1., '#06721e']             #10000
+]
+
 scl_wtr = [
     [0.00, '#caf0f7'],
     [0.33, '#64d6ea'],
@@ -166,24 +174,24 @@ def create_3d_plot(df, x, y, z, cs, x_name, y_name, z_name, x_color, y_color, z_
     layout = go.Layout(autosize=True,
                        margin=dict(r=10, t=10, b=10, l=10, pad=0),
                        scene={'aspectmode': 'cube',
-                           'xaxis': {
-                           'title': x_name,
-                           'tickfont': {'size': 10},
-                           'titlefont': {'color': x_color},
-                           'type': 'linear'
-                       },
-                           'yaxis': {
-                           'title': y_name,
-                           'tickfont': {'size': 10},
-                           'titlefont': {'color': y_color},
-                           'tickangle': 1
-                       },
-                           'zaxis': {
-                           'title': z_name,
-                           'tickfont': {'size': 10},
-                           'titlefont': {'color': z_color},
-                       },
-                       }
+                              'xaxis': {
+                                  'title': x_name,
+                                  'tickfont': {'size': 10},
+                                  'titlefont': {'color': x_color},
+                                  'type': 'linear'
+                              },
+                              'yaxis': {
+                                  'title': y_name,
+                                  'tickfont': {'size': 10},
+                                  'titlefont': {'color': y_color},
+                                  'tickangle': 1
+                              },
+                              'zaxis': {
+                                  'title': z_name,
+                                  'tickfont': {'size': 10},
+                                  'titlefont': {'color': z_color},
+                              },
+                              }
                        )
     graphJSON = json.dumps(dict(data=data, layout=layout),
                            cls=plotly.utils.PlotlyJSONEncoder)
@@ -226,14 +234,60 @@ def create_graph_iot(sensor, time):
     return graphJSON
 
 
-def get_graph_oilgas(api):
-
+def get_offsets_oilgas(header, rad):
     db = client.petroleum
+    r = rad/75
+    lat = header['latitude']
+    lon = header['longitude']
+    df = pd.DataFrame(list(db.doggr.find({'latitude': {'$gt': lat-r, '$lt': lat+r}, 
+                                        'longitude': {'$gt': lon-r,'$lt': lon+r}})))
+    df['dist'] = np.arccos(np.sin(lat*np.pi/180) * np.sin(df['latitude']*np.pi/180) + np.cos(lat*np.pi/180)
+                           * np.cos(df['latitude']*np.pi/180) * np.cos((df['longitude']*np.pi/180) - (lon*np.pi/180))) * 6371
+    df = df[df['dist'] <= rad]
+    df.sort_values(by='dist', inplace=True)
+    offsets = df[:25]['api'].tolist()
+    dists = df[:25]['dist'].tolist()
 
+    df = pd.DataFrame(list(db.doggr.aggregate([
+        {'$unwind': '$prod'},
+        {'$match': {'api': {'$in':offsets}}},
+        {'$project': {
+            'api': 1,
+            'prod.date': 1,
+            'prod.oil': 1,
+            # 'prod.water': 1,
+            # 'prod.gas': 1,
+        }}
+    ])))
+    
+    df_offsets = pd.DataFrame(list(df['prod']))
+    df_offsets['api'] = df['api']
+    df_offsets['api'] = df_offsets['api'].apply(lambda x: str(np.round(dists[offsets.index(x)],3))+' mi - '+x)
+    df_offsets.sort_values(by='api', inplace=True)
+    data = [
+        go.Heatmap(
+            z=df_offsets['oil']/30.45,
+            x=df_offsets['date'],
+            y=df_offsets['api'],
+            colorscale=scl_oil_log,
+        ),
+    ]
+
+    layout = go.Layout(autosize=True,
+                       margin=dict(r=10, t=10, b=30, l=150, pad=0),
+                       yaxis = dict(autorange = 'reversed'),
+                       )
+    graphJSON_offsets = json.dumps(dict(data=data, layout=layout),
+                           cls=plotly.utils.PlotlyJSONEncoder)
+
+    map_offsets= []
+    return graphJSON_offsets, map_offsets, offsets
+
+
+def get_graph_oilgas(api):
+    db = client.petroleum
     df = pd.DataFrame()
-
     df_header = pd.DataFrame(list(db.doggr.find({'api': api})))
-
     header = {}
     for col in ['lease', 'well', 'county', 'countycode', 'district', 'operator', 'operatorcode', 'field', 'fieldcode', 'area', 'areacode', 'section', 'township', 'rnge', 'bm', 'wellstatus', 'pwt', 'spuddate', 'gissrc', 'elev', 'latitude', 'longitude', 'api', 'gas_cum', 'oil_cum', 'water_cum', 'wtrstm_cum']:
         try:
@@ -1245,7 +1299,8 @@ def create_wx_figs(time, sid):
                                       title='Wind Speed / Gust (kts)',
                                       overlaying='y',
                                       side='right',
-                                      range=[0, df_wx_raw['wind_gust_mph'].max() * 0.869],
+                                      range=[
+                                          0, df_wx_raw['wind_gust_mph'].max() * 0.869],
                                       fixedrange=True,
                                       titlefont=dict(color='rgb(127, 255, 31)')
                                       ),

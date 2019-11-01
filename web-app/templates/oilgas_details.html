@@ -100,5 +100,42 @@
       </div>
     </div>
   </div>
+  <div class="row">
+      <div class="col-md-12">
+        <div class="card-deck mt-4">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title" align=center>Offset Peformance: {{ header['api'] }}</h5>
+            </div>
+            <br>
+            <div class="chart" id="graph_oilgas_offsets">
+              <script>
+                var graphs = {{ plot_offsets | safe }};
+                Plotly.plot('graph_oilgas_offsets', graphs.data, graphs.layout, {
+                  displayModeBar: false,
+                  responsive: true
+                });
+              </script>
+            </div>
+            <div class="row">
+              <div class="col-md">
+                <h6>X-axis:</h6>
+                <select class="form-control" id='plot_axis'>
+                  <option value="normal">Normal</option>
+                  <option value="log">Logarithmic</option>
+                </select>
+              </div>
+              <div class="col-md">
+                <h6>Y-axis:</h6>
+                <select class="form-control" id='plot_axis'>
+                  <option value="normal">Normal</option>
+                  <option value="log">Logarithmic</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
 {% endblock %}
