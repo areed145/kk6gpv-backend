@@ -383,35 +383,35 @@ def get_graph_oilgas(api):
         except:
             pass
 
-    data_loc = [go.Scattermapbox(lat=df_header['latitude'].values,
-                                 lon=df_header['longitude'].values,
-                                 mode='markers',
-                                 text=df_header['api'].values,
-                                 name='wells',
-                                 visible=True,
-                                 marker=dict(
-                                     size=12,
-                                     color='purple',
-                                     ),
-                                ),
-                ]
+    # data_loc = [go.Scattermapbox(lat=df_header['latitude'].values,
+    #                              lon=df_header['longitude'].values,
+    #                              mode='markers',
+    #                              text=df_header['api'].values,
+    #                              name='wells',
+    #                              visible=True,
+    #                              marker=dict(
+    #                                  size=12,
+    #                                  color='purple',
+    #                                  ),
+    #                             ),
+    #             ]
 
-    layout_loc = go.Layout(autosize=True,
-                           hovermode='closest',
-                           showlegend=False,
-                           margin=dict(r=0, t=0, b=0, l=0, pad=0),
-                           mapbox=dict(bearing=0,
-                                       center=dict(
-                                           lat=df_header['latitude'].values[0], lon=df_header['longitude'].values[0]),
-                                       accesstoken=mapbox_access_token,
-                                       style='satellite-streets',
-                                       pitch=0,
-                                       zoom=16
-                                       )
-                           )
+    # layout_loc = go.Layout(autosize=True,
+    #                        hovermode='closest',
+    #                        showlegend=False,
+    #                        margin=dict(r=0, t=0, b=0, l=0, pad=0),
+    #                        mapbox=dict(bearing=0,
+    #                                    center=dict(
+    #                                        lat=df_header['latitude'].values[0], lon=df_header['longitude'].values[0]),
+    #                                    accesstoken=mapbox_access_token,
+    #                                    style='satellite-streets',
+    #                                    pitch=0,
+    #                                    zoom=16
+    #                                    )
+    #                        )
 
-    graphJSON_loc = json.dumps(
-        dict(data=data_loc, layout=layout_loc), cls=plotly.utils.PlotlyJSONEncoder)
+    # graphJSON_loc = json.dumps(
+    #     dict(data=data_loc, layout=layout_loc), cls=plotly.utils.PlotlyJSONEncoder)
 
     df = get_prodinj([api])
 
@@ -527,7 +527,7 @@ def get_graph_oilgas(api):
                        )
     graphJSON = json.dumps(dict(data=data, layout=layout),
                            cls=plotly.utils.PlotlyJSONEncoder)
-    return graphJSON, graphJSON_loc, header
+    return graphJSON, header
 
 
 def create_map_oilgas():

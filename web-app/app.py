@@ -259,9 +259,9 @@ def oilgas_summary():
 def oilgas_detail(api):
     g.track_var['page'] = 'oilgas/details'
     g.track_var['api'] = str(api)
-    graph_oilgas, map_oilgas, header = figs.get_graph_oilgas(str(api))
+    graph_oilgas, header = figs.get_graph_oilgas(str(api))
     graph_offset_oil, graph_offset_stm, graph_offset_wtr, map_offsets, offsets  = figs.get_offsets_oilgas(header, 0.25)
-    return render_template('oilgas_details.html', plot=graph_oilgas, map=map_oilgas, header=header, plot_offset_oil=graph_offset_oil, plot_offset_stm=graph_offset_stm, plot_offset_wtr=graph_offset_wtr, offsets=offsets)
+    return render_template('oilgas_details.html', plot=graph_oilgas, header=header, plot_offset_oil=graph_offset_oil, plot_offset_stm=graph_offset_stm, plot_offset_wtr=graph_offset_wtr, offsets=offsets)
 
 
 @cache.cached(timeout=60)
