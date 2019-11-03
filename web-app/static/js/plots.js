@@ -207,6 +207,30 @@ if ($('#aprs').length > 0) {
     })
 
     $('#time_aprs').on('change', function () {
+        var time_aprs = document.getElementById('time_aprs').value;
+        var time_int = 15;
+        if (time_aprs == 'm_5') {
+            time_int = 1;
+        }
+        if (time_aprs == 'h_1') {
+            time_int = 20;
+        }
+        if (time_aprs == 'h_6') {
+            time_int = 60;
+        }
+        if (time_aprs == 'd_1') {
+            time_int = 60;
+        }
+        if (time_aprs == 'd_2') {
+            time_int = 60;
+        }
+        if (time_aprs == 'd_7') {
+            time_int = 60;
+        }
+        if (time_aprs == 'd_30') {
+            time_int = 60;
+        }
+        console.log(time_int);
         $.ajax({
             url: "/aprs/map",
             type: "GET",
@@ -225,28 +249,27 @@ if ($('#aprs').length > 0) {
                 Proc(data.rows);
             }
         });
+        setInterval(function () {
+            $.ajax({
+                    url: "/aprs/map",
+                    type: "GET",
+                    contentType: 'application/json;charset=UTF-8',
+                    data: {
+                        'type_aprs': document.getElementById('type_aprs').value,
+                        'prop_aprs': document.getElementById('prop_aprs').value,
+                        'time_aprs': document.getElementById('time_aprs').value,
+                    },
+                    dataType: "json",
+                })
+                .done(function (data) {
+                    Plotly.react('map_aprs', data.map_aprs);
+                    Plotly.react('plot_speed', data.plot_speed);
+                    Plotly.react('plot_alt', data.plot_alt);
+                    Plotly.react('plot_course', data.plot_course);
+                    Proc(data.rows);
+                })
+        }, 1000 * time_int);
     })
-
-    setInterval(function () {
-        $.ajax({
-                url: "/aprs/map",
-                type: "GET",
-                contentType: 'application/json;charset=UTF-8',
-                data: {
-                    'type_aprs': document.getElementById('type_aprs').value,
-                    'prop_aprs': document.getElementById('prop_aprs').value,
-                    'time_aprs': document.getElementById('time_aprs').value,
-                },
-                dataType: "json",
-            })
-            .done(function (data) {
-                Plotly.react('map_aprs', data.map_aprs);
-                Plotly.react('plot_speed', data.plot_speed);
-                Plotly.react('plot_alt', data.plot_alt);
-                Plotly.react('plot_course', data.plot_course);
-                Proc(data.rows);
-            })
-    }, 1000 * time_int);
 }
 
 if ($('#awc').length > 0) {
