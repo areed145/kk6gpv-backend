@@ -1,2 +1,2 @@
 to convert geojson to tiles:
-    tippecanoe -zg -o wells.mbtiles --drop-densest-as-needed wells.geojson
+    tippecanoe -zg -o wells_full.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping wells.geojson
