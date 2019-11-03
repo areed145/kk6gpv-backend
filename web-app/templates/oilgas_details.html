@@ -130,7 +130,7 @@
                   
                   var map = new mapboxgl.Map({
                       container: 'map',
-                      style: 'mapbox://styles/areed145/ck2glq80r168d1cp8siebrplp',
+                      style: 'mapbox://styles/areed145/ck2jlfnp03oiv1cpepd4js9k6',
                       center: [{{ header['longitude']|float }}, {{ header['latitude']|float }}],
                       zoom: 17
                   });
@@ -149,8 +149,8 @@
                       var well = e.features[0].properties.well;
                       var operator = e.features[0].properties.operator;
                       var api = e.features[0].properties.api;
-                      var text = "<a href=\"/oilgas/details/"+api+"\" target=\"_blank\" title=\"Opens in a new window\">"+api+"</a><br>"
-                      text += "<strong>"+lease+" "+well+"</strong><br>"
+                      var text = "<strong>"+lease+" "+well+"</strong><br>"
+                      text += "<a href=\"/oilgas/details/"+api+"\" target=\"_blank\" title=\"Opens in a new window\">"+api+"</a><br>"
                       text += operator+"<br>"
                       text += field+"<br>"
           
