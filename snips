@@ -1,2 +1,10 @@
 to convert geojson to tiles:
     tippecanoe -zg -o wells_full.mbtiles --drop-densest-as-needed --extend-zooms-if-still-dropping wells.geojson
+
+kubectl proxy
+http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/cluster?namespace=_all
+
+
+kubectl --insecure-skip-tls-verify --kubeconfig="/dev/null" --server=https://f610e6cf-6043-4e76-947c-ba2852aaeb7e.k8s.ondigitalocean.com --token=$TOKEN get pods
+
+kubectl --insecure-skip-tls-verify --kubeconfig="/dev/null" --server=https://f610e6cf-6043-4e76-947c-ba2852aaeb7e.k8s.ondigitalocean.com --token=$TOKEN get pods
