@@ -8,3 +8,5 @@ http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-da
 kubectl --insecure-skip-tls-verify --kubeconfig="/dev/null" --server=https://f610e6cf-6043-4e76-947c-ba2852aaeb7e.k8s.ondigitalocean.com --token=$TOKEN get pods
 
 kubectl --insecure-skip-tls-verify --kubeconfig="/dev/null" --server=https://f610e6cf-6043-4e76-947c-ba2852aaeb7e.k8s.ondigitalocean.com --token=$TOKEN get pods
+
+helm install stable/nginx-ingress --name nginx-ingress --set controller.publishService.enabled=true --set-string controller.config.use-forward-headers=true,controller.config.compute-full-forward-for=true,controller.config.use-proxy-protocol=true  --set controller.service.annotations."service\.beta\.kubernetes\.io/do-loadbalancer-enable-proxy-protocol=true"
