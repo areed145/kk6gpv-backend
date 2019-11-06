@@ -1,9 +1,9 @@
 
-from os import environ as env
+import os
 import multiprocessing
 
-PORT = int(env.get("PORT", 8080))
-DEBUG_MODE = int(env.get("DEBUG_MODE", 1))
+PORT = os.environ['PORT']
+DEBUG_MODE = os.environ['DEBUG_MODE']
 
 # Gunicorn config
 bind = ":" + str(PORT)

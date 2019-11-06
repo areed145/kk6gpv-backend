@@ -14,5 +14,6 @@ ENV MONGODB_CLIENT 'mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mon
 ENV MAPBOX_TOKEN 'pk.eyJ1IjoiYXJlZWQxNDUiLCJhIjoiY2phdzNsN2ZoMGh0bjMybzF3cTkycWYyciJ9.4aS7z-guI2VDlP3duMg2FA'
 ENV SID 'KTXHOUST1941'
 ENV PORT 8080
+ENV DEBUG_MODE 0
 
 CMD ["gunicorn", "app:app", "--config=config.py"]
