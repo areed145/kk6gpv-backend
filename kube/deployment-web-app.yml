@@ -18,4 +18,4 @@ spec:
           image: areed145/kk6gpv-web-app:$COMMIT_SHA1
           imagePullPolicy: Always
           ports:
-            - containerPort: 4000
+            - containerPort: 8080

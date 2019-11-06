@@ -22,6 +22,8 @@ import json
 import feather
 import pandas as pd
 
+import config
+
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_num=0, x_proto=1)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
@@ -423,4 +425,4 @@ def create_oilgas():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=4000, debug=False)
+    app.run(host="0.0.0.0", port=config.PORT, debug=config.DEBUG_MODE)
