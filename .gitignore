@@ -42,4 +42,4 @@ Thumbs.db
 .vscode
 *.env
 *.pyc
-kube
+kube-private
