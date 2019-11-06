@@ -13,7 +13,7 @@ RUN pip install --upgrade pip && \
 ENV MONGODB_CLIENT 'mongodb://kk6gpv:kk6gpv@mongo-mongodb-replicaset-0.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-1.mongo-mongodb-replicaset.default.svc.cluster.local,mongo-mongodb-replicaset-2.mongo-mongodb-replicaset.default.svc.cluster.local/?replicaSet=db'
 ENV MAPBOX_TOKEN 'pk.eyJ1IjoiYXJlZWQxNDUiLCJhIjoiY2phdzNsN2ZoMGh0bjMybzF3cTkycWYyciJ9.4aS7z-guI2VDlP3duMg2FA'
 ENV SID 'KTXHOUST1941'
-ENV PORT 8080
+ENV PORT 80
 ENV DEBUG_MODE 0
 
 CMD ["gunicorn", "app:app", "--config=config.py"]
