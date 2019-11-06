@@ -11,6 +11,8 @@ from helpers.blog import Database, Blog, Post, User
 from micawber.providers import bootstrap_basic
 from micawber.contrib.mcflask import add_oembed_filters
 
+from werkzeug.middleware.proxy_fix import ProxyFix
+
 from pymongo import MongoClient
 from flask_track_usage import TrackUsage
 from flask_track_usage.storage.mongo import MongoPiggybackStorage
@@ -21,6 +23,7 @@ import feather
 import pandas as pd
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_num=0, x_proto=1)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 sid = os.environ['SID']
