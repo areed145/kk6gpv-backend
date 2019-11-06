@@ -25,7 +25,7 @@ import pandas as pd
 import config
 
 app = Flask(__name__)
-app.wsgi_app = ProxyFix(app.wsgi_app, x_num=0, x_proto=1)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=0, x_proto=1)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 sid = os.environ['SID']
