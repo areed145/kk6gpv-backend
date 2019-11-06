@@ -1,0 +1,14 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kk6gpv-web-service
+spec:
+  rules:
+  - host: kk6gpv.net
+    http:
+      paths:
+      - backend:
+          serviceName: kk6gpv-web-service
+          servicePort: 80
+        path: /

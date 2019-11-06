@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kk6gpv-web-service
+  labels:
+    app: kk6gpv-web-app
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    name: http
+    targetPort: 4000
+  selector:
+    app: kk6gpv-web-app
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: "/commerceplus"
+    nginx.ingress.kubernetes.io/upstream-vhost: "existing.com"
+  name: kk6gpv-web-service
+spec:
+  rules:
+  - host: kk6gpv.net
+    http:
+      paths:
+      - backend:
+          serviceName: kk6gpv-web-service
+          servicePort: 80
+        path: /
