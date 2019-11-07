@@ -16,4 +16,6 @@ ENV SID 'KTXHOUST1941'
 ENV PORT 80
 ENV DEBUG_MODE 0
 
+EXPOSE 80
+
 CMD ["gunicorn", "app:app", "--config=config.py"]
