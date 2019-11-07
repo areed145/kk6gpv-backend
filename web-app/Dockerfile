@@ -18,4 +18,5 @@ ENV DEBUG_MODE 0
 
 EXPOSE 80
 
-CMD ["gunicorn", "app:app", "--config=config.py"]
+# CMD ["gunicorn", "app:app", "--config=config.py"]
+CMD ["python", "app.py"]
