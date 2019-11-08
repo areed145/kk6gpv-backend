@@ -4,12 +4,12 @@ kind: Deployment
 metadata:
   name: kk6gpv-web-app
   labels:
-    name: kk6gpv-web-app
+    app: kk6gpv-web-app
 spec:
   replicas: 5
-  # selector:
-  #   matchLabels:
-  #     app: kk6gpv-web-app
+  selector:
+    matchLabels:
+      app: kk6gpv-web-app
   template:
     metadata:
       labels:
