@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: kk6gpv-web-app
   labels:
-    app: kk6gpv-web-app
+    name: kk6gpv-web-app
 spec:
   replicas: 5
   selector:
@@ -13,7 +13,7 @@ spec:
   template:
     metadata:
       labels:
-        name: kk6gpv-web-app
+        app: kk6gpv-web-app
     spec:
       containers:
         - name: kk6gpv-web-app
