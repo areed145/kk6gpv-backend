@@ -3,6 +3,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kk6gpv-web-app
+  labels:
+    app: kk6gpv-web-app
 spec:
   replicas: 5
   selector:
