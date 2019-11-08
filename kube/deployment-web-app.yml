@@ -9,7 +9,7 @@ spec:
   replicas: 5
   selector:
     matchLabels:
-      name: kk6gpv-web-app
+      app: kk6gpv-web-app
   template:
     metadata:
       labels:
