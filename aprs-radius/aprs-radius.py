@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
             # Mosquitto client
             ais = aprslib.IS('N0CALL', '13023', port=14580)
-            ais.set_filter('r/30/-95/250 t/n')
+            ais.set_filter('r/30/-95/200 t/n')
             ais.connect()
             ais.consumer(unpack_dict, raw=False)
         except:
