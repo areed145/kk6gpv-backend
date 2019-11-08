@@ -26,7 +26,7 @@ if ($('#wx').length > 0) {
                 Plotly.newPlot('fig_thp', data.fig_thp);
             }
         });
-    })
+    });
 
     setInterval(function () {
         $.ajax({
@@ -48,7 +48,7 @@ if ($('#wx').length > 0) {
                 Plotly.react('fig_wr', data.fig_wr);
                 Plotly.newPlot('fig_thp', data.fig_thp);
 
-            })
+            });
     }, 1000 * 30);
 
 }
@@ -76,7 +76,7 @@ if ($('#iot').length > 0) {
                 Plotly.react('graph_iot', data);
             }
         });
-    })
+    });
 
     $('#time_iot').on('change', function () {
         var selections = [];
@@ -99,7 +99,7 @@ if ($('#iot').length > 0) {
                 Plotly.react('graph_iot', data);
             }
         });
-    })
+    });
 
     setInterval(function () {
         var selections = [];
@@ -121,7 +121,7 @@ if ($('#iot').length > 0) {
             })
             .done(function (data) {
                 Plotly.react('graph_iot', data);
-            })
+            });
     }, 1000 * 5);
 
 }
@@ -187,7 +187,7 @@ if ($('#aprs').length > 0) {
                 Proc(data.rows);
             }
         });
-    })
+    });
 
     $('#prop_aprs').on('change', function () {
         $.ajax({
@@ -204,7 +204,7 @@ if ($('#aprs').length > 0) {
                 Plotly.react('map_aprs', data.map_aprs);
             }
         });
-    })
+    });
 
     $('#time_aprs').on('change', function () {
         var time_aprs = document.getElementById('time_aprs').value;
@@ -267,9 +267,30 @@ if ($('#aprs').length > 0) {
                     Plotly.react('plot_alt', data.plot_alt);
                     Plotly.react('plot_course', data.plot_course);
                     Proc(data.rows);
-                })
+                });
         }, 1000 * time_int);
-    })
+    });
+
+    setInterval(function () {
+        $.ajax({
+                url: "/aprs/map",
+                type: "GET",
+                contentType: 'application/json;charset=UTF-8',
+                data: {
+                    'type_aprs': document.getElementById('type_aprs').value,
+                    'prop_aprs': document.getElementById('prop_aprs').value,
+                    'time_aprs': document.getElementById('time_aprs').value,
+                },
+                dataType: "json",
+            })
+            .done(function (data) {
+                Plotly.react('map_aprs', data.map_aprs);
+                Plotly.react('plot_speed', data.plot_speed);
+                Plotly.react('plot_alt', data.plot_alt);
+                Plotly.react('plot_course', data.plot_course);
+                Proc(data.rows);
+            });
+    }, 1000 * time_int);
 }
 
 if ($('#awc').length > 0) {
@@ -314,7 +335,7 @@ if ($('#awc').length > 0) {
                 Plotly.react('map_awc', data);
             }
         });
-    })
+    });
 
     $('#satellite').on('click', function () {
         var map_awc = document.getElementById('map_awc');
@@ -349,7 +370,7 @@ if ($('#awc').length > 0) {
                 Plotly.react('map_awc', data);
             }
         });
-    })
+    });
 
     $('#radar').on('click', function () {
         var map_awc = document.getElementById('map_awc');
@@ -384,7 +405,7 @@ if ($('#awc').length > 0) {
                 Plotly.react('map_awc', data);
             }
         });
-    })
+    });
 
     $('#lightning').on('click', function () {
         var map_awc = document.getElementById('map_awc');
@@ -418,7 +439,7 @@ if ($('#awc').length > 0) {
                 Plotly.react('map_awc', data);
             }
         });
-    })
+    });
 
     $('#precip').on('click', function () {
         var map_awc = document.getElementById('map_awc');
@@ -452,7 +473,7 @@ if ($('#awc').length > 0) {
                 Plotly.react('map_awc', data);
             }
         });
-    })
+    });
 
     $('#watchwarn').on('click', function () {
         var map_awc = document.getElementById('map_awc');
@@ -486,7 +507,7 @@ if ($('#awc').length > 0) {
                 Plotly.react('map_awc', data);
             }
         });
-    })
+    });
 
     $('#prop_awc').on('change', function () {
         var map_awc = document.getElementById('map_awc');
@@ -515,7 +536,7 @@ if ($('#awc').length > 0) {
                 Plotly.react('map_awc', data);
             }
         });
-    })
+    });
 
     setInterval(function () {
         var map_awc = document.getElementById('map_awc');
@@ -543,7 +564,7 @@ if ($('#awc').length > 0) {
             })
             .done(function (data) {
                 Plotly.react('map_awc', data);
-            })
+            });
     }, 1000 * 60);
 
 }
