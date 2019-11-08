@@ -9,7 +9,7 @@ goal will be to re-create kk6gpv.net as a flask site
 - flask
 - boostrap
 - plotly
-- leaflet (folium?)
+- mapbox
 - datashader
 - mqtt
 
@@ -17,6 +17,8 @@ goal will be to re-create kk6gpv.net as a flask site
 - weather
     - station
     - aviation
+    - blips
+    - soundings
 - iot
     - home assistant
     - vibration protocol
