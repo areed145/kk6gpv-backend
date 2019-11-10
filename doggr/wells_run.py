@@ -229,7 +229,7 @@ class DownloadWorker(Thread):
 
 def main():
     queue = Queue()
-    for x in range(25):
+    for x in range(50):
         worker = DownloadWorker(queue)
         worker.daemon = True
         worker.start()
