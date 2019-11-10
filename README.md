@@ -19,6 +19,7 @@ goal will be to re-create kk6gpv.net as a flask site
     - aviation
     - blips
     - soundings
+    - random
 - iot
     - home assistant
     - vibration protocol
