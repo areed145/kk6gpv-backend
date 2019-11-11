@@ -185,7 +185,7 @@ class TrackUsage(object):
         if ctx.request.authorization:
             data['username'] = str(ctx.request.authorization.username)
         if self._use_freegeoip:
-            clean_ip = quote_plus(str(ctx.request.xforwardedfor))
+            clean_ip = quote_plus(str(ctx.request.headers.get('X-Forwarded-For', None)))
             if '{ip}' in self._freegeoip_endpoint:
                 url = self._freegeoip_endpoint.format(ip=clean_ip)
             else:
