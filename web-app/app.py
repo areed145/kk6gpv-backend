@@ -14,8 +14,8 @@ from micawber.contrib.mcflask import add_oembed_filters
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from pymongo import MongoClient
-from flask_track_usage import TrackUsage
-from flask_track_usage.storage.mongo import MongoPiggybackStorage
+from helpers.tracker import TrackUsage
+from helpers.tracker.storage.mongo import MongoPiggybackStorage
 from flask_caching import Cache
 
 import json
@@ -43,6 +43,7 @@ times = dict(m_5='5m', h_1='1h', h_6='6h', d_1='1d',
              d_2='2d', d_7='7d', d_30='30d')
 
 app.config['TRACK_USAGE_USE_FREEGEOIP'] = True
+app.config['TRACK_USAGE_FREEGEOIP_ENDPOINT'] = True
 app.config['TRACK_USAGE_INCLUDE_OR_EXCLUDE_VIEWS'] = 'include'
 app.config['TRACK_USAGE_COOKIE'] = True
 
@@ -425,4 +426,4 @@ def create_oilgas():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=config.PORT, debug=config.DEBUG_MODE)
+    app.run(host="0.0.0.0", port=os.environ['PORT'], debug=os.environ['DEBUG_MODE'])
