@@ -186,6 +186,9 @@ class TrackUsage(object):
             data['username'] = str(ctx.request.authorization.username)
         if self._use_freegeoip:
             clean_ip = quote_plus(str(ctx.request.headers.get('X-Forwarded-For', None)))
+            if clean_ip == None:
+                clean_ip = quote_plus(str(ctx.request.remote_addr))
+            print(clean_ip)
             if '{ip}' in self._freegeoip_endpoint:
                 url = self._freegeoip_endpoint.format(ip=clean_ip)
             else:
@@ -194,8 +197,11 @@ class TrackUsage(object):
             text = urlopen(url).read()
             ip_info = json.loads(text)
             if url.startswith("http://extreme-ip-lookup.com/"):
-                del ip_info["businessWebsite"]
-                del ip_info["status"]
+                try:
+                    del ip_info["businessWebsite"]
+                    del ip_info["status"]
+                except:
+                    pass
             data['ip_info'] = ip_info
 
         for storage in self._storages:

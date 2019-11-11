@@ -43,7 +43,6 @@ times = dict(m_5='5m', h_1='1h', h_6='6h', d_1='1d',
              d_2='2d', d_7='7d', d_30='30d')
 
 app.config['TRACK_USAGE_USE_FREEGEOIP'] = True
-app.config['TRACK_USAGE_FREEGEOIP_ENDPOINT'] = True
 app.config['TRACK_USAGE_INCLUDE_OR_EXCLUDE_VIEWS'] = 'include'
 app.config['TRACK_USAGE_COOKIE'] = True
 
