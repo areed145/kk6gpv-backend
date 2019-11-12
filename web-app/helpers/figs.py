@@ -6,6 +6,9 @@ import plotly
 import plotly.graph_objs as go
 import json
 from datetime import datetime, timedelta
+import base64
+import re
+    
 
 client = MongoClient(os.environ['MONGODB_CLIENT'], maxPoolSize=10000)
 
@@ -1538,3 +1541,14 @@ def create_wx_figs(time, sid):
                                    'Dewpoint (F)', 'Humidity (%)', 'rgb(255, 95, 63)', 'rgb(255, 127, 63)', 'rgb(63, 127, 255)')
 
     return graphJSON_td, graphJSON_pr, graphJSON_cb, graphJSON_pc, graphJSON_wd, graphJSON_su, graphJSON_wr, graphJSON_thp
+
+
+def get_sounding(sid):
+    db = client.wx
+    img = pd.DataFrame(list(db.soundings.find({'station_id':sid})))
+    img = img['sounding'][0]
+    img = base64.b64decode(img)
+    img = img[img.find(b'<svg'):]
+    img = re.sub(b'height="\d*pt"', b'height="100%"', img)
+    img = re.sub(b'width="\d*pt"', b'width="100%"', img)
+    return img

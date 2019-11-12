@@ -101,12 +101,21 @@ def blips():
     return render_template('blips.html')
 
 
+# @cache.cached(timeout=60)
+# @t.include
+# @app.route('/soundings')
+# def soundings():
+#     g.track_var['page'] = 'soundings'
+#     return render_template('soundings.html')
+
+
 @cache.cached(timeout=60)
 @t.include
 @app.route('/soundings')
 def soundings():
     g.track_var['page'] = 'soundings'
-    return render_template('soundings.html')
+    img = figs.get_sounding('OAK')
+    return render_template('soundings.html', img=img)
 
 
 @cache.cached(timeout=60)
@@ -406,6 +415,13 @@ def graph_wx_change():
     data['fig_wr'] = json.loads(fig_wr)
     data['fig_thp'] = json.loads(fig_thp)
     return json.dumps(data, default=myconverter)
+
+import base64
+@app.route('/soundings/update', methods=['GET', 'POST'])
+def sounding_update():
+    sid = request.args['sid']
+    img = figs.get_sounding(sid)
+    return json.dumps(img.decode('unicode_escape'))
 
 
 @app.route('/iot/graph', methods=['GET', 'POST'])
