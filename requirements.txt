@@ -4,6 +4,7 @@ alembic==1.2.1
 apache-airflow==1.10.5
 apache-beam==2.16.0
 apispec==3.0.0
+appdirs==1.4.3
 applicationinsights==0.11.9
 appnope==0.1.0
 aprslib==0.6.46
@@ -172,6 +173,7 @@ marshmallow-enum==1.5.1
 marshmallow-sqlalchemy==0.19.0
 matplotlib==3.1.1
 mccabe==0.6.1
+MetPy==0.11.1
 micawber==0.5.1
 mistune==0.8.4
 ml-metadata==0.14.0
@@ -197,6 +199,7 @@ onnxconverter-common==1.5.5
 onnxmltools==1.4.1
 opt-einsum==3.1.0
 ordereddict==1.1
+packaging==19.2
 paho-mqtt==1.4.0
 pandas==0.25.2
 pandocfilters==1.4.2
@@ -209,8 +212,10 @@ pendulum==1.4.4
 pexpect==4.7.0
 pickleshare==0.7.5
 Pillow==6.2.1
+Pint==0.9
 plotly==4.1.1
 pmdarima==1.1.1
+pooch==0.6.0
 prison==0.1.0
 prometheus-client==0.7.1
 prompt-toolkit==2.0.10
@@ -232,6 +237,7 @@ pyOpenSSL==19.0.0
 pyparsing==2.4.2
 pyproj==2.4.0
 pyrsistent==0.15.4
+pyshp==2.1.0
 python-daemon==2.1.2
 python-dateutil==2.8.0
 Python-EasyConfig==0.1.7
@@ -241,7 +247,7 @@ python3-openid==3.1.0
 pytz==2019.2
 pytzdata==2019.3
 PyWavelets==1.1.1
-PyYAML==5.1.2
+PyYAML==3.13
 pyzmq==18.1.0
 qtconsole==4.5.5
 requests==2.22.0
@@ -260,6 +266,7 @@ setproctitle==1.1.10
 shap==0.29.3
 Shapely==1.6.4.post2
 shortuuid==0.5.0
+siphon==0.8.0
 six==1.12.0
 skl2onnx==1.4.9
 sklearn-pandas==1.7.0
@@ -298,5 +305,6 @@ Werkzeug==0.15.6
 widgetsnbextension==3.5.1
 wrapt==1.11.2
 WTForms==2.2.1
+xarray==0.14.0
 zipp==0.6.0
 zope.deprecation==4.4.0
