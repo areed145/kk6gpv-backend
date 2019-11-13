@@ -184,8 +184,7 @@
             <script>
               var graphs = {{ plot | safe }};
               Plotly.plot('graph_oilgas', graphs.data, graphs.layout, {
-                displayModeBar: false,
-                responsive: true
+                displayModeBar: false, responsive: true
               });
             </script>
           </div>
@@ -221,8 +220,7 @@
               <script>
                 var graphs = {{ plot_offset_oil | safe }};
                 Plotly.plot('graph_oilgas_offset_oil', graphs.data, graphs.layout, {
-                  displayModeBar: false,
-                  responsive: true
+                  displayModeBar: false, responsive: true
                 });
               </script>
             </div>
@@ -230,8 +228,7 @@
               <script>
                 var graphs = {{ plot_offset_stm | safe }};
                 Plotly.plot('graph_oilgas_offset_stm', graphs.data, graphs.layout, {
-                  displayModeBar: false,
-                  responsive: true
+                  displayModeBar: false, responsive: true
                 });
               </script>
             </div>
@@ -239,8 +236,7 @@
               <script>
                 var graphs = {{ plot_offset_wtr | safe }};
                 Plotly.plot('graph_oilgas_offset_wtr', graphs.data, graphs.layout, {
-                  displayModeBar: false,
-                  responsive: true
+                  displayModeBar: false, responsive: true
                 });
               </script>
             </div>
