@@ -6,6 +6,8 @@ channels:
 dependencies:
   - python=3.7   # or 2.7
   - metpy
+  - siphon==0.8.0
   - pandas
   - numpy
+  - matplotlib
   - pymongo==3.9.0
