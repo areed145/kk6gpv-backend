@@ -29,7 +29,7 @@
             <script>
               var graphs = {{ fig_td | safe }};
               Plotly.plot('fig_td', graphs.data, graphs.layout, {
-                displayModeBar: false
+                displayModeBar: false, responsive: true
               });
             </script>
           </div>
@@ -43,7 +43,7 @@
             <script>
               var graphs = {{ fig_pr | safe }};
               Plotly.plot('fig_pr', graphs.data, graphs.layout, {
-                displayModeBar: false
+                displayModeBar: false, responsive: true
               });
             </script>
           </div>
@@ -57,7 +57,7 @@
             <script>
               var graphs = {{ fig_pc | safe }};
               Plotly.plot('fig_pc', graphs.data, graphs.layout, {
-                displayModeBar: false
+                displayModeBar: false, responsive: true
               });
             </script>
           </div>
@@ -71,7 +71,7 @@
             <script>
               var graphs = {{ fig_wd | safe }};
               Plotly.plot('fig_wd', graphs.data, graphs.layout, {
-                displayModeBar: false
+                displayModeBar: false, responsive: true
               });
             </script>
           </div>
@@ -85,7 +85,7 @@
             <script>
               var graphs = {{ fig_su | safe }};
               Plotly.plot('fig_su', graphs.data, graphs.layout, {
-                displayModeBar: false
+                displayModeBar: false, responsive: true
               });
             </script>
           </div>
@@ -99,7 +99,7 @@
             <script>
               var graphs = {{ fig_cb | safe }};
               Plotly.plot('fig_cb', graphs.data, graphs.layout, {
-                displayModeBar: false
+                displayModeBar: false, responsive: true
               });
             </script>
           </div>
@@ -113,8 +113,7 @@
             <script>
               var graphs = {{ fig_wr | safe }};
               Plotly.newPlot('fig_wr', graphs.data, graphs.layout, {
-                displayModeBar: false,
-                responsive: true
+                displayModeBar: false, responsive: true
               });
             </script>
           </div>
@@ -128,8 +127,7 @@
             <script>
               var graphs = {{ fig_thp | safe }};
               Plotly.newPlot('fig_thp', graphs.data, graphs.layout, {
-                displayModeBar: false,
-                responsive: true
+                displayModeBar: false, responsive: true
               });
             </script>
           </div>
