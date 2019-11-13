@@ -352,7 +352,7 @@ workflows:
           filters:
             branches:
               only: master
-      - build_metpy_taks:
+      - build_metpy_tasks:
           filters:
             branches:
               only: master
