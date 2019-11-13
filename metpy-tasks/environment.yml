@@ -1,0 +1,11 @@
+name: metpy
+channels:
+  - pywr
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.7   # or 2.7
+  - metpy
+  - pandas
+  - numpy
+  - pymongo==3.9.0
