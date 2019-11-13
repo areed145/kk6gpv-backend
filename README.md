@@ -10,16 +10,15 @@ goal will be to re-create kk6gpv.net as a flask site
 - boostrap
 - plotly
 - mapbox
-- datashader
+- datashader (tbd)
 - mqtt
 
 ## structure
 - weather
-    - station
     - aviation
+    - station
     - blips
     - soundings
-    - random
 - iot
     - home assistant
     - vibration protocol
@@ -36,17 +35,18 @@ goal will be to re-create kk6gpv.net as a flask site
     - travel
     - flickr gallery
 - oil & gas
-     - doggr application
+     - summary
+     - maps
 
 ## todo
 - UI
 - rebuild flickr photo gallery functionality
 - move gallery listing to db
-- figure out how to add raster layers to maps (leaflet? instaead of plotly for mapbox)
-- builder like blog for writing about projects
 - details pages for APRS info
 - styling
 - optimize deployment
+- metpy incorporation
+- CRM modeling for oil & gas
 
 ## done
 - add old mongodb data (delete incorrect, load correct)
@@ -62,3 +62,5 @@ goal will be to re-create kk6gpv.net as a flask site
 - multi-services in kubernetes?
 - add station weather plots
 - move to local mongodb
+- builder like blog for writing about projects
+- figure out how to add raster layers to maps (leaflet? instaead of plotly for mapbox)
