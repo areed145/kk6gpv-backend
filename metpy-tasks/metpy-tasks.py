@@ -1,16 +1,20 @@
-import posixpath
-import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-import metpy.calc as mpcalc
-from metpy.plots import add_metpy_logo, add_timestamp, SkewT, Hodograph
-from metpy.units import units
-from siphon.simplewebservice.wyoming import WyomingUpperAir
-from datetime import datetime, timedelta
-import io
-import base64
-from pymongo import MongoClient
 import time
+from pymongo import MongoClient
+import base64
+import io
+from datetime import datetime, timedelta
+from siphon.simplewebservice.wyoming import WyomingUpperAir
+from metpy.units import units
+from metpy.plots import add_metpy_logo, add_timestamp, SkewT, Hodograph
+import metpy.calc as mpcalc
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+import matplotlib.pyplot as plt
+import posixpath
+import matplotlib as mpl
 import os
+if os.environ.get('DISPLAY', '') == '':
+    print('no display found. Using non-interactive Agg backend')
+    mpl.use('Agg')
 
 client = MongoClient(os.environ['MONGODB_CLIENT'])
 db = client.wx
@@ -98,23 +102,24 @@ def generate_plot(site, date=None):
     message = {}
     message['station_id'] = site
     message['sounding'] = b64
+    message['timestamp'] = datetime.utcnow()
     db.soundings.replace_one({'station_id': site}, message, upsert=True)
 
 
-station_list = ['OAK', 'REV', 'LKN', 'SLC', 'GJT', 'DNR', 'VBG', 'EDW', 'DRA', 'FGZ', 'ABQ', 'AMA', 'NKX', 'TUS', 'EPZ', 'MAF', 'FWD', 'SHV', 'DRT']
+station_list = ['OAK', 'REV', 'LKN', 'SLC', 'GJT', 'DNR', 'VBG', 'EDW',
+                'DRA', 'FGZ', 'ABQ', 'AMA', 'NKX', 'TUS', 'EPZ', 'MAF', 'FWD', 'SHV', 'DRT']
 
 if __name__ == '__main__':
-    last_hour = datetime.now().hour - 1
-    last_minute = datetime.now().minute - 1
+    next_hour = datetime.utcnow()
     while True:
-        if datetime.now().hour != last_hour:
+        if datetime.utcnow() >= next_hour:
             for station in station_list:
                 try:
                     generate_plot(station)
                 except:
                     pass
-            last_hour = datetime.now().hour
             print('got metpy')
+            next_hour = datetime.utcnow() + timedelta(hours=1)
         else:
             print('skipping updates')
         time.sleep(60*10)
