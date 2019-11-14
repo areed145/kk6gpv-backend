@@ -1,0 +1,23 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kk6gpv-web-app
+  labels:
+    app: kk6gpv-web-app
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: kk6gpv-web-app
+  template:
+    metadata:
+      labels:
+        app: kk6gpv-web-app
+    spec:
+      containers:
+        - name: kk6gpv-web-app
+          image: areed145/kk6gpv-web-app:$COMMIT_SHA1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
