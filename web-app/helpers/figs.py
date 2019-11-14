@@ -713,7 +713,7 @@ def create_map_awc(prop, lat=38, lon=-96, zoom=3, satellite='0', radar='0', ligh
         df_mvfr = df[df['flight_category'] == 'MVFR']
         df_ifr = df[df['flight_category'] == 'IFR']
         df_lifr = df[df['flight_category'] == 'LIFR']
-        legend = True
+        legend = False
 
         data = [go.Scattermapbox(lat=df_vfr['latitude'],
                                  lon=df_vfr['longitude'],
@@ -909,7 +909,7 @@ def create_map_awc(prop, lat=38, lon=-96, zoom=3, satellite='0', radar='0', ligh
     zoom = float(zoom)
 
     layout = go.Layout(autosize=True,
-                    #    legend=dict(orientation='h'),
+                       legend=dict(orientation='h'),
                        showlegend=legend,
                        hovermode='closest',
                        uirevision=True,
