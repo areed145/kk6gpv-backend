@@ -2,19 +2,21 @@ import time
 from pymongo import MongoClient
 import base64
 import io
+import os
 from datetime import datetime, timedelta
 from siphon.simplewebservice.wyoming import WyomingUpperAir
 from metpy.units import units
 from metpy.plots import add_metpy_logo, add_timestamp, SkewT, Hodograph
 import metpy.calc as mpcalc
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-import matplotlib.pyplot as plt
-import posixpath
 import matplotlib as mpl
-import os
 if os.environ.get('DISPLAY', '') == '':
     print('no display found. Using non-interactive Agg backend')
     mpl.use('Agg')
+import matplotlib.pyplot as plt
+import posixpath
+
+
 
 client = MongoClient(os.environ['MONGODB_CLIENT'])
 db = client.wx
