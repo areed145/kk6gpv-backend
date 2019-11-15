@@ -116,7 +116,7 @@ def blips():
 @app.route('/soundings')
 def soundings():
     g.track_var['page'] = 'soundings'
-    img = figs.get_image('OAK')
+    img = figs.get_image('925')
     return render_template('soundings.html', img=img)
 
 

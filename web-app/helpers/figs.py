@@ -1551,6 +1551,6 @@ def get_image(name):
     img = fs.get(file._id).read()
     img = base64.b64decode(img)
     img = img[img.find(b'<svg'):]
-    img = re.sub(b'height="\d*pt"', b'height="100%"', img)
-    img = re.sub(b'width="\d*pt"', b'width="100%"', img)
+    img = re.sub(b'height="\d*.\d*pt"', b'height="100%"', img)
+    img = re.sub(b'width="\d*.\d*pt"', b'width="100%"', img)
     return img

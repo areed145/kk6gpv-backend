@@ -114,7 +114,7 @@ def generate_sounding_plot(site, date=None):
     # skewt.ax.figure.savefig(make_name(site, date, request_time))
 
     bio = io.BytesIO()
-    skewt.ax.figure.savefig(bio, format='svg')
+    skewt.ax.figure.savefig(bio, format='svg', bbox_inches='tight')
     bio.seek(0)
     b64 = base64.b64encode(bio.read())
     try:
@@ -204,8 +204,10 @@ def generate_rap_plots():
         except:
             pass
 
+        ax.gridlines(zorder=9)
+
         bio = io.BytesIO()
-        ax.figure.savefig(bio, format='svg')
+        ax.figure.savefig(bio, format='svg', bbox_inches='tight')
         bio.seek(0)
         b64 = base64.b64encode(bio.read())
         try:
