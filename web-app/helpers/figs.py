@@ -1548,7 +1548,7 @@ def get_image(name):
     db = client.wx_gfx
     fs = gridfs.GridFS(db)
     file = fs.find_one({"filename": name})
-    img = fs.get(file._id)
+    img = fs.get(file._id).read()
     img = base64.b64decode(img)
     img = img[img.find(b'<svg'):]
     img = re.sub(b'height="\d*pt"', b'height="100%"', img)
