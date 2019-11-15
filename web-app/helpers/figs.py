@@ -2,6 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 from pymongo import MongoClient
+import gridfs
 import plotly
 import plotly.graph_objs as go
 import json
@@ -713,7 +714,7 @@ def create_map_awc(prop, lat=38, lon=-96, zoom=3, satellite='0', radar='0', ligh
         df_mvfr = df[df['flight_category'] == 'MVFR']
         df_ifr = df[df['flight_category'] == 'IFR']
         df_lifr = df[df['flight_category'] == 'LIFR']
-        legend = True
+        legend = False
 
         data = [go.Scattermapbox(lat=df_vfr['latitude'],
                                  lon=df_vfr['longitude'],
@@ -1543,10 +1544,11 @@ def create_wx_figs(time, sid):
     return graphJSON_td, graphJSON_pr, graphJSON_cb, graphJSON_pc, graphJSON_wd, graphJSON_su, graphJSON_wr, graphJSON_thp
 
 
-def get_sounding(sid):
-    db = client.wx
-    img = pd.DataFrame(list(db.soundings.find({'station_id':sid})))
-    img = img['sounding'][0]
+def get_image(name):
+    db = client.wx_gfx
+    fs = gridfs.GridFS(db)
+    file = fs.find_one({"filename": name})
+    img = fs.get(file._id)
     img = base64.b64decode(img)
     img = img[img.find(b'<svg'):]
     img = re.sub(b'height="\d*pt"', b'height="100%"', img)

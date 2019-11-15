@@ -69,7 +69,9 @@ def initialize_database():
 def index():
     g.track_var['page'] = 'home'
     wx = figs.get_wx_latest(sid)
-    return render_template('index.html', wx=wx)
+    wxmap = figs.create_map_awc(
+        'flight_category', 29.780880, -95.420410, 6, '0', '1', '1', '0', '1', '0')
+    return render_template('index.html', wx=wx, wxmap=wxmap)
 
 
 @cache.cached(timeout=60)
@@ -420,7 +422,7 @@ import base64
 @app.route('/soundings/update', methods=['GET', 'POST'])
 def sounding_update():
     sid = request.args['sid']
-    img = figs.get_sounding(sid)
+    img = figs.get_image(sid)
     return json.dumps(img.decode('unicode_escape'))
 
 

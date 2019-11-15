@@ -1,19 +1,41 @@
-import posixpath
-import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-import metpy.calc as mpcalc
-from metpy.plots import add_metpy_logo, add_timestamp, SkewT, Hodograph
-from metpy.units import units
-from siphon.simplewebservice.wyoming import WyomingUpperAir
-from datetime import datetime, timedelta
-import io
-import base64
-from pymongo import MongoClient
 import time
+from pymongo import MongoClient
+import gridfs
+import base64
+import io
 import os
+import matplotlib as mpl
+mpl.use('Agg')
+import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
+from siphon.simplewebservice.wyoming import WyomingUpperAir
+from metpy.units import units
+from metpy.plots import add_metpy_logo, add_timestamp, SkewT, Hodograph
+import metpy.calc as mpcalc
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+import posixpath
+
+import cartopy.crs as ccrs
+import cartopy.io.shapereader as shpreader
+import cartopy.feature as cfeature
+import matplotlib.colors as colors
+import matplotlib.patheffects as PathEffects
+import matplotlib.ticker as mticker
+import metpy
+from mpl_toolkits.axes_grid1 import make_axes_locatable, axes_size
+from netCDF4 import num2date
+import numpy as np
+import scipy.ndimage as ndimage
+import shapefile
+from siphon.catalog import TDSCatalog
+import xarray as xr
+from xarray.backends import NetCDF4DataStore
+from matplotlib.colors import LinearSegmentedColormap
+
 
 client = MongoClient(os.environ['MONGODB_CLIENT'])
-db = client.wx
+db = client.wx_gfx
+fs = gridfs.GridFS(db)
 
 
 def plot_skewt(df):
@@ -72,7 +94,7 @@ def make_name(site, date, time):
         return '{site}.svg'.format(site=site)
 
 
-def generate_plot(site, date=None):
+def generate_sounding_plot(site, date=None):
 
     if date:
         request_time = datetime.strptime(date, '%Y%m%d%H')
@@ -95,26 +117,117 @@ def generate_plot(site, date=None):
     skewt.ax.figure.savefig(bio, format='svg')
     bio.seek(0)
     b64 = base64.b64encode(bio.read())
-    message = {}
-    message['station_id'] = site
-    message['sounding'] = b64
-    db.soundings.replace_one({'station_id': site}, message, upsert=True)
+    try:
+        file = fs.find_one({"filename": site})
+        fs.delete(file._id)
+    except:
+        pass
+    fs.put(b64, filename=site, timestamp=datetime.utcnow())
 
 
-station_list = ['OAK', 'REV', 'LKN', 'SLC', 'GJT', 'DNR', 'VBG', 'EDW', 'DRA', 'FGZ', 'ABQ', 'AMA', 'NKX', 'TUS', 'EPZ', 'MAF', 'FWD', 'SHV', 'DRT']
+station_list = ['OAK', 'REV', 'LKN', 'SLC', 'GJT', 'DNR', 'VBG', 'EDW',
+                'DRA', 'FGZ', 'ABQ', 'AMA', 'NKX', 'TUS', 'EPZ', 'MAF', 
+                'FWD', 'SHV', 'DRT', 'CRP', 'BRO', 'LCH', 'SHV', 'OUN',
+                'DDC', 'RIW', 'BOI', 'MFR', 'SLE', 'UIL', 'OTX', 'TFX',
+                'GGW', 'UNR', 'BIS', 'ABR', 'OAX', 'TOP', 'SGF', 'LZK',
+                'SIL', 'INL', 'MPX', 'DVN', 'ILX', 'JAN', 'APX', 'DTX',
+                'ILN', 'BNA', 'BMX', 'FFC', 'TLH', 'PIT', 'RNK', 'GSO',
+                'CHS', 'JAX', 'TBW', 'XMR', 'MFL', 'EYW', 'MHX', 'IAD',
+                'BUF', 'WAL', 'ALB', 'OKX', 'GYX', 'CHH', 'CAR']
+
+def generate_rap_plots():
+
+    colors = ['#cbff30','#7fff30','#30ff56','#129e10']
+    cm = LinearSegmentedColormap.from_list('cm', colors, N=len(colors)*10)
+
+    now = datetime.utcnow()
+
+    # Define datasets to wanted.
+    prop = 'Relative_humidity_isobaric'
+
+    # Use TDSCatalog to begin data access, NCSS to subset, & grab latest file.
+    rap_cat = TDSCatalog('https://thredds.unidata.ucar.edu/thredds/catalog/'
+                        'grib/NCEP/RAP/CONUS_13km/latest.xml')
+    latestrap = rap_cat.datasets[0]
+    ncss = latestrap.subset()
+
+    # Query prop data.
+    prop_data = ncss.query()
+    prop_data.variables(prop)
+    prop_data.add_lonlat().lonlat_box(north=59, south=15, east=-57, west=-139)
+    prop_data.time(now)
+    prop_dataq = ncss.get_data(prop_data)
+
+    propc = prop_dataq.variables[prop]
+
+    levels = dict(_925=33,_850=28,_700=24,_500=16,_300=8,_250=6, _200=4)
+
+    for level in levels:
+        name = level[1:]
+        slice = levels[level]
+
+        propcs = propc[0,slice,:,:]
+
+        fnl_prop = ndimage.gaussian_filter(propcs, sigma=0.5, order=0)
+
+        # Extract the lon/lat,
+        lon = prop_dataq.variables['lon'][:]
+        lat = prop_dataq.variables['lat'][:]
+
+        # Create figure.
+        fig = plt.figure(figsize=(10, 15))
+
+        # Define projection.
+        lc = ccrs.LambertConformal(central_longitude=-97.5, central_latitude=35, 
+                                standard_parallels=(30,60))
+        ax = fig.add_subplot(1, 1, 1, projection=lc)
+        ax.set_extent([-123, -73, 23, 52], crs=ccrs.PlateCarree())
+
+        # Create the map.
+        ax.add_feature(cfeature.OCEAN.with_scale('50m'),facecolor='#34cceb',edgecolor='none',zorder=5)
+        ax.add_feature(cfeature.LAND.with_scale('50m'),edgecolor='dimgray',
+                                                    facecolor='#ede6af',
+                                                    zorder=0)
+        ax.add_feature(cfeature.BORDERS.with_scale('50m'),zorder=8)
+        ax.add_feature(cfeature.LAKES.with_scale('50m'),linewidth=.5,
+                                                        facecolor='#34cceb',
+                                                        edgecolor='dimgray',
+                                                        zorder=3)
+        ax.add_feature(cfeature.STATES.with_scale('50m'),linewidth=.5,
+                                                        edgecolor='black',
+                                                        zorder=8)
+
+        # Plot prop data.
+        cntr_prop = np.arange(50, 101, 1)
+        try:
+            ax.contourf(lon, lat, fnl_prop, cntr_prop, cmap=cm, zorder=7, transform=ccrs.PlateCarree())
+        except:
+            pass
+
+        bio = io.BytesIO()
+        ax.figure.savefig(bio, format='svg')
+        bio.seek(0)
+        b64 = base64.b64encode(bio.read())
+        try:
+            file = fs.find_one({"filename": name})
+            fs.delete(file._id)
+        except:
+            pass
+        fs.put(b64, filename=name, timestamp=datetime.utcnow())
 
 if __name__ == '__main__':
-    last_hour = datetime.now().hour - 1
-    last_minute = datetime.now().minute - 1
+    next_hour = datetime.utcnow()
     while True:
-        if datetime.now().hour != last_hour:
+        if datetime.utcnow() >= next_hour:
             for station in station_list:
                 try:
-                    generate_plot(station)
+                    generate_sounding_plot(station)
                 except:
                     pass
-            last_hour = datetime.now().hour
+            generate_rap_plots()
+
             print('got metpy')
+            next_hour = datetime.utcnow() + timedelta(hours=1)
         else:
             print('skipping updates')
         time.sleep(60*10)
