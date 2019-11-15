@@ -9,10 +9,9 @@ from datetime import datetime, timedelta
 import io
 import base64
 from pymongo import MongoClient
-import time
-import os
 
-client = MongoClient(os.environ['MONGODB_CLIENT'])
+client = MongoClient(
+    'mongodb+srv://kk6gpv:kk6gpv@cluster0-kglzh.azure.mongodb.net/test?retryWrites=true&w=majority')
 db = client.wx
 
 
@@ -101,20 +100,8 @@ def generate_plot(site, date=None):
     db.soundings.replace_one({'station_id': site}, message, upsert=True)
 
 
-station_list = ['OAK', 'REV', 'LKN', 'SLC', 'GJT', 'DNR', 'VBG', 'EDW', 'DRA', 'FGZ', 'ABQ', 'AMA', 'NKX', 'TUS', 'EPZ', 'MAF', 'FWD', 'SHV', 'DRT']
-
-if __name__ == '__main__':
-    last_hour = datetime.now().hour - 1
-    last_minute = datetime.now().minute - 1
-    while True:
-        if datetime.now().hour != last_hour:
-            for station in station_list:
-                try:
-                    generate_plot(station)
-                except:
-                    pass
-            last_hour = datetime.now().hour
-            print('got metpy')
-        else:
-            print('skipping updates')
-        time.sleep(60*10)
+for station in ['OAK', 'REV', 'LKN', 'SLC', 'GJT', 'DNR', 'VBG', 'EDW', 'DRA', 'FGZ', 'ABQ', 'AMA', 'NKX', 'TUS', 'EPZ', 'MAF', 'FWD', 'SHV', 'DRT']:
+    try:
+        generate_plot(station)
+    except:
+        pass
