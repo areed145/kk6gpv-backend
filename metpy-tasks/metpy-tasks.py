@@ -124,6 +124,9 @@ def generate_sounding_plot(site, date=None):
         pass
     fs.put(b64, filename=site, timestamp=datetime.utcnow())
 
+    skewt.clear()
+    plt.close(skewt)
+
 
 station_list = ['OAK', 'REV', 'LKN', 'SLC', 'GJT', 'DNR', 'VBG', 'EDW',
                 'DRA', 'FGZ', 'ABQ', 'AMA', 'NKX', 'TUS', 'EPZ', 'MAF', 
@@ -216,6 +219,9 @@ def generate_rap_plots():
         except:
             pass
         fs.put(b64, filename=name, timestamp=datetime.utcnow())
+
+        fig.clear()
+        plt.close(fig)
 
 if __name__ == '__main__':
     next_hour = datetime.utcnow()
