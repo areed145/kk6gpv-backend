@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: application
-          image: areed145/kk6gpv-wunderground:$COMMIT_SHA1
+          image: areed145/kk6gpv-wunderground:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 4000
