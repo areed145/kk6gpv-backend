@@ -82,9 +82,8 @@ def convert_entry(api):
     db.doggr.replace_one({'api': api}, entry, upsert=False)
 
 if __name__ == '__main__':
-    df_prod = pd.DataFrame(list(db.doggr.find({'prod': {'$exists': True}},{'api':1})))
-    df_inj = pd.DataFrame(list(db.doggr.find({'inj': {'$exists': True}},{'api':1})))
-    apis = list(set(list(df_prod['api'])+list(df_inj['api'])))
+    df_prodinj = pd.DataFrame(list(db.doggr.find({'prodinj': {'$exists': True}},{'api':1})))
+    apis = list(set(list(df_prodinj['api'])))
     random.shuffle(apis)
     for api in apis:
         try:
