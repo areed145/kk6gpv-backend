@@ -56,12 +56,14 @@ def convert_entry(api):
 
     try:
         cyclic_jobs = []
-        for job in df_prodinj['cyclic_ct'].unique():
+        for job in range(df_prodinj['cyclic_ct'].max()):
             if job > 0:
                 df_prev = df_prodinj[df_prodinj['cyclic_ct'] == job-1]
+                df_prev = df_prev.sort_values(by='date')
                 df_prev.reset_index(drop=True, inplace=True)
-                df_prev.index = -(df_prev.index.astype(int) + 1)
+                df_prev.index = df_prev.index.astype(int) - min(len(df_prev),5)
                 df = df_prodinj[df_prodinj['cyclic_ct'] == job]
+                df = df.sort_values(by='date')
                 df.reset_index(drop=True, inplace=True)
                 cyclic_job = {}
                 cyclic_job['number'] = job
