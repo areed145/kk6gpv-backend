@@ -2,10 +2,14 @@
 
 import flickr_api as f
 import pickle
+import os
+from pymongo import MongoClient
+from datetime import datetime
+import time
 
 f.set_keys(api_key='77a2ae7ea816558f00e4dd32249be54e',
            api_secret='2267640a7461db21')
-f.set_auth_handler('helpers/auth')
+f.set_auth_handler('auth')
 username = '- Adam Reeder -'
 u = f.Person.findByUserName(username)
 
@@ -40,7 +44,25 @@ def get_gals():
             'kk6gpv_link': kk6gpv_link,
             'photos': photos
         }
-    g = open('static/gals', 'wb')
-    pickle.dump(gals, g)
+
+    # g = open('static/gals', 'wb')
+    # pickle.dump(gals, g)
     print('galleries updated')
+    db.gals.insert_one(gals)
     return gals
+
+client = MongoClient('mongodb+srv://kk6gpv:kk6gpv@cluster0-kglzh.azure.mongodb.net/test?retryWrites=true&w=majority')
+db = client.flickr
+
+if __name__ == '__main__':
+    last_hour = datetime.now().hour - 1
+    while True:
+        if datetime.now().hour != last_hour:
+            get_gals()
+            last_hour = datetime.now().hour
+            print('got long')
+        else:
+            print('skipping updates')
+        time.sleep(60)
+
+

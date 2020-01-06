@@ -40,7 +40,7 @@ def get_var(message, rad, awc, prop):
     r = rad/50
     lat = message['latitude']
     lon = message['longitude']
-    df = pd.DataFrame(list(awc.find({'latitude': {'$gt': lat-r, '$lt': lat+r}, 
+    df = pd.DataFrame(list(awc.find({'latitude': {'$gt': lat-r, '$lt': lat+r},
                                     'longitude': {'$gt': lon-r, '$lt': lon+r}})))
     df['dist'] = np.arccos(np.sin(lat*np.pi/180) * np.sin(df['latitude']*np.pi/180) + np.cos(lat*np.pi/180)
                            * np.cos(df['latitude']*np.pi/180) * np.cos((df['longitude']*np.pi/180) - (lon*np.pi/180))) * 6371
@@ -140,11 +140,11 @@ if __name__ == '__main__':
     while True:
         if datetime.now().hour != last_hour:
             #pl = Pool(48)
-            inc = 15
+            inc = 10
             for lat_min in range(-90, 90, inc):
                 for lon_min in range(-180, 180, inc):
                     #pl.apply_async(get_obs, args=(lat_min, lon_min, inc, 1, 2))
-                    get_obs(lat_min, lon_min, inc, 2, 2)
+                    get_obs(lat_min, lon_min, inc, 1.1, 3)
             # pl.close()
             # pl.join()
             last_hour = datetime.now().hour
