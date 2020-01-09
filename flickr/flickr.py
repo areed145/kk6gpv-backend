@@ -9,7 +9,7 @@ import time
 
 f.set_keys(api_key='77a2ae7ea816558f00e4dd32249be54e',
            api_secret='2267640a7461db21')
-f.set_auth_handler('auth')
+# f.set_auth_handler('auth')
 username = '- Adam Reeder -'
 u = f.Person.findByUserName(username)
 
@@ -17,7 +17,6 @@ u = f.Person.findByUserName(username)
 def get_gals():
     ps = u.getPhotosets()
 
-    gals = {}
     for p in ps:
         pid = p.id
         title = p.title
@@ -29,12 +28,39 @@ def get_gals():
         kk6gpv_link = '/galleries/'+p.id
         photos = {}
         phs = p.getPhotos()
+
         for ph in phs:
+
+            photo = {
+                'id': ph.id,
+                'thumb': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_q_d.jpg',
+                'large': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_b.jpg',
+            }
+            try:
+                ex = {}
+                for item in ph.getExif():
+                    ex[item.tag] = item.raw
+                photo['exif'] = ex
+            except:
+                pass
+            try:
+                photo['location'] = ph.location
+            except:
+                pass
+            db.photos.replace_one({'id': ph.id}, photo)
+            print('photo uploaded')
+
             photos[ph.id] = {
                 'thumb': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_q_d.jpg',
-                'large': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_b.jpg'
+                'large': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_b.jpg',
             }
-        gals[pid] = {
+            try:
+                photos[ph.id]['latitude'] = ph.location['latitude']
+                photos[ph.id]['longitude'] = ph.location['longitude']
+            except:
+                pass
+
+        gal = {
             'id': pid,
             'title': title,
             'count_photos': count_photos,
@@ -44,14 +70,12 @@ def get_gals():
             'kk6gpv_link': kk6gpv_link,
             'photos': photos
         }
+        db.galleries.replace_one({'id': pid}, gal)
+        print('gallery updated')
 
-    # g = open('static/gals', 'wb')
-    # pickle.dump(gals, g)
-    print('galleries updated')
-    db.gals.insert_one(gals)
-    return gals
 
-client = MongoClient('mongodb+srv://kk6gpv:kk6gpv@cluster0-kglzh.azure.mongodb.net/test?retryWrites=true&w=majority')
+client = MongoClient(
+    'mongodb+srv://kk6gpv:kk6gpv@cluster0-kglzh.azure.mongodb.net/test?retryWrites=true&w=majority')
 db = client.flickr
 
 if __name__ == '__main__':
@@ -64,5 +88,3 @@ if __name__ == '__main__':
         else:
             print('skipping updates')
         time.sleep(60)
-
-
