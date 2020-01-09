@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kk6gpv-flickr
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: kk6gpv-flickr
+  template:
+    metadata:
+      labels:
+        name: kk6gpv-flickr
+    spec:
+      containers:
+        - name: application
+          image: areed145/kk6gpv-flickr:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 4000

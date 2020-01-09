@@ -47,7 +47,7 @@ def get_gals():
                 photo['location'] = ph.location
             except:
                 pass
-            db.photos.replace_one({'id': ph.id}, photo)
+            db.photos.replace_one({'id': ph.id}, photo, upsert=True)
             print('photo uploaded')
 
             photos[ph.id] = {
@@ -70,12 +70,11 @@ def get_gals():
             'kk6gpv_link': kk6gpv_link,
             'photos': photos
         }
-        db.galleries.replace_one({'id': pid}, gal)
+        db.galleries.replace_one({'id': pid}, gal, upsert=True)
         print('gallery updated')
 
 
-client = MongoClient(
-    'mongodb+srv://kk6gpv:kk6gpv@cluster0-kglzh.azure.mongodb.net/test?retryWrites=true&w=majority')
+client = MongoClient(os.environ['MONGODB_CLIENT'])
 db = client.flickr
 
 if __name__ == '__main__':
