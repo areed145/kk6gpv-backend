@@ -57,6 +57,9 @@ class decline_curve:
             vals = (self.prodinj['oil'] + self.prodinj['water']) / 30.45
         elif stream == 'owr':
             vals = self.prodinj['oil'] / self.prodinj['water']
+        elif stream == 'oilcut':
+            vals = self.prodinj['oil'] / \
+                (self.prodinj['oil'] + self.prodinj['water'])
         else:
             vals = (self.prodinj[stream]) / 30.45
         vals.index = vals.index.astype(int)
@@ -307,17 +310,24 @@ class decline_curve:
         self.get_prodinj()
         self.streams = {}
         self.params = {}
-        stream = 'oil'
-        self.decline_curve(stream=stream)
+        self.decline_curve(stream='oil')
 #         lookback_use = self.streams[stream]['params']['lookback']
         lookback_use = None
-        stream = 'owr'
-        self.decline_curve(stream=stream, lookback_use=lookback_use)
+        self.decline_curve(stream='oilcut', lookback_use=lookback_use)
+        self.decline_curve(stream='water')
+        self.decline_curve(stream='gas')
         self.write_declines()
 
 
-df_ = pd.DataFrame(list(db.doggr.find(
-    {'field': 'Kern River', 'oil_cum': {'$gt': 0}}, {'api': 1})))
+df_ = pd.DataFrame(
+    list(
+        db.doggr.find(
+            {'field': 'Kern River', 'oil_cum': {'$gt': 0},
+                'gas_cum': {'$gt': 0}}, {'api': 1}
+            # {'oil_cum': {'$gt': 0}, 'gas_cum': {'$gt': 0}}, {'api': 1}
+        )
+    )
+)
 apis = df_['api'].values
 
 print(len(apis))

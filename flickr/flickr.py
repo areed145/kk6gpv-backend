@@ -86,4 +86,4 @@ if __name__ == '__main__':
             print('got long')
         else:
             print('skipping updates')
-        time.sleep(60)
+        time.sleep(60*12)
