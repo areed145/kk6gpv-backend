@@ -27,38 +27,40 @@ def get_gals():
         flickr_link = 'https://www.flickr.com/photos/adamreeder/albums/'+p.id
         kk6gpv_link = '/galleries/'+p.id
         photos = {}
-        phs = p.getPhotos()
 
-        for ph in phs:
+        for page in range(int(p.photos/500)):
+            phs = p.getPhotos(page=page+1)
 
-            photo = {
-                'id': ph.id,
-                'thumb': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_q_d.jpg',
-                'large': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_b.jpg',
-            }
-            try:
-                ex = {}
-                for item in ph.getExif():
-                    ex[item.tag] = item.raw
-                photo['exif'] = ex
-            except:
-                pass
-            try:
-                photo['location'] = ph.location
-            except:
-                pass
-            db.photos.replace_one({'id': ph.id}, photo, upsert=True)
-            print('photo uploaded')
+            for ph in phs:
 
-            photos[ph.id] = {
-                'thumb': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_q_d.jpg',
-                'large': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_b.jpg',
-            }
-            try:
-                photos[ph.id]['latitude'] = ph.location['latitude']
-                photos[ph.id]['longitude'] = ph.location['longitude']
-            except:
-                pass
+                photo = {
+                    'id': ph.id,
+                    'thumb': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_q_d.jpg',
+                    'large': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_b.jpg',
+                }
+                try:
+                    ex = {}
+                    for item in ph.getExif():
+                        ex[item.tag] = item.raw
+                    photo['exif'] = ex
+                except:
+                    pass
+                try:
+                    photo['location'] = ph.location
+                except:
+                    pass
+                db.photos.replace_one({'id': ph.id}, photo, upsert=True)
+                print('photo uploaded')
+
+                photos[ph.id] = {
+                    'thumb': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_q_d.jpg',
+                    'large': 'https://live.staticflickr.com/'+ph.server+'/'+ph.id+'_'+ph.secret+'_b.jpg',
+                }
+                try:
+                    photos[ph.id]['latitude'] = ph.location['latitude']
+                    photos[ph.id]['longitude'] = ph.location['longitude']
+                except:
+                    pass
 
         gal = {
             'id': pid,

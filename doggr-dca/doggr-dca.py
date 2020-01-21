@@ -322,9 +322,9 @@ class decline_curve:
 df_ = pd.DataFrame(
     list(
         db.doggr.find(
-            {'field': 'Kern River', 'oil_cum': {'$gt': 0},
-                'gas_cum': {'$gt': 0}}, {'api': 1}
-            # {'oil_cum': {'$gt': 0}, 'gas_cum': {'$gt': 0}}, {'api': 1}
+            {'oil_cum': {'$gt': 0}}, {'api': 1}
+            # {'field': 'Kern River', 'oil_cum': {'$gt': 0},
+            #     'gas_cum': {'$gt': 0}}, {'api': 1}
         )
     )
 )
