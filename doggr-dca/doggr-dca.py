@@ -47,8 +47,8 @@ class decline_curve:
         x = np.array(samples.index.astype(float)) - lookback
         y = samples.values
         qi = vals_use.dropna().mean()
-        d = 0.01 + (random.randint(1000)-500/1000)
-        b = 0 + (random.randint(1000)-500/1000)
+        d = 0.01 + (random.randint(0,1000)-500/1000)
+        b = 0 + (random.randint(0,1000)-500/1000)
         return qi, d, b, lookback
 
     def clean_sample(self, stream):
@@ -60,6 +60,9 @@ class decline_curve:
         elif stream == 'oilcut':
             vals = self.prodinj['oil'] / \
                 (self.prodinj['oil'] + self.prodinj['water'])
+        elif stream == 'oilcut_gas':
+            vals = self.prodinj['oil'] / \
+                (self.prodinj['oil'] + self.prodinj['gas'])
         else:
             vals = (self.prodinj[stream]) / 30.45
         vals.index = vals.index.astype(int)
@@ -77,6 +80,10 @@ class decline_curve:
 #         vals_clean = vals_clean.interpolate()
         self.streams[stream]['vals'] = vals
         self.streams[stream]['vals_clean'] = vals_clean
+        if vals_clean.sum() > 0:
+            return True
+        else:
+            return False
 
     def decline_sample(self, window, stream, lookback=None):
         vals_clean = self.streams[stream]['vals_clean']
@@ -121,58 +128,28 @@ class decline_curve:
 #             pass
 
     def decline_curve(self, stream, lookback_use=None):
-        self.clean_sample(stream)
-        qis = []
-        ds = []
-        bs = []
-        lookbacks = []
-        exp = 2
-        success = False
-        while success == False:
-            for i in range(2*(10**exp)):
-                window = random.randint(7, 301)
-                try:
-                    qi, d, b, lookback = self.decline_sample(
-                        window, stream, lookback_use)
-                    qis.append(qi)
-                    ds.append(d)
-                    bs.append(b)
-                    lookbacks.append(lookback)
-                except:
-                    pass
-            try:
-                df_ = pd.DataFrame()
-                df_['qi'] = qis
-                df_['d'] = ds
-                df_['b'] = bs
-                df_['lookback'] = lookbacks
-                print(len(df_))
-                self.streams[stream]['iters'] = df_
-                self.get_most_likely(stream=stream)
-                print(self.streams[stream]['params'])
-#                 self.plot_decline(stream=stream, yaxis='log')
-# #                 self.plot_owr(stream=stream)
-# #                 self.plot_kdes(stream=stream)
-#                 self.plot_cum_decline(stream=stream)
-                success = True
-            except:
-                if exp == 4:
-                    print('averaging')
-                    qis = []
-                    ds = []
-                    bs = []
-                    lookbacks = []
-                    for i in range(100):
-                        window = random.randint(7, 301)
-#                         try:
-                        qi, d, b, lookback = self.average_sample(
+        print(stream)
+        vol_flag = self.clean_sample(stream)
+        if vol_flag == True:
+            qis = []
+            ds = []
+            bs = []
+            lookbacks = []
+            exp = 2
+            success = False
+            while success == False:
+                for i in range(2*(10**exp)):
+                    window = random.randint(7, 301)
+                    try:
+                        qi, d, b, lookback = self.decline_sample(
                             window, stream, lookback_use)
                         qis.append(qi)
                         ds.append(d)
                         bs.append(b)
                         lookbacks.append(lookback)
-#                         except:
-#                             pass
+                    except:
+                        pass
+                try:
                     df_ = pd.DataFrame()
                     df_['qi'] = qis
                     df_['d'] = ds
@@ -180,15 +157,47 @@ class decline_curve:
                     df_['lookback'] = lookbacks
                     print(len(df_))
                     self.streams[stream]['iters'] = df_
-#                     self.get_most_likely(stream=stream)
-#                     print(self.streams[stream]['params'])
-#                     self.plot_decline(stream=stream, yaxis='log')
-# #                     self.plot_owr(stream=stream)
-# #                     self.plot_kdes(stream=stream)
-#                     self.plot_cum_decline(stream=stream)
-                    break
-                else:
-                    exp += 1
+                    self.get_most_likely(stream=stream)
+                    print(self.streams[stream]['params'])
+    #                 self.plot_decline(stream=stream, yaxis='log')
+    # #                 self.plot_owr(stream=stream)
+    # #                 self.plot_kdes(stream=stream)
+    #                 self.plot_cum_decline(stream=stream)
+                    success = True
+                except:
+                    if exp == 4:
+                        print('averaging')
+                        qis = []
+                        ds = []
+                        bs = []
+                        lookbacks = []
+                        for i in range(100):
+                            window = random.randint(7, 301)
+    #                         try:
+                            qi, d, b, lookback = self.average_sample(
+                                window, stream, lookback_use)
+                            qis.append(qi)
+                            ds.append(d)
+                            bs.append(b)
+                            lookbacks.append(lookback)
+    #                         except:
+    #                             pass
+                        df_ = pd.DataFrame()
+                        df_['qi'] = qis
+                        df_['d'] = ds
+                        df_['b'] = bs
+                        df_['lookback'] = lookbacks
+                        print(len(df_))
+                        self.streams[stream]['iters'] = df_
+    #                     self.get_most_likely(stream=stream)
+    #                     print(self.streams[stream]['params'])
+    #                     self.plot_decline(stream=stream, yaxis='log')
+    # #                     self.plot_owr(stream=stream)
+    # #                     self.plot_kdes(stream=stream)
+    #                     self.plot_cum_decline(stream=stream)
+                        break
+                    else:
+                        exp += 1
 
     def plot_decline(self, stream, yaxis=None):
         try:
@@ -298,7 +307,7 @@ class decline_curve:
 
         db.doggr.update_one({'api': self.api}, {
                             '$set': {'decline': params}}, upsert=False)
-        print(self.api)
+        print(self.api, ' written')
 #         try:
 
 #         except:

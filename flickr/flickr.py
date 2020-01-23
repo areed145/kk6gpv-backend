@@ -6,7 +6,7 @@ import os
 from pymongo import MongoClient
 from datetime import datetime
 import time
-
+import numpy as np
 f.set_keys(api_key='77a2ae7ea816558f00e4dd32249be54e',
            api_secret='2267640a7461db21')
 # f.set_auth_handler('auth')
@@ -28,8 +28,8 @@ def get_gals():
         kk6gpv_link = '/galleries/'+p.id
         photos = {}
 
-        for page in range(int(p.photos/500)):
-            phs = p.getPhotos(page=page+1)
+        for page in range(int(np.ceil(p.photos/500))):
+            phs = p.getPhotos(page=page)
 
             for ph in phs:
 
@@ -82,10 +82,10 @@ db = client.flickr
 if __name__ == '__main__':
     last_hour = datetime.now().hour - 1
     while True:
-        if datetime.now().hour != last_hour:
+        if datetime.now().hour == last_hour:
             get_gals()
             last_hour = datetime.now().hour
             print('got long')
         else:
             print('skipping updates')
-        time.sleep(60*12)
+        time.sleep(60*60*6)
