@@ -36,6 +36,7 @@ def on_message(client, userdata, msg):
 
 # MongoDB client
 client = MongoClient(os.environ['MONGODB_CLIENT'])
+
 db = client.iot
 raw = db.raw
 
