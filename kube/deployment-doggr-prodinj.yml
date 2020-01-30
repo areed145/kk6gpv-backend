@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kk6gpv-doggr-cyc
+  name: kk6gpv-doggr-prodinj
 spec:
   replicas: 3
   selector:
