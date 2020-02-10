@@ -138,7 +138,7 @@ class decline_curve:
             exp = 2
             success = False
             while success == False:
-                for i in range(2*(10**exp)):
+                for i in [300, 500, 1500]:
                     window = random.randint(7, 301)
                     try:
                         qi, d, b, lookback = self.decline_sample(

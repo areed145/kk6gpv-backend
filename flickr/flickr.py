@@ -80,12 +80,12 @@ client = MongoClient(os.environ['MONGODB_CLIENT'])
 db = client.flickr
 
 if __name__ == '__main__':
-    last_hour = datetime.now().hour - 1
+    last_day = datetime.now().day - 1
     while True:
-        if datetime.now().hour == last_hour:
+        if datetime.now().day != last_day:
             get_gals()
-            last_hour = datetime.now().hour
+            last_day = datetime.now().day
             print('got long')
         else:
             print('skipping updates')
-        time.sleep(60*60*6)
+        time.sleep(60)
