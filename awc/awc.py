@@ -39,7 +39,7 @@ def convert(val):
 client = MongoClient(os.environ['MONGODB_CLIENT'])
 db = client.wx
 awc = db.awc
-df_running = awc.find({})
+df_running = pd.DataFrame(awc.find({}))
 
 
 def get_var(message, rad, prop):
@@ -128,11 +128,10 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                     try:
                         awc.replace_one(
                             {'station_id': message['station_id']}, message, upsert=True)
-                        print(message)
-
                         for key in message:
-                            df.loc[df['station_id'] == message['station_id'], key] = message[key]
-                        print('running')
+                            df_running.loc[df_running['station_id'] ==
+                                   message['station_id'], key] = message[key]
+                        print(message)
                     except:
                         print('error')
                 else:
@@ -145,11 +144,10 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                 try:
                     awc.replace_one(
                         {'station_id': message['station_id']}, message, upsert=True)
-                    print(message)
-
                     for key in message:
-                        df.loc[df['station_id'] == message['station_id'], key] = message[key]
-                    print('running')
+                        df_running.loc[df_running['station_id'] ==
+                               message['station_id'], key] = message[key]
+                    print(message)
                 except:
                     print('error')
 
