@@ -110,6 +110,7 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                 message['observation_time'], utc=True)
             try:
                 prev = get_prev(message, awc)
+                prev.reset_index(inplace=True)
                 prev['observation_time'] = pd.to_datetime(
                     prev['observation_time'], utc=True)
                 if message['observation_time'] > prev['observation_time'][0]:
@@ -117,9 +118,9 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                     message['topic'] = 'wx/awc'
                     message['ttl'] = datetime.utcnow()
                     message['temp_c_var'] = get_var(
-                        message, 150, awc, 'temp_c')
+                        message, 150, 'temp_c')
                     message['altim_in_hg_var'] = get_var(
-                        message, 250, awc, 'altim_in_hg')
+                        message, 250, 'altim_in_hg')
                     for col in ['temp_c', 'dewpoint_c', 'altim_in_hg', 'wind_speed_kt', 'wind_gust_kt', 'cloud_base_ft_agl_0']:
                         try:
                             message[col+'_delta'] = message[col] - prev[col][0]
@@ -130,7 +131,7 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                             {'station_id': message['station_id']}, message, upsert=True)
                         for key in message:
                             df_running.loc[df_running['station_id'] ==
-                                   message['station_id'], key] = message[key]
+                                           message['station_id'], key] = message[key]
                         print(message)
                     except:
                         print('error')
@@ -146,7 +147,7 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                         {'station_id': message['station_id']}, message, upsert=True)
                     for key in message:
                         df_running.loc[df_running['station_id'] ==
-                               message['station_id'], key] = message[key]
+                                       message['station_id'], key] = message[key]
                     print(message)
                 except:
                     print('error')
