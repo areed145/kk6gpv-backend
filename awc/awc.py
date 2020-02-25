@@ -36,12 +36,24 @@ def convert(val):
     return val
 
 
-def get_var(message, rad, awc, prop):
+client = MongoClient(os.environ['MONGODB_CLIENT'])
+db = client.wx
+awc = db.awc
+df_running = awc.find({})
+
+
+def get_var(message, rad, prop):
     r = rad/50
     lat = message['latitude']
     lon = message['longitude']
-    df = pd.DataFrame(list(awc.find({'latitude': {'$gt': lat-r, '$lt': lat+r},
-                                    'longitude': {'$gt': lon-r, '$lt': lon+r}})))
+
+    df = df_running[
+        (df_running['latitude'] > lat-r) &
+        (df_running['latitude'] < lat+r) &
+        (df_running['longitude'] > lon-r) &
+        (df_running['longitude'] < lon+r)
+    ]
+
     df['dist'] = np.arccos(np.sin(lat*np.pi/180) * np.sin(df['latitude']*np.pi/180) + np.cos(lat*np.pi/180)
                            * np.cos(df['latitude']*np.pi/180) * np.cos((df['longitude']*np.pi/180) - (lon*np.pi/180))) * 6371
     df = df[df['dist'] <= rad]
@@ -52,7 +64,10 @@ def get_var(message, rad, awc, prop):
 
 
 def get_prev(message, awc):
-    df = pd.DataFrame(list(awc.find({'station_id': message['station_id']})))
+
+    df = df_running[
+        df_running['station_id'] == message['station_id']
+    ]
     return df
 
 
@@ -114,6 +129,10 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                         awc.replace_one(
                             {'station_id': message['station_id']}, message, upsert=True)
                         print(message)
+
+                        for key in message:
+                            df.loc[df['station_id'] == message['station_id'], key] = message[key]
+                        print('running')
                     except:
                         print('error')
                 else:
@@ -127,6 +146,10 @@ def get_obs(lat_min, lon_min, inc, timeback, max_pool):
                     awc.replace_one(
                         {'station_id': message['station_id']}, message, upsert=True)
                     print(message)
+
+                    for key in message:
+                        df.loc[df['station_id'] == message['station_id'], key] = message[key]
+                    print('running')
                 except:
                     print('error')
 
