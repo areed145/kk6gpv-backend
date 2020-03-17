@@ -32,14 +32,14 @@ def on_message(client, userdata, msg):
     msg['state'] = ins['state']
     msg['uom'] = ins['attributes']['unit_of_measurement']
     try:
-        client.publish('kk6gpv_bus', json.dumps(msg))
+        client.publish('kk6gpv_bus/iot/'+str(msg['sensor']), json.dumps(msg), retain=True)
     except:
         pass
 
 
-client = mqtt.Client()
+client = mqtt.Client(client_id='', clean_session=True, userdata=None)
 client.on_connect = on_connect
 client.on_message = on_message
-client.connect('broker.hivemq.com', 1883, 60)
+client.connect('broker.mqttdashboard.com', 1883)
 
 client.loop_forever()

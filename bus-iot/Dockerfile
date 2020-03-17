@@ -2,9 +2,9 @@ FROM python:3.7-slim-buster
 
 LABEL maintainer="areed145@gmail.com"
 
-WORKDIR /bus_wx
+WORKDIR /bus-iot
 
-COPY . /bus_wx
+COPY . /bus-iot
 
 # We copy just the requirements.txt first to leverage Docker cache
 RUN pip install --upgrade pip && \
@@ -12,4 +12,4 @@ RUN pip install --upgrade pip && \
 
 # EXPOSE 80
 
-CMD ["python", "bus_wx.py"]
+CMD ["python", "bus-iot.py"]

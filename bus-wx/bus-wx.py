@@ -49,6 +49,10 @@ async def wx_on_message(ws):
             msg['feels_like'] = str(message['summary']['feels_like'])
             msg['heat_index'] = str(message['summary']['heat_index'])
             msg['wind_chill'] = str(message['summary']['wind_chill'])
+            try:
+                client.publish('kk6gpv_bus/wx/air', json.dumps(msg), retain=True)
+            except:
+                pass
 
         if message['type'] == "obs_sky":
             msg = {}
@@ -63,17 +67,20 @@ async def wx_on_message(ws):
             msg['solar_radiation'] = str(message['obs'][0][10])
             msg['uv'] = str(message['obs'][0][2])
             msg['wind_degrees'] = str(message['obs'][0][7])
+            try:
+                client.publish('kk6gpv_bus/wx/sky', json.dumps(msg), retain=True)
+            except:
+                pass
 
         if message['type'] == "rapid_wind":
             msg = {}
             msg['type'] = 'wx_wind'
             msg['wind_degrees'] = str(message['ob'][2])
             msg['wind_mph'] = str(np.round(message['ob'][1] * 1.94384, 2))
-
-        try:
-            client.publish('kk6gpv_bus', json.dumps(msg))
-        except:
-            pass
+            try:
+                client.publish('kk6gpv_bus/wx/wind', json.dumps(msg), retain=True)
+            except:
+                pass
 
 
 async def weatherstation():
@@ -82,7 +89,7 @@ async def weatherstation():
         await wx_connect(ws)
         await wx_on_message(ws)
 
-client = mqtt.Client()
-client.connect('broker.hivemq.com', 1883, 60)
+client = mqtt.Client(client_id='', clean_session=True, userdata=None)
+client.connect('broker.mqttdashboard.com', 1883)
 
 asyncio.get_event_loop().run_until_complete(weatherstation())
