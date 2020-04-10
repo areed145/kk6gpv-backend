@@ -6,13 +6,11 @@ Created on Tue May  7 18:23:20 2019
 @author: areed145
 """
 
-import dns
+# import dns
 import ast
 import paho.mqtt.client as mqtt
 from datetime import datetime
-from pymongo import MongoClient
 import json
-from datetime import datetime
 import os
 
 

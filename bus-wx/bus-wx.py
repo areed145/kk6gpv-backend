@@ -15,6 +15,7 @@ import os
 import asyncio
 import websockets
 import numpy as np
+import sys
 
 
 async def wx_connect(ws):
@@ -27,9 +28,46 @@ async def wx_on_message(ws):
     while True:
         message = await ws.recv()
         message = json.loads(message)
+        # print(message)
+        if message['type'] == "evt_precip":
+            msg = {}
+            msg['type'] = 'wx_precip'
+            msg['timestamp'] = datetime.utcnow().isoformat()
+            try:
+                client.publish('kk6gpv_bus/wx/precip',
+                               json.dumps(msg), retain=True)
+                print(msg)
+            except:
+                sys.exit(1)
+
+        if message['type'] == "evt_strike":
+            msg = {}
+            msg['type'] = 'wx_strike'
+            msg['timestamp'] = datetime.utcnow().isoformat()
+            msg['distance'] = message['evt'][1]
+            msg['energy'] = message['evt'][2]
+            try:
+                client.publish('kk6gpv_bus/wx/strike',
+                               json.dumps(msg), retain=True)
+                print(msg)
+            except:
+                sys.exit(1)
+
+        if message['type'] == "device_status":
+            msg = {}
+            msg['type'] = 'wx_status'
+            msg['voltage'] = message['voltage']
+            try:
+                client.publish('kk6gpv_bus/wx/status',
+                               json.dumps(msg), retain=True)
+                print(msg)
+            except:
+                sys.exit(1)
+
         if message['type'] == "obs_air":
             msg = {}
             msg['type'] = 'wx_air'
+            msg['timestamp'] = datetime.utcnow().isoformat()
             msg['temp_f'] = str(np.round(
                 (message['obs'][0][2] * (9 / 5) + 32), 2))
             msg['dewpoint_f'] = str(np.round(
@@ -50,13 +88,16 @@ async def wx_on_message(ws):
             msg['heat_index'] = str(message['summary']['heat_index'])
             msg['wind_chill'] = str(message['summary']['wind_chill'])
             try:
-                client.publish('kk6gpv_bus/wx/air', json.dumps(msg), retain=True)
+                client.publish('kk6gpv_bus/wx/air',
+                               json.dumps(msg), retain=True)
+                print(msg)
             except:
-                pass
+                sys.exit(1)
 
         if message['type'] == "obs_sky":
             msg = {}
             msg['type'] = 'wx_sky'
+            msg['timestamp'] = datetime.utcnow().isoformat()
             msg['wind_degrees'] = str(message['obs'][0][7])
             msg['wind_mph'] = str(np.round(
                 message['obs'][0][5] * 1.94384, 2))
@@ -68,19 +109,24 @@ async def wx_on_message(ws):
             msg['uv'] = str(message['obs'][0][2])
             msg['wind_degrees'] = str(message['obs'][0][7])
             try:
-                client.publish('kk6gpv_bus/wx/sky', json.dumps(msg), retain=True)
+                client.publish('kk6gpv_bus/wx/sky',
+                               json.dumps(msg), retain=True)
+                print(msg)
             except:
-                pass
+                sys.exit(1)
 
         if message['type'] == "rapid_wind":
             msg = {}
             msg['type'] = 'wx_wind'
+            msg['timestamp'] = datetime.utcnow().isoformat()
             msg['wind_degrees'] = str(message['ob'][2])
             msg['wind_mph'] = str(np.round(message['ob'][1] * 1.94384, 2))
             try:
-                client.publish('kk6gpv_bus/wx/wind', json.dumps(msg), retain=True)
+                client.publish('kk6gpv_bus/wx/wind',
+                               json.dumps(msg), retain=True)
+                print(msg)
             except:
-                pass
+                sys.exit(1)
 
 
 async def weatherstation():
