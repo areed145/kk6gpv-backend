@@ -51,4 +51,4 @@ if __name__ == '__main__':
             ais.connect()
             ais.consumer(unpack_dict, raw=False)
         except:
-            sys.exit(1)
+            pass

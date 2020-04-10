@@ -43,7 +43,7 @@ if __name__ == '__main__':
     while True:
         try:
             client = mqtt.Client(
-                client_id='', clean_session=True, userdata=None)
+                client_id='l', clean_session=True, userdata=None)
             client.connect('broker.mqttdashboard.com', 1883)
 
             ais = aprslib.IS('N0CALL', '13023', port=14580)
@@ -51,4 +51,4 @@ if __name__ == '__main__':
             ais.connect()
             ais.consumer(unpack_dict, raw=False)
         except:
-            sys.exit(1)
+            pass
