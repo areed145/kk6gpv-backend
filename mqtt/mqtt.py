@@ -14,6 +14,7 @@ from pymongo import MongoClient
 import json
 from datetime import datetime
 import os
+import sys
 
 
 def on_connect(client, userdata, flags, rc):
@@ -28,10 +29,8 @@ def on_message(client, userdata, msg):
     ins['timestamp_'] = datetime.utcnow()
     try:
         raw.insert_one(ins)
-        # print(message)
     except:
-        pass
-        # print('failed')
+        sys.exit(1)
 
 
 # MongoDB client
