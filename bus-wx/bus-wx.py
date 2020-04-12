@@ -130,10 +130,14 @@ async def wx_on_message(ws):
 
 
 async def weatherstation():
-    uri = "wss://ws.weatherflow.com/swd/data?api_key=20c70eae-e62f-4d3b-b3a4-8586e90f3ac8"
-    async with websockets.connect(uri) as ws:
-        await wx_connect(ws)
-        await wx_on_message(ws)
+    try:
+        uri = "wss://ws.weatherflow.com/swd/data?api_key=20c70eae-e62f-4d3b-b3a4-8586e90f3ac8"
+        async with websockets.connect(uri) as ws:
+            await wx_connect(ws)
+            await wx_on_message(ws)
+    except:
+        print('reconnecting...')
+        weatherstation()
 
 client = mqtt.Client(client_id='', clean_session=True, userdata=None)
 client.connect('broker.mqttdashboard.com', 1883)
