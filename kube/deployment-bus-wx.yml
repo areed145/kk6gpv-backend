@@ -17,5 +17,6 @@ spec:
         - name: application
           image: areed145/kk6gpv-bus-wx:latest
           imagePullPolicy: Always
+          restartPolicy: OnFailure
           ports:
             - containerPort: 4000
