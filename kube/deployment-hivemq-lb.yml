@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: hivemq-mqtt
+  annotations:
+    service.spec.externalTrafficPolicy: Local
+spec:
+  selector:
+    app: hivemq-cluster1
+  ports:
+    - protocol: TCP
+      port: 1883
+      targetPort: 1883
+  type: LoadBalancer
