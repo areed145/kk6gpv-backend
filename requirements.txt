@@ -1,7 +1,7 @@
 absl-py==0.8.1
 adal==1.2.2
 alembic==1.2.1
-apache-airflow==1.10.11
+apache-airflow==1.10.12
 apache-beam==2.16.0
 apispec==3.0.0
 appdirs==1.4.3
