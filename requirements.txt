@@ -175,7 +175,7 @@ matplotlib==3.1.1
 mccabe==0.6.1
 MetPy==0.11.1
 micawber==0.5.1
-mistune==0.8.4
+mistune==2.0.3
 ml-metadata==0.14.0
 mock==2.0.0
 mongoengine==0.18.2
